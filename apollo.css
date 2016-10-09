@@ -28,6 +28,20 @@ input
 	margin-left: 5px;
 }
 
+.track-info .album-image
+{
+	width: 10%;
+	display: inline-block;
+}
+.track-info .track-text
+{
+	width: 90%;
+	vertical-align: top;
+	display: inline-block;
+}
+.track-info h2 { margin-bottom: 0px; }
+.track-info h3 { margin-top: 0px; }
+
 .graph-cont
 {
 	background: white;

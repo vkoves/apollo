@@ -36,6 +36,7 @@ $(document).ready(function()
 
 		// Also can use getAudioFeaturesForTracks(Array<string>)
 		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures);
+		spotifyApi.getTrack(trackId).then(showTrackInfo);
 	});
 });
 
@@ -90,6 +91,29 @@ function graphAudioFeatures(featureData)
 				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
 			}
 		}
+	}
+}
+
+function showTrackInfo(trackData)
+{
+	console.log(trackData);
+
+	$(".track-info").html('<img class="album-image" src="' + trackData.album.images[0].url + '">'
+	 	+ '<div class="track-text">'
+		 	+ "<h2>" + trackData.name + "</h2>" 
+			+ "<h3>by " + combineArtists(trackData.artists) + "</h3>"
+		+ "</div>");
+
+	function combineArtists(artistsHash)
+	{
+		var artistNames = [];
+		
+		for(key in artistsHash)
+		{
+			artistNames.push(artistsHash[key].name);
+		}
+
+		return artistNames.join(", ");
 	}
 }
 
