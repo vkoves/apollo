@@ -8,9 +8,9 @@
 	color: white;
 	font-weight: 600;
 	text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    font-size: 14px;
+	letter-spacing: 0.5px;
+	cursor: pointer;
+	font-size: 14px;
 }
 
 /* Add hover to not diabled apollo buttons */
@@ -39,6 +39,17 @@ input
 	position: relative;
 	width: calc(100% / 7);
 	height: 70%;
+}
+.col-title:hover > .col-desc { display: block; }
+.col-desc {
+	position: absolute;
+	width: 250%;
+	left: -75%;
+	top: 30px;
+	padding: 10px;
+	box-sizing: border-box;
+	background: gainsboro;
+	display: none;
 }
 .graph-col .fill
 {
