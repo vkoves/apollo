@@ -27,7 +27,13 @@ $(document).ready(function()
 		if($(this).hasClass("disabled")) // return if the button is non active
 			return;
 
-		spotifyApi.getAudioFeaturesForTrack($("#track-id").val()).then(function(data)
+		var trackInputData = $("#track-id").val();
+		var trackId = trackInputData;
+
+		if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
+			trackId = trackInputData.split("spotify:track:")[1];
+
+		spotifyApi.getAudioFeaturesForTrack(trackId).then(function(data)
 		{
 			console.log(data);
 		});	
