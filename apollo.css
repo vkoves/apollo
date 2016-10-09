@@ -22,20 +22,27 @@
 /* Make grey if disabled */
 .apollo-btn.disabled { background-color: #c5c5c5; }
 
-input
+#track-id
 {
 	margin-top: 10px;
 	margin-left: 5px;
+	width: 300px;
+	height: 29px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 2px grey inset;
+	padding: 0px 10px;
+	border: none;
+	outline: none !important;
 }
 
 .track-info .album-image
 {
-	width: 10%;
+	width: 15%;
 	display: inline-block;
 }
 .track-info .track-text
 {
-	width: 90%;
+	width: 85%;
 	vertical-align: top;
 	display: inline-block;
 }
