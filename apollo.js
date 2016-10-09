@@ -40,6 +40,7 @@ $(document).ready(function()
 	});
 });
 
+// Callback for login completion, which updates buttons and sets access token in the API
 function loginComplete(access_token)
 {
 	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
@@ -49,6 +50,7 @@ function loginComplete(access_token)
 	spotifyApi.setAccessToken(access_token);
 }
 
+// Setup the audio feature graph, appending all needed columns
 function setupGraph()
 {
 	for(key in spotifyGraphableData)
@@ -69,9 +71,9 @@ function setupGraph()
 	}
 }
 
+// Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
-	console.log(featureData);
 	for(key in featureData) // iterate through each feature attribute
 	{
 		if(key in spotifyGraphableData) // and graph if it's in the list of allowed data to graph
@@ -94,16 +96,16 @@ function graphAudioFeatures(featureData)
 	}
 }
 
+// Show information about the track from the passed in track data
 function showTrackInfo(trackData)
 {
-	console.log(trackData);
-
 	$(".track-info").html('<img class="album-image" src="' + trackData.album.images[0].url + '">'
 	 	+ '<div class="track-text">'
 		 	+ "<h2>" + trackData.name + "</h2>" 
 			+ "<h3>by " + combineArtists(trackData.artists) + "</h3>"
 		+ "</div>");
 
+	// A helper function to combine all the artists into one nice string
 	function combineArtists(artistsHash)
 	{
 		var artistNames = [];
