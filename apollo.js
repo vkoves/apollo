@@ -24,6 +24,9 @@ $(document).ready(function()
 
 	$("#get-track-data").click(function()
 	{
+		if($(this).hasClass("disabled")) // return if the button is non active
+			return;
+
 		spotifyApi.getAudioFeaturesForTrack($("#track-id").val()).then(function(data)
 		{
 			console.log(data);
@@ -33,7 +36,9 @@ $(document).ready(function()
 
 function loginComplete(access_token)
 {
-	$("#spotify-authorize").addClass("disabled").text("Authorized!");
+	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
+	$("#spotify-authorize").off(); // and disable the click event from being fired again
+	$(".needs-auth").removeClass("disabled");
 
 	spotifyApi.setAccessToken(access_token);
 	// Also can use getAudioFeaturesForTracks(Array<string>)
