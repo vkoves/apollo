@@ -50,6 +50,7 @@ input
 	box-sizing: border-box;
 	background: gainsboro;
 	display: none;
+	z-index: 5;
 }
 .graph-col .fill
 {
@@ -61,3 +62,12 @@ input
 	height: 0%;
 	transition: height 1s;
 }
+.graph-col .value {
+	position: absolute;
+	width: 100%;
+	bottom: 0.5em;
+	font-weight: 600;
+	color: white;
+	font-size: 1.25em;
+}
+.graph-col .value.dark-text { color: black; }

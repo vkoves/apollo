@@ -60,12 +60,20 @@ function graphAudioFeatures(featureData)
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
 				if($(".graph-cont ." + key).length == 0) // if column doesn't exist, make it
-					$(".graph-cont").append('<div class="graph-col ' + key + '"><div class="fill"></div>'
+					$(".graph-cont").append('<div class="graph-col ' + key + '">'
 						+ '<div class="col-title">'
 							+ keyData["name"]
 							+ '<div class="col-desc">' + keyData["description"] + "</div>"
 						+ "</div>"
+						+ '<div class="fill"></div>'
+						+ '<div class="value">' + value + "</div>"
 					+ '</div>');
+
+				if(value < 0.05) //if super small value
+					$(".graph-col." + key + " .value").addClass("dark-text"); // make dark text for contrast
+				else
+					$(".graph-col." + key + " .value").removeClass("dark-text");
+
 
 				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
 			}
