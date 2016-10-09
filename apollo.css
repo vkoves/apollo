@@ -8,8 +8,9 @@
 	color: white;
 	font-weight: 600;
 	text-transform: uppercase;
-	letter-spacing: 1px;
-	cursor: pointer;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 /* Add hover to not diabled apollo buttons */
@@ -20,3 +21,9 @@
 
 /* Make grey if disabled */
 .apollo-btn.disabled { background-color: #c5c5c5; }
+
+input
+{
+	margin-top: 10px;
+	margin-left: 5px;
+}

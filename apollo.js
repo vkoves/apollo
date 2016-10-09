@@ -21,6 +21,14 @@ $(document).ready(function()
 	{
 		login(loginComplete);
 	});
+
+	$("#get-track-data").click(function()
+	{
+		spotifyApi.getAudioFeaturesForTrack($("#track-id").val()).then(function(data)
+		{
+			console.log(data);
+		});	
+	});
 });
 
 function loginComplete(access_token)
@@ -28,6 +36,7 @@ function loginComplete(access_token)
 	$("#spotify-authorize").addClass("disabled").text("Authorized!");
 
 	spotifyApi.setAccessToken(access_token);
+	// Also can use getAudioFeaturesForTracks(Array<string>)
 	spotifyApi.getAudioFeaturesForTrack("22MQaNqXOkTUdg4rawaBCg").then(function(data)
 	{
 		console.log(data);
