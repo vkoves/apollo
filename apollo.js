@@ -1,36 +1,36 @@
 /* Uses JMPerez Spotify JS Wrapper https://github.com/JMPerez/spotify-web-api-js */
-var origin = "http://viktorkoves.com";
 
-if(window.location.href.indexOf("localhost") > -1)
-	origin = "http://localhost:4000";
+var spotifyApi;
+var origin = "http://viktorkoves.com"; // assume on production, and set origin variable as such
+
+if(window.location.href.indexOf("localhost") > -1) // if we're on localhost after all
+	origin = "http://localhost:4000"; // likewise set the origin to reflect this
 
 $(document).ready(function()
 {
-	if(window.location.href.indexOf("access_token") > -1)
+	if(window.location.href.indexOf("access_token") > -1) // if this is a redirect from Spotify authorization
 	{
-		var dataToPass = {"access_token": window.location.href.split("access_token=")[1].split("&")[0]};
-		window.opener.postMessage(JSON.stringify(dataToPass), origin);
-		window.close(); //close the window
+		var dataToPass = {"access_token": window.location.href.split("access_token=")[1].split("&")[0]}; // create a hash with the data to pass to the other window
+		window.opener.postMessage(JSON.stringify(dataToPass), origin); // andd pass the data to the original window (the one that opened this one)
+		window.close(); // then close this window
 	}
 
-	var spotifyApi = new SpotifyWebApi();
+	spotifyApi = new SpotifyWebApi(); // init SpotifyWebApi
 
 	$("#spotify-authorize").click(function()
 	{
-		console.log("Click!");
-
-		login(function(access_token)
-		{
-			console.log("Login response");
-
-			spotifyApi.setAccessToken(access_token);
-			spotifyApi.getAudioFeaturesForTrack("22MQaNqXOkTUdg4rawaBCg").then(function(data)
-			{
-				console.log(data);
-			});
-		});
+		login(loginComplete);
 	});
 });
+
+function loginComplete(access_token)
+{
+	spotifyApi.setAccessToken(access_token);
+	spotifyApi.getAudioFeaturesForTrack("22MQaNqXOkTUdg4rawaBCg").then(function(data)
+	{
+		console.log(data);
+	});
+}
 
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
 function login(callback) {
@@ -45,6 +45,7 @@ function login(callback) {
 	}
 	
 	var url = getLoginURL([
+		// Specify scopes here, don't need any for track data fetching
 		// 'playlist-modify-public'
 	]);
 	
@@ -62,8 +63,8 @@ function login(callback) {
 	}, false);
 	
 	var w = window.open(url,
-						'Spotify',
-						'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
-					   );
+		'Spotify',
+		'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+	);
 	
 }
