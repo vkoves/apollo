@@ -16,6 +16,7 @@ $(document).ready(function()
 	}
 
 	spotifyApi = new SpotifyWebApi(); // init SpotifyWebApi
+	setupGraph();
 
 	$("#spotify-authorize").click(function()
 	{
@@ -34,7 +35,7 @@ $(document).ready(function()
 			trackId = trackInputData.split("spotify:track:")[1];
 
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures);	
+		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures);
 	});
 });
 
@@ -45,6 +46,26 @@ function loginComplete(access_token)
 	$(".needs-auth").removeClass("disabled");
 
 	spotifyApi.setAccessToken(access_token);
+}
+
+function setupGraph()
+{
+	for(key in spotifyGraphableData)
+	{
+		keyData = spotifyGraphableData[key];
+
+		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
+		{
+			$(".graph-cont").append('<div class="graph-col ' + key + '">'
+				+ '<div class="col-title">'
+					+ keyData["name"]
+					+ '<div class="col-desc">' + keyData["description"] + "</div>"
+				+ "</div>"
+				+ '<div class="fill"></div>'
+				+ '<div class="value"></div>'
+			+ '</div>');
+		}
+	}
 }
 
 function graphAudioFeatures(featureData)
@@ -59,21 +80,12 @@ function graphAudioFeatures(featureData)
 
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
-				if($(".graph-cont ." + key).length == 0) // if column doesn't exist, make it
-					$(".graph-cont").append('<div class="graph-col ' + key + '">'
-						+ '<div class="col-title">'
-							+ keyData["name"]
-							+ '<div class="col-desc">' + keyData["description"] + "</div>"
-						+ "</div>"
-						+ '<div class="fill"></div>'
-						+ '<div class="value">' + value + "</div>"
-					+ '</div>');
+				$(".graph-col." + key + " .value").text(value);
 
 				if(value < 0.05) //if super small value
 					$(".graph-col." + key + " .value").addClass("dark-text"); // make dark text for contrast
 				else
 					$(".graph-col." + key + " .value").removeClass("dark-text");
-
 
 				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
 			}
