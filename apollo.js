@@ -33,10 +33,8 @@ $(document).ready(function()
 		if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
 			trackId = trackInputData.split("spotify:track:")[1];
 
-		spotifyApi.getAudioFeaturesForTrack(trackId).then(function(data)
-		{
-			console.log(data);
-		});	
+		// Also can use getAudioFeaturesForTracks(Array<string>)
+		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures);	
 	});
 });
 
@@ -47,11 +45,11 @@ function loginComplete(access_token)
 	$(".needs-auth").removeClass("disabled");
 
 	spotifyApi.setAccessToken(access_token);
-	// Also can use getAudioFeaturesForTracks(Array<string>)
-	spotifyApi.getAudioFeaturesForTrack("22MQaNqXOkTUdg4rawaBCg").then(function(data)
-	{
-		console.log(data);
-	});
+}
+
+function graphAudioFeatures(featureData)
+{
+	console.log(featureData);
 }
 
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
@@ -77,7 +75,6 @@ function login(callback) {
 		top = (screen.height / 2) - (height / 2);
 
 	window.addEventListener("message", function(event) {
-		console.log("MSG" + event.data);
 		var hash = JSON.parse(event.data);
 		if(hash["access_token"])
 			callback(hash["access_token"]);
