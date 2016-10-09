@@ -42,12 +42,13 @@
 }
 .track-info .track-text
 {
-	width: 85%;
+	width: 84.5%;
 	vertical-align: top;
 	display: inline-block;
 }
 .track-info h2 { margin-bottom: 0px; }
 .track-info h3 { margin-top: 0px; }
+.non-graph-data span { margin-right: 10px; }
 
 .graph-cont
 {

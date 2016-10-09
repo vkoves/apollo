@@ -74,6 +74,8 @@ function setupGraph()
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
+	console.log(featureData);
+
 	for(key in featureData) // iterate through each feature attribute
 	{
 		if(key in spotifyGraphableData) // and graph if it's in the list of allowed data to graph
@@ -94,16 +96,27 @@ function graphAudioFeatures(featureData)
 			}
 		}
 	}
+
+	if(featureData.mode == 1) // major
+		featureData.mode = "Major";
+	else
+		featureData.mode = "Minor";
+
+	var pitches = ['C', 'C#', 'D', 'D#', 'E', 'E#', 'F', 'F#', 'G', 'G#'];
+	featureData.key = pitches[featureData.key];
+
+	$(".non-graph-data #key").text(featureData.key);
+	$(".non-graph-data #tempo").text(featureData.tempo);
+	$(".non-graph-data #time_signature").text(featureData.time_signature);
+	$(".non-graph-data #mode").text(featureData.mode);
 }
 
 // Show information about the track from the passed in track data
 function showTrackInfo(trackData)
 {
-	$(".track-info").html('<img class="album-image" src="' + trackData.album.images[0].url + '">'
-	 	+ '<div class="track-text">'
-		 	+ "<h2>" + trackData.name + "</h2>" 
-			+ "<h3>by " + combineArtists(trackData.artists) + "</h3>"
-		+ "</div>");
+	$(".album-image").attr("src", trackData.album.images[0].url);
+	$(".track-text #title").text(trackData.name);
+	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
 
 	// A helper function to combine all the artists into one nice string
 	function combineArtists(artistsHash)
