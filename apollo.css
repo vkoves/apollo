@@ -1,0 +1,22 @@
+/* Add basic pill button styling */
+.apollo-btn
+{
+	background-color: #673AB7;
+	border-radius: 100px;
+	display: inline-block;
+	padding: 5px 30px;
+	color: white;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+/* Add hover to not diabled apollo buttons */
+.apollo-btn:not(.disabled):hover
+{
+	background-color: #804be0;
+}
+
+/* Make grey if disabled */
+.apollo-btn.disabled { background-color: #c5c5c5; }

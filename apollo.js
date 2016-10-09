@@ -25,6 +25,8 @@ $(document).ready(function()
 
 function loginComplete(access_token)
 {
+	$("#spotify-authorize").addClass("disabled").text("Authorized!");
+
 	spotifyApi.setAccessToken(access_token);
 	spotifyApi.getAudioFeaturesForTrack("22MQaNqXOkTUdg4rawaBCg").then(function(data)
 	{
