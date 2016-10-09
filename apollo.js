@@ -50,6 +50,22 @@ function loginComplete(access_token)
 function graphAudioFeatures(featureData)
 {
 	console.log(featureData);
+	for(key in featureData) // iterate through each feature attribute
+	{
+		if(key in spotifyGraphableData) // and graph if it's in the list of allowed data to graph
+		{
+			keyData = spotifyGraphableData[key];
+			value = featureData[key];
+
+			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
+			{
+				if($(".graph-cont ." + key).length == 0) // if column doesn't exist, make it
+					$(".graph-cont").append('<div class="graph-col ' + key + '"><div class="fill"></div>' + keyData["name"] + '</div>');
+
+				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
+			}
+		}
+	}
 }
 
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */

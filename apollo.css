@@ -27,3 +27,26 @@ input
 	margin-top: 10px;
 	margin-left: 5px;
 }
+
+.graph-cont
+{
+	background: white;
+	margin-top: 20px;
+}
+.graph-col
+{
+	display: inline-block;
+	position: relative;
+	width: calc(100% / 7);
+	height: 70%;
+}
+.graph-col .fill
+{
+	background: #673ab7;
+	position: absolute;
+	bottom: 0;
+	width: 90%;
+	left: 5%;
+	height: 0%;
+	transition: height 1s;
+}
