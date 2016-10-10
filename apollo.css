@@ -43,8 +43,6 @@
 /* Hide feature-rich panel by default (wait till auth) */
 .post-authorize { display: none; }
 
-
-
 #track-id
 {
 	margin-top: 10px;
@@ -99,7 +97,7 @@
 {
 	background: white;
 	margin-top: 10px;
-	height: 60%;
+	height: 50%;
 }
 .graph-col
 {
@@ -108,18 +106,42 @@
 	width: calc(100% / 7);
 	height: 100%;
 }
+.col-title
+{
+	position: absolute;
+	top: 101%;
+	width: 100%;
+}
 .col-title:hover > .col-desc { display: block; }
 .col-desc {
 	position: absolute;
 	width: 250%;
 	left: -75%;
-	top: 30px;
+	bottom: 120%;
 	padding: 10px;
 	box-sizing: border-box;
 	background: gainsboro;
 	display: none;
 	z-index: 5;
 }
+/* Add column icons */
+.col-icon
+{
+	width: 35%;
+	padding-bottom: 35%; /* Makes divs square if matches width */
+	margin: 2% auto 2% auto;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+.acousticness .col-icon { background-image: url("icons/acousticness.png"); }
+.danceability .col-icon { background-image: url("icons/danceability.png"); }
+.energy .col-icon { background-image: url("icons/energy.png"); }
+.instrumentalness .col-icon { background-image: url("icons/instrumentalness.png"); }
+.liveness .col-icon { background-image: url("icons/liveness.png"); }
+.speechiness .col-icon { background-image: url("icons/speechiness.png"); }
+.valence .col-icon { background-image: url("icons/valence.png"); }
+
+
 .graph-col .fill
 {
 	background: #673ab7;
@@ -133,9 +155,7 @@
 .graph-col .value {
 	position: absolute;
 	width: 100%;
-	bottom: 0.5em;
+	bottom: 100%;
 	font-weight: 600;
-	color: white;
 	font-size: 1.25em;
 }
-.graph-col .value.dark-text { color: black; }

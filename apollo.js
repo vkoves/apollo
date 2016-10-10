@@ -66,11 +66,13 @@ function setupGraph()
 		{
 			$(".graph-cont").append('<div class="graph-col ' + key + '">'
 				+ '<div class="col-title">'
-					+ keyData["name"]
+					+ '<div class="col-icon"></div>'
+					+ '<span>' + keyData["name"] + '</span>'
 					+ '<div class="col-desc">' + keyData["description"] + "</div>"
 				+ "</div>"
-				+ '<div class="fill"></div>'
-				+ '<div class="value"></div>'
+				+ '<div class="fill">'
+					+ '<div class="value"></div>'
+				+ '</div>'
 			+ '</div>');
 		}
 	}
@@ -79,6 +81,7 @@ function setupGraph()
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
+	console.log(featureData);
 	$(".track-info").show();
 
 	for(key in featureData) // iterate through each feature attribute
@@ -91,12 +94,6 @@ function graphAudioFeatures(featureData)
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
 				$(".graph-col." + key + " .value").text(value);
-
-				if(value < 0.05) //if super small value
-					$(".graph-col." + key + " .value").addClass("dark-text"); // make dark text for contrast
-				else
-					$(".graph-col." + key + " .value").removeClass("dark-text");
-
 				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
 			}
 		}
