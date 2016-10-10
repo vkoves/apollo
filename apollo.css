@@ -1,3 +1,8 @@
+.page-container
+{
+	font-family: 'Montserrat', sans-serif;
+}
+
 /* Add basic pill button styling */
 .apollo-btn
 {
@@ -22,6 +27,24 @@
 /* Make grey if disabled */
 .apollo-btn.disabled { background-color: #c5c5c5; }
 
+/* Make main Apollo text very large with no bottom margin */
+.main-title
+{
+	font-size: 72px;
+	font-weight: normal;
+	margin-bottom: 0px;
+}
+.sub-title
+{
+	margin-top: 10px;
+	font-weight: normal;
+}
+
+/* Hide feature-rich panel by default (wait till auth) */
+.post-authorize { display: none; }
+
+
+
 #track-id
 {
 	margin-top: 10px;
@@ -44,8 +67,12 @@
 }
 .track-info .album-image-cont img
 {
-	width: 100%;
 	box-shadow: 2px 2px 5px grey;
+	margin-top: 10%;
+}
+.track-info .album-image-cont .album-image
+{
+	width: 100%;
 }
 .track-info .album-image-cont .record
 {
