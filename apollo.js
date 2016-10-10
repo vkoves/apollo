@@ -161,7 +161,10 @@ function handleTrackInfo(trackData)
 	if(audioObject)
 		audioObject.pause(); // pause if playing
 	audioObject = new Audio(trackData.preview_url);
-	audioObject.addEventListener('ended', hideRecord);
+	audioObject.addEventListener('ended', function()
+	{
+		hideRecord(400);
+	});
 
 	$(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
@@ -223,7 +226,7 @@ function showRecord(speed)
 }
 
 function hideRecord(speed)
-{	
+{
 	console.log("HIDE!");
 	if(audioObject)
 	{
