@@ -159,7 +159,11 @@ function handleTrackInfo(trackData)
 {
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
 	if(audioObject)
+	{
 		audioObject.pause(); // pause if playing
+		if(!$(".record").hasClass("hidden")) //if record isn't hidden
+			hideRecord();
+	}
 	audioObject = new Audio(trackData.preview_url);
 	audioObject.addEventListener('ended', function()
 	{
