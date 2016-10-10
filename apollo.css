@@ -91,7 +91,24 @@
 }
 .track-info h2 { margin-bottom: 0px; }
 .track-info h3 { margin-top: 0px; }
-.non-graph-data span { margin-right: 10px; }
+.non-graph-data .data-item { margin-right: 10px; }
+.non-graph-data .left-col, .right-col
+{
+	text-align: left;
+	width: 48%;
+	display: inline-block;
+	box-sizing: border-box;
+}
+.non-graph-data .left-col
+{
+	padding-left: 20%;
+}
+.non-graph-data .right-col
+{
+	padding-right: 20%;
+	margin-left: 2%;
+}
+.non-graph-data .right-text { float: right; }
 
 .graph-cont
 {

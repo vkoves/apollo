@@ -32,10 +32,34 @@ scripts:
 				<h2 id="title" class="no-bold"></h2>
 				<h3 id="artists" class="no-bold"></h3>
 				<div class="non-graph-data">
-					<span>Tempo: <span id="tempo"></span></span>
-					<span>Time Signature: <span id="time_signature"></span></span>
-					<span>Key: <span id="key"></span></span>
-					<span>Major/Minor: <span id="mode"></span></span>
+					<div class="left-col">
+						<div class="data-item">
+							Tempo:
+							<div class="right-text"><span id="tempo"></span> BPM</div>
+						</div>
+						<div class="data-item">
+							Key:
+							<div class="right-text"><span id="key"></span></div>
+						</div>
+						<div class="data-item">
+							Loudness:
+							<div class="right-text"><span id="loudness"></span> dB</div>
+						</div>
+					</div>
+					<div class="right-col">
+						<div class="data-item">
+							Time Signature:
+							<div class="right-text"><span id="time_signature"></span></div>
+						</div>
+						<div class="data-item">
+							Major/Minor:
+							<div class="right-text"><span id="mode"></span></div>
+						</div>
+						<div class="data-item">
+							Length:
+							<div class="right-text"><span id="duration"></span></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

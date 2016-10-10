@@ -106,11 +106,25 @@ function graphAudioFeatures(featureData)
 
 	var pitches = ['C', 'C#', 'D', 'D#', 'E', 'E#', 'F', 'F#', 'G', 'G#'];
 	featureData.key = pitches[featureData.key];
+	featureData.duration = getProperDuration(featureData.duration_ms)
 
 	$(".non-graph-data #key").text(featureData.key);
 	$(".non-graph-data #tempo").text(featureData.tempo);
 	$(".non-graph-data #time_signature").text(featureData.time_signature);
 	$(".non-graph-data #mode").text(featureData.mode);
+	$(".non-graph-data #loudness").text(featureData.loudness);
+	$(".non-graph-data #duration").text(featureData.duration);
+
+	function getProperDuration(duration_ms)
+	{
+		var minutes = Math.floor(duration_ms/(1000*60));
+		var seconds = Math.floor((duration_ms/1000)%60);
+
+		if(seconds < 10) //need zero buffering
+			seconds = "0" + seconds;
+		
+		return minutes + ":" + seconds; // get proper duration using math
+	}
 }
 
 // Show information about the track from the passed in track data
