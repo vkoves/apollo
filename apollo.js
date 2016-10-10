@@ -158,9 +158,10 @@ function graphAudioFeatures(featureData)
 function handleTrackInfo(trackData)
 {
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
+	if(audioObject)
+		audioObject.pause(); // pause if playing
 	audioObject = new Audio(trackData.preview_url);
 	audioObject.addEventListener('ended', hideRecord);
-	audioObject.addEventListener('pause', hideRecord);
 
 	$(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
@@ -194,27 +195,46 @@ function handleSearch(data)
 
 function toggleRecord()
 {
+	var speed = 400;
+
 	if($(".album-image-cont").hasClass("playing"))
-		hideRecord();
+		hideRecord(speed);
 	else
-		showRecord();
+		showRecord(speed);
 }
 
-function showRecord()
+function showRecord(speed)
 {
 	if(audioObject)
 	{
-		audioObject.play();
-		$(".album-image-cont").addClass("playing");
+		$( ".album-image-cont .record" ).animate({
+			top: "-100%"
+		}, speed, function() {
+			$(".album-image-cont").addClass("playing");
+			$(this).animate({
+				top: "2%"
+			}, speed, function()
+			{
+				audioObject.play();
+			});
+		});
 	}
 }
 
-function hideRecord()
+function hideRecord(speed)
 {	
+	console.log("HIDE!");
 	if(audioObject)
 	{
 		audioObject.pause();
-		$(".album-image-cont").removeClass("playing");
+		$( ".album-image-cont .record" ).animate({
+			top: "-100%"
+		}, speed, function() {
+			$(".album-image-cont").removeClass("playing");
+			$(this).animate({
+				top: "-10%"
+			}, speed);
+		});
 	}	
 }
 
