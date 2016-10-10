@@ -43,17 +43,14 @@ $(document).ready(function()
 // Callback for login completion, which updates buttons and sets access token in the API
 function loginComplete(access_token)
 {
-	$("#spotify-authorize").text("Authorized!"); // indicate authorization worked
+	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
 	$("#spotify-authorize").off(); // and disable the click event from being fired again
 	$(".needs-auth").removeClass("disabled");
 
-	window.setTimeout(function()
+	$(".pre-authorize").fadeOut(function()
 	{
-		$(".pre-authorize").fadeOut(function()
-		{
-			$(".post-authorize").fadeIn();			
-		});
-	}, 1000)
+		$(".post-authorize").fadeIn();			
+	});
 
 	spotifyApi.setAccessToken(access_token);
 }
