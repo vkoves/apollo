@@ -183,6 +183,7 @@ input[type="text"]
 	position: relative;
 	width: 20%;
 	display: inline-block;
+	cursor: pointer;
 }
 .track-info .album-image-cont img
 {
@@ -201,7 +202,24 @@ input[type="text"]
 	z-index: -1;
 	width: 96%;
 	left: 2%;
-	transition: top 0.5s;
+	transition: top 0.3s;
+}
+.album-image-cont:hover > .record
+{
+	top: -15%;
+}
+/* If playing a song */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.album-image-cont.playing .record
+{
+	z-index: 1;
+	top: 2%;
+	-moz-animation: spin 30s linear infinite;
+	-o-animation: spin 30s linear infinite;
+	-webkit-animation: spin 30s linear infinite;
+	animation: spin 30s linear infinite;
 }
 /*.track-info .album-image-cont:hover > .record { top: -50%; }*/
 .track-info .track-text

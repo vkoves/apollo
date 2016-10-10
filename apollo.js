@@ -13,6 +13,7 @@
 
 var spotifyApi;
 var origin = "http://viktorkoves.com"; // assume on production, and set origin variable as such
+var audioObject; // for playing previews
 
 if(window.location.href.indexOf("localhost") > -1) // if we're on localhost after all
 	origin = "http://localhost:4000"; // likewise set the origin to reflect this
@@ -40,6 +41,7 @@ $(document).ready(function()
 	{
 		spotifyApi.searchTracks($("#track-search").val(), {limit: 5}).then(handleSearch);
 	})
+
 	$("#track-search").keyup(function(e)
 	{
 		if(e.keyCode == 13)
@@ -47,6 +49,8 @@ $(document).ready(function()
 			spotifyApi.searchTracks($(this).val(), {limit: 5}).then(handleSearch);
 		}
 	});
+
+	$(".album-image-cont").click(toggleRecord);
 });
 
 function getTrackDataClick()
@@ -59,7 +63,7 @@ function getTrackDataClick()
 
 	// Also can use getAudioFeaturesForTracks(Array<string>)
 	spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
-	spotifyApi.getTrack(trackId).then(showTrackInfo, errorWithTrack);
+	spotifyApi.getTrack(trackId).then(handleTrackInfo, errorWithTrack);
 }
 
 // Callback for login completion, which updates buttons and sets access token in the API
@@ -151,8 +155,13 @@ function graphAudioFeatures(featureData)
 }
 
 // Show information about the track from the passed in track data
-function showTrackInfo(trackData)
+function handleTrackInfo(trackData)
 {
+	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
+	audioObject = new Audio(trackData.preview_url);
+	audioObject.addEventListener('ended', hideRecord);
+	audioObject.addEventListener('pause', hideRecord);
+
 	$(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
 	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
@@ -183,7 +192,33 @@ function handleSearch(data)
 	});
 }
 
-// Probably an invalid Spotify UID
+function toggleRecord()
+{
+	if($(".album-image-cont").hasClass("playing"))
+		hideRecord();
+	else
+		showRecord();
+}
+
+function showRecord()
+{
+	if(audioObject)
+	{
+		audioObject.play();
+		$(".album-image-cont").addClass("playing");
+	}
+}
+
+function hideRecord()
+{	
+	if(audioObject)
+	{
+		audioObject.pause();
+		$(".album-image-cont").removeClass("playing");
+	}	
+}
+
+// Callback for API calls that shows an error
 function errorWithTrack()
 {
 	$("#track-error").show();
