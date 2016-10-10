@@ -65,15 +65,16 @@ function setupGraph()
 		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 		{
 			$(".graph-cont").append('<div class="graph-col ' + key + '">'
-				+ '<div class="col-title">'
-					+ '<div class="col-icon"></div>'
-					+ '<span>' + keyData["name"] + '</span>'
-					+ '<div class="col-desc">' + keyData["description"] + "</div>"
-				+ "</div>"
 				+ '<div class="fill">'
 					+ '<div class="value"></div>'
 				+ '</div>'
 			+ '</div>');
+			$(".graph-labels").append(""
+			+ '<div class="col-title ' + key + '">'
+				+ '<div class="col-icon"></div>'
+				+ '<span>' + keyData["name"] + '</span>'
+				+ '<div class="col-desc">' + keyData["description"] + "</div>"
+			+ "</div>");
 		}
 	}
 }
@@ -81,7 +82,6 @@ function setupGraph()
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
-	console.log(featureData);
 	$(".track-info").show();
 
 	for(key in featureData) // iterate through each feature attribute

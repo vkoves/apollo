@@ -1,6 +1,7 @@
 .page-container
 {
 	font-family: 'Montserrat', sans-serif;
+	color: #1d1d1d;
 }
 
 /* Add basic pill button styling */
@@ -43,9 +44,17 @@
 /* Hide feature-rich panel by default (wait till auth) */
 .post-authorize { display: none; }
 
+.input-bar
+{
+	background: #dadada;
+	padding: 10px 30px;
+	margin: auto;
+	display: inline-block;
+	border-radius: 5px;
+}
+
 #track-id
 {
-	margin-top: 10px;
 	margin-left: 5px;
 	width: 300px;
 	height: 29px;
@@ -85,18 +94,18 @@
 /*.track-info .album-image-cont:hover > .record { top: -50%; }*/
 .track-info .track-text
 {
-	width: 79.5%;
+	width: 78.5%;
+	margin-left: 1%;
 	vertical-align: top;
 	display: inline-block;
+	margin-top: 20px;
+	background: #dadada;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 5px;
 }
-.track-info h2 { margin-bottom: 0px; }
-.track-info h3 { margin-top: 0px; }
-.non-graph-data .data-item
-{
-	margin-right: 10px;
-	color: grey;
-	height: 30px;
-}
+.track-info #title { margin: 0px; }
+.track-info #artists { margin-top: 0px; }
 .non-graph-data .left-col, .right-col
 {
 	text-align: left;
@@ -113,17 +122,29 @@
 	padding-right: 20%;
 	margin-left: 2%;
 }
-.non-graph-data .left-text { float: left; }
-.non-graph-data .right-text
+.non-graph-data .data-item
 {
-	float: right;
-	color: black;
+	margin-right: 10px;
+	height: 30px;
 }
+.non-graph-data .left-text
+{
+	color: #484747;
+	float: left;
+}
+.non-graph-data .right-text { float: right; }
 
+.graph-top-cont
+{
+	background: #dadada;
+	border-radius: 5px;
+	overflow: hidden;
+	margin-top: 10px;
+}
 .graph-cont
 {
+	padding-top: 2%;
 	background: white;
-	margin-top: 10px;
 	height: 50%;
 }
 .graph-col
@@ -135,9 +156,10 @@
 }
 .col-title
 {
-	position: absolute;
-	top: 101%;
-	width: 100%;
+	width: calc(100%/7);
+	display: inline-block;
+	position: relative;
+	padding-bottom: 10px;
 }
 .col-title:hover > .col-desc { display: block; }
 .col-desc {
@@ -154,9 +176,9 @@
 /* Add column icons */
 .col-icon
 {
-	width: 35%;
-	padding-bottom: 35%; /* Makes divs square if matches width */
-	margin: 2% auto 2% auto;
+	width: 25%;
+	padding-bottom: 25%; /* Makes divs square if matches width */
+	margin: 5% auto 5% auto;
 	background-size: 100%;
 	background-repeat: no-repeat;
 }
@@ -174,8 +196,8 @@
 	background: #673ab7;
 	position: absolute;
 	bottom: 0;
-	width: 90%;
-	left: 5%;
+	width: 80%;
+	left: 10%;
 	height: 0%;
 	transition: height 1s;
 }
