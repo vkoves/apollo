@@ -2,6 +2,7 @@
 {
 	font-family: 'Montserrat', sans-serif;
 	color: #1d1d1d;
+	margin-top: 10px;
 }
 
 /* Add basic pill button styling */
@@ -63,6 +64,44 @@
 
 /* Hide feature-rich panel by default (wait till auth) */
 .post-authorize { display: none; }
+
+/* Style the top menu */
+.menu-bar
+{
+	margin-bottom: 20px;
+	height: 70px;
+	background-color: #dadada;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.menu-option
+{
+	width: 24.85%;
+	vertical-align: top;
+	padding: 10px 0px;
+	box-sizing: border-box;
+	height: 100%;
+	cursor: pointer;
+	float: left;
+	bprder
+}
+.menu-option:hover
+{
+	background-color: #bdbdbd;
+}
+.menu-sep
+{
+	width: 0.2%;
+	height: 80%;
+	margin-top: 0.7%;
+	background: grey;
+	float: left;
+}
+.menu-option img
+{
+	height: calc(100% - 20px);
+	margin-bottom: 5px;
+}
 
 .input-bar
 {

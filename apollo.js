@@ -8,7 +8,7 @@
  *  - Add way of comparing two tracks
  *  - Add way of graphing these properties over an entire set of tracks, like a playlist or album
  *  - Track history during session (songs entered), so a user can go back and analyse a past analysed song
- *  - Add a way to search instead of using ID  spotifyApi.searchTracks(queryTerm, {limit: 5})
+ *  - DONE: Add a way to search instead of using ID  spotifyApi.searchTracks(queryTerm, {limit: 5})
  */
 
 var spotifyApi;
@@ -78,6 +78,14 @@ function loginComplete(access_token)
 	});
 
 	spotifyApi.setAccessToken(access_token);
+	
+	// TODO: Implement use of this later
+	/*
+	spotifyApi.getUserPlaylists({"limit": 40}).then(function(value)
+	{
+		console.log(value);
+	});
+	*/
 }
 
 // Setup the audio feature graph, appending all needed columns
