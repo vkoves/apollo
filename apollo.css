@@ -36,12 +36,28 @@
 }
 
 .track-info { display: none; }
-.track-info .album-image
+.track-info .album-image-cont
 {
+	position: relative;
 	width: 20%;
 	display: inline-block;
+}
+.track-info .album-image-cont img
+{
+	width: 100%;
 	box-shadow: 2px 2px 5px grey;
 }
+.track-info .album-image-cont .record
+{
+	border-radius: 100px;
+	position: absolute;
+	top: -10%;
+	z-index: -1;
+	width: 96%;
+	left: 2%;
+	transition: top 0.5s;
+}
+/*.track-info .album-image-cont:hover > .record { top: -50%; }*/
 .track-info .track-text
 {
 	width: 79.5%;
