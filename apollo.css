@@ -138,6 +138,7 @@ input[type="text"]
 	background-color: #bdbdbd;
 	padding: 10px;
 	cursor: pointer;
+	width: 500px;
 }
 .search-listing:hover
 {
@@ -156,7 +157,7 @@ input[type="text"]
 	position: relative;
 	vertical-align: top;
 	top: 25%;
-	width: calc(100% - 115px);
+	max-width: calc(100% - 120px)
 }
 .listing-text .track-title
 {
@@ -204,9 +205,9 @@ input[type="text"]
 	width: 96%;
 	left: 2%;
 }
-.album-image-cont:hover > .record
+.album-image-cont:hover > .record.hidden
 {
-	top: -12%;
+	top: -12% !important;
 }
 /* If playing a song */
 @keyframes spin {

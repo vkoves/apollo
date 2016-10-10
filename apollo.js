@@ -207,6 +207,7 @@ function showRecord(speed)
 {
 	if(audioObject)
 	{
+		$(".album-image-cont .record").removeClass("hidden");
 		$( ".album-image-cont .record" ).animate({
 			top: "-100%"
 		}, speed, function() {
@@ -233,7 +234,10 @@ function hideRecord(speed)
 			$(".album-image-cont").removeClass("playing");
 			$(this).animate({
 				top: "-10%"
-			}, speed);
+			}, speed, function()
+			{
+				$(".album-image-cont .record").addClass("hidden");
+			});
 		});
 	}	
 }
