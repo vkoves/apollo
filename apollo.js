@@ -1,5 +1,15 @@
 /* Uses JMPerez Spotify JS Wrapper https://github.com/JMPerez/spotify-web-api-js */
 
+/**
+ *
+ *  TODO:
+ *
+ *  - Use ranges specified in the descriptions of content to make some predictions (e.g. Spotify things this is an aoustic depressing song)
+ *  - Add way of comparing two tracks
+ *  - Add way of graphing these properties over an entire set of tracks, like a playlist or album
+ *  - Track history during session (songs entered), so a user can go back and analyse a past analysed song
+ */
+
 var spotifyApi;
 var origin = "http://viktorkoves.com"; // assume on production, and set origin variable as such
 
