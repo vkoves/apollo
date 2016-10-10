@@ -164,11 +164,16 @@ function handleTrackInfo(trackData)
 		if(!$(".record").hasClass("hidden")) //if record isn't hidden
 			hideRecord();
 	}
-	audioObject = new Audio(trackData.preview_url);
-	audioObject.addEventListener('ended', function()
+	if(trackData.preview_url) // some songs don't have previews. Try "Gimme Gimme" by Louis La Roche - spotify:track:0EiwsLRU0PXK2cIjGXsiaa (works when searching?)
 	{
-		hideRecord(400);
-	});
+		audioObject = new Audio(trackData.preview_url);
+		audioObject.addEventListener('ended', function()
+		{
+			hideRecord(400);
+		});
+	}
+	else
+		audioObject = null;
 
 	$(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
@@ -200,6 +205,7 @@ function handleSearch(data)
 	});
 }
 
+// Toggle between the record being hidden and not hidden
 function toggleRecord()
 {
 	var speed = 400;
@@ -210,6 +216,7 @@ function toggleRecord()
 		showRecord(speed);
 }
 
+// Show the record, playing the audioObject when the animation ends
 function showRecord(speed)
 {
 	if(audioObject)
@@ -229,9 +236,12 @@ function showRecord(speed)
 	}
 }
 
+// Hide the record, pausing immediately then animating back to normal position
+// Animation goes from 2% (centered onrecord) to -100% (fully off record) to -10% (peeking out behind record)
+// We remove the playing class when the record is fully out to make the record move from in front of the album art
+// to behind it. We also add the hidden class when animation is done for hover effects
 function hideRecord(speed)
 {
-	console.log("HIDE!");
 	if(audioObject)
 	{
 		audioObject.pause();
@@ -249,7 +259,7 @@ function hideRecord(speed)
 	}	
 }
 
-// Callback for API calls that shows an error
+// Callback for API calls that shows an error message
 function errorWithTrack()
 {
 	$("#track-error").show();
