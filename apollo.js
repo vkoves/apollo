@@ -34,22 +34,29 @@ $(document).ready(function()
 		login(loginComplete);
 	});
 
-	$("#get-track-data").click(function()
+	$("#get-track-data").click(getTrackDataClick);
+
+	$("#track-search").keyup(function(e)
 	{
-		if($(this).hasClass("disabled")) // return if the button is non active
-			return;
-
-		var trackInputData = $("#track-id").val();
-		var trackId = trackInputData;
-
-		if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
-			trackId = trackInputData.split("spotify:track:")[1];
-
-		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
-		spotifyApi.getTrack(trackId).then(showTrackInfo, errorWithTrack);
+		if(e.keyCode == 13)
+		{
+			spotifyApi.searchTracks($(this).val(), {limit: 5}).then(handleSearch);
+		}
 	});
 });
+
+function getTrackDataClick()
+{
+	var trackInputData = $("#track-id").val();
+	var trackId = trackInputData;
+
+	if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
+		trackId = trackInputData.split("spotify:track:")[1];
+
+	// Also can use getAudioFeaturesForTracks(Array<string>)
+	spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
+	spotifyApi.getTrack(trackId).then(showTrackInfo, errorWithTrack);
+}
 
 // Callback for login completion, which updates buttons and sets access token in the API
 function loginComplete(access_token)
@@ -145,19 +152,31 @@ function showTrackInfo(trackData)
 	$(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
 	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
+}
 
-	// A helper function to combine all the artists into one nice string
-	function combineArtists(artistsHash)
+// Called as a result of calling the search API call
+function handleSearch(data)
+{
+	$(".search-results").html(""); // clear the HTML of the search results
+
+	for(key in data.tracks.items) // iterate through tracks
 	{
-		var artistNames = [];
-		
-		for(key in artistsHash)
-		{
-			artistNames.push(artistsHash[key].name);
-		}
-
-		return artistNames.join(", ");
+		var track = data.tracks.items[key];
+		$(".search-results").append('<div class="search-listing" data-uri=' + track.uri + '>'
+			+ '<img src="' + track.album.images[0].url + '">'
+			+ '<div class="listing-text">'
+				+ '<span class="track-title">' + track.name + '</span><br><span class="author">by ' + combineArtists(track.artists) + '</span>'
+			+ '</div>'
+		+ '</div>');
 	}
+	$(".search-results").slideDown();
+
+	$(".search-listing").click(function()
+	{
+		$("#track-id").val($(this).attr("data-uri"));
+		$(".search-results").hide();
+		getTrackDataClick();
+	});
 }
 
 // Probably an invalid Spotify UID
@@ -165,6 +184,19 @@ function errorWithTrack()
 {
 	$("#track-error").show();
 	$(".track-cont").hide();
+}
+
+// A helper function to combine all the artists into one nice string
+function combineArtists(artistsHash)
+{
+	var artistNames = [];
+	
+	for(key in artistsHash)
+	{
+		artistNames.push(artistsHash[key].name);
+	}
+
+	return artistNames.join(", ");
 }
 
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
