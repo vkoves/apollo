@@ -40,12 +40,16 @@ scripts:
 <!-- Show up after authorization completes -->
 <div class="post-authorize">
 	<div class="input-bar">
-		Track ID/Spotify URI <input type="text" id="track-id"></input>
+		<div class="input-label">Track ID/Spotify URI </div><input type="text" id="track-id"></input>
 		<div id="get-track-data" class="apollo-btn">Get Track Data</div>
+		<br>
+		<!--
 		<div class="or-row">
 			<span class="or-break"></span>OR<span class="or-break"></span>
 		</div>
-		Search <input type="text" id="track-search"></input>
+		-->
+		<div class="input-label">Search </div><input type="text" id="track-search"></input>
+		<div class="apollo-btn search-submit">Search</div>		
 		<div class="search-results"></div>
 	</div>
 	<div id="track-error">

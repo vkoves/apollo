@@ -66,11 +66,24 @@
 
 .input-bar
 {
+	position: relative;
 	background: #dadada;
 	padding: 10px 30px;
 	margin: auto;
 	display: inline-block;
 	border-radius: 5px;
+	text-align: left;
+}
+.input-bar .apollo-btn
+{
+	width: 140px;
+	text-align: center;
+}
+.input-label
+{
+	display: inline-block;
+	width: 170px;
+	text-align: right;
 }
 
 input[type="text"]
@@ -84,6 +97,7 @@ input[type="text"]
 	border: none;
 	outline: none !important;
 }
+#track-search { margin-top: 5px; }
 
 .or-row
 {
@@ -100,8 +114,14 @@ input[type="text"]
 /* Search Styling */
 .search-results
 {
-	display: none;
-	padding-top: 10px;
+	position: absolute;
+	top: 73px;
+	left: 206px;
+	z-index: 10;
+	border-bottom-right-radius: 5px;
+	overflow: hidden;
+	border-bottom-left-radius: 5px;
+	box-shadow: 0px 2px 3px #404040;
 }
 .search-listing
 {
@@ -128,6 +148,7 @@ input[type="text"]
 	position: relative;
 	vertical-align: top;
 	top: 25%;
+	width: calc(100% - 115px);
 }
 .listing-text .track-title
 {

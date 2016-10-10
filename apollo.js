@@ -36,6 +36,10 @@ $(document).ready(function()
 
 	$("#get-track-data").click(getTrackDataClick);
 
+	$(".search-submit").click(function()
+	{
+		spotifyApi.searchTracks($("#track-search").val(), {limit: 5}).then(handleSearch);
+	})
 	$("#track-search").keyup(function(e)
 	{
 		if(e.keyCode == 13)
