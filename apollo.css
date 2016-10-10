@@ -85,6 +85,17 @@
 	outline: none !important;
 }
 
+#track-error
+{
+	display: none;
+	background-color: #ff7f7f;
+	padding: 10px 30px;
+	/*display: inline-block;*/
+	margin: 10px 0px;
+	border-radius: 5px;
+	color: white;
+}
+
 .track-info { display: none; }
 .track-info .album-image-cont
 {

@@ -8,6 +8,7 @@
  *  - Add way of comparing two tracks
  *  - Add way of graphing these properties over an entire set of tracks, like a playlist or album
  *  - Track history during session (songs entered), so a user can go back and analyse a past analysed song
+ *  - Add a way to search instead of using ID  spotifyApi.searchTracks(queryTerm, {limit: 5})
  */
 
 var spotifyApi;
@@ -45,8 +46,8 @@ $(document).ready(function()
 			trackId = trackInputData.split("spotify:track:")[1];
 
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures);
-		spotifyApi.getTrack(trackId).then(showTrackInfo);
+		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
+		spotifyApi.getTrack(trackId).then(showTrackInfo, errorWithTrack);
 	});
 });
 
@@ -55,7 +56,6 @@ function loginComplete(access_token)
 {
 	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
 	$("#spotify-authorize").off(); // and disable the click event from being fired again
-	$(".needs-auth").removeClass("disabled");
 
 	$(".pre-authorize").fadeOut(function()
 	{
@@ -92,7 +92,9 @@ function setupGraph()
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
+	$(".track-cont").show();
 	$(".track-info").show();
+	$("#track-error").hide();
 
 	for(key in featureData) // iterate through each feature attribute
 	{
@@ -156,6 +158,13 @@ function showTrackInfo(trackData)
 
 		return artistNames.join(", ");
 	}
+}
+
+// Probably an invalid Spotify UID
+function errorWithTrack()
+{
+	$("#track-error").show();
+	$(".track-cont").hide();
 }
 
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
