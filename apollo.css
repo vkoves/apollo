@@ -91,7 +91,12 @@
 }
 .track-info h2 { margin-bottom: 0px; }
 .track-info h3 { margin-top: 0px; }
-.non-graph-data .data-item { margin-right: 10px; }
+.non-graph-data .data-item
+{
+	margin-right: 10px;
+	color: grey;
+	height: 30px;
+}
 .non-graph-data .left-col, .right-col
 {
 	text-align: left;
@@ -108,7 +113,12 @@
 	padding-right: 20%;
 	margin-left: 2%;
 }
-.non-graph-data .right-text { float: right; }
+.non-graph-data .left-text { float: left; }
+.non-graph-data .right-text
+{
+	float: right;
+	color: black;
+}
 
 .graph-cont
 {

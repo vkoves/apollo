@@ -104,7 +104,7 @@ function graphAudioFeatures(featureData)
 	else
 		featureData.mode = "Minor";
 
-	var pitches = ['C', 'C#', 'D', 'D#', 'E', 'E#', 'F', 'F#', 'G', 'G#'];
+	var pitches = ['C', 'C#', 'D', 'D#', 'E', 'E#', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'B#'];
 	featureData.key = pitches[featureData.key];
 	featureData.duration = getProperDuration(featureData.duration_ms)
 
