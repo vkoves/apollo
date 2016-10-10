@@ -35,14 +35,16 @@
 	outline: none !important;
 }
 
+.track-info { display: none; }
 .track-info .album-image
 {
-	width: 15%;
+	width: 20%;
 	display: inline-block;
+	box-shadow: 2px 2px 5px grey;
 }
 .track-info .track-text
 {
-	width: 84.5%;
+	width: 79.5%;
 	vertical-align: top;
 	display: inline-block;
 }
@@ -53,14 +55,15 @@
 .graph-cont
 {
 	background: white;
-	margin-top: 20px;
+	margin-top: 10px;
+	height: 60%;
 }
 .graph-col
 {
 	display: inline-block;
 	position: relative;
 	width: calc(100% / 7);
-	height: 70%;
+	height: 100%;
 }
 .col-title:hover > .col-desc { display: block; }
 .col-desc {

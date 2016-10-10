@@ -74,7 +74,7 @@ function setupGraph()
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
-	console.log(featureData);
+	$(".track-info").show();
 
 	for(key in featureData) // iterate through each feature attribute
 	{
