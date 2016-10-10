@@ -185,19 +185,31 @@
 	position: absolute;
 	width: 250%;
 	left: -75%;
-	bottom: 120%;
+	bottom: 95%;
 	padding: 10px;
 	box-sizing: border-box;
-	background: gainsboro;
+	background: #404040;
+	color: white;
+	border-radius: 5px;
 	display: none;
 	z-index: 5;
+}
+.col-desc::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #404040 transparent transparent transparent;
 }
 /* Add column icons */
 .col-icon
 {
 	width: 25%;
 	padding-bottom: 25%; /* Makes divs square if matches width */
-	margin: 5% auto 5% auto;
+	margin: 10% auto 5% auto;
 	background-size: 100%;
 	background-repeat: no-repeat;
 }
