@@ -95,9 +95,17 @@ input[type="text"]
 	box-shadow: 0px 0px 2px grey inset;
 	padding: 0px 10px;
 	border: none;
+	font-size: 14px;
 	outline: none !important;
 }
-#track-search { margin-top: 5px; }
+#track-search
+{
+	margin-top: 5px;
+	background-image: url("search.svg");
+	background-size: auto 70%;
+	background-repeat: no-repeat;
+	background-position: 98% center;
+}
 
 .or-row
 {
@@ -248,7 +256,7 @@ input[type="text"]
 {
 	padding-top: 2%;
 	background: white;
-	height: 50%;
+	height: 48%;
 }
 .graph-col
 {
