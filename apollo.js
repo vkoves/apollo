@@ -51,6 +51,12 @@ $(document).ready(function()
 	});
 
 	$(".album-image-cont").click(toggleRecord);
+
+	$(".menu-option").click(function()
+	{
+		$(".menu-option").removeClass("active");
+		$(this).addClass("active");
+	});
 });
 
 function getTrackDataClick()

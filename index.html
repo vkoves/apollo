@@ -40,26 +40,26 @@ scripts:
 <!-- Show up after authorization completes -->
 <div class="post-authorize">
 	<div class="menu-bar">
-		<div class="menu-option">
-			<img src="icons/menu/song.png"><br>
+		<div id="song" class="menu-option active">
+			<div class="icon" src="icons/menu/song.png"></div>
 			Single Song
 		</div>
 		<div class="menu-sep"></div>
 		
-		<div class="menu-option">
-			<img src="icons/menu/songcompare.png"><br>
+		<div id="song-compare" class="menu-option">
+			<div class="icon" src="icons/menu/songcompare.png"></div>
 			Compare Songs
 		</div>
 		<div class="menu-sep"></div>
 		
-		<div class="menu-option">
-			<img src="icons/menu/album.png"><br>
+		<div id="album" class="menu-option">
+			<div class="icon" src="icons/menu/album.png"></div>
 			Album
 		</div>
 		<div class="menu-sep"></div>
 
-		<div class="menu-option">
-			<img src="icons/menu/playlist.png"><br>
+		<div id="playlist" class="menu-option">
+			<div class="icon" src="icons/menu/playlist.png"></div>
 			Playlist
 		</div>
 	</div>
@@ -67,14 +67,14 @@ scripts:
 		<div class="input-label">Track ID/Spotify URI </div><input type="text" id="track-id"></input>
 		<div id="get-track-data" class="apollo-btn">Get Track Data</div>
 		<br>
-		<!--
-		<div class="or-row">
-			<span class="or-break"></span>OR<span class="or-break"></span>
-		</div>
-		-->
 		<div class="input-label">Search </div><input type="text" id="track-search"></input>
 		<div class="apollo-btn search-submit">Search</div>		
 		<div class="search-results"></div>
+	</div>
+	<!-- For Compare Songs -->
+	<div class="song-select compare-songs">
+		<div>Song 1</div>
+		<div>Song 2</div>
 	</div>
 	<div id="track-error">
 		Spotify returned an error! Please double check your input and try again.

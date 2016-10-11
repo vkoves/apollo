@@ -89,6 +89,11 @@
 {
 	background-color: #bdbdbd;
 }
+.menu-option.active
+{
+	background-color: #673ab7;
+	color: white;
+}
 .menu-sep
 {
 	width: 0.2%;
@@ -97,11 +102,23 @@
 	background: grey;
 	float: left;
 }
-.menu-option img
+.menu-option .icon
 {
 	height: calc(100% - 20px);
 	margin-bottom: 5px;
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
+.menu-option#song .icon { background-image: url("icons/menu/song.png"); }
+.menu-option#song-compare .icon { background-image: url("icons/menu/songcompare.png"); }
+.menu-option#album .icon{ background-image: url("icons/menu/album.png"); }
+.menu-option#playlist .icon { background-image: url("icons/menu/playlist.png"); }
+
+.menu-option.active#song .icon { background-image: url("icons/menu/song-white.png"); }
+.menu-option.active#song-compare .icon { background-image: url("icons/menu/songcompare-white.png"); }
+.menu-option.active#album .icon{ background-image: url("icons/menu/album-white.png"); }
+.menu-option.active#playlist .icon { background-image: url("icons/menu/playlist-white.png"); }
 
 .input-bar
 {
@@ -144,18 +161,6 @@ input[type="text"]
 	background-size: auto 70%;
 	background-repeat: no-repeat;
 	background-position: 98% center;
-}
-
-.or-row
-{
-	margin: 10px 0px;
-}
-.or-break
-{
-	display: inline-block;
-	width: 43%;
-	border: solid 1px #281d1d;
-	margin: 5px 15px;
 }
 
 /* Search Styling */
@@ -276,6 +281,8 @@ input[type="text"]
 }
 .track-info #title { margin: 0px; }
 .track-info #artists { margin-top: 0px; }
+
+
 .non-graph-data .left-col, .right-col
 {
 	text-align: left;
@@ -304,6 +311,8 @@ input[type="text"]
 }
 .non-graph-data .right-text { float: right; }
 
+
+/* Graph Styling */
 .graph-top-cont
 {
 	background: #dadada;
@@ -388,4 +397,15 @@ input[type="text"]
 	bottom: 100%;
 	font-weight: 600;
 	font-size: 1.25em;
+}
+/* End Graph Styling */
+
+/* Compare Songs Styling */
+.compare-songs { display: none; } /* Hide song comparison tools by default */
+.song-select { height: 40px; }
+.song-select div {
+    width: 50%;
+    float: left;
+    height: 40px;
+    padding-top: 20px;
 }
