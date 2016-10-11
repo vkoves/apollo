@@ -64,26 +64,26 @@ scripts:
 		</div>
 	</div>
 	<div class="input-bar">
-		<div class="input-label">Track ID/Spotify URI </div><input type="text" id="track-id"></input>
-		<div id="get-track-data" class="apollo-btn">Get Track Data</div>
+		<div class="input-label">Track ID/Spotify URI </div><input type="text" id="spotify-id"></input>
+		<div id="submit-btn" class="apollo-btn">Get Song Data</div>
 		<br>
-		<div class="input-label">Search </div><input type="text" id="track-search"></input>
+		<div class="input-label">Search </div><input type="text" id="search-field"></input>
 		<div class="apollo-btn search-submit">Search</div>		
 		<div class="search-results"></div>
 	</div>
 	<!-- For Compare Songs -->
 	<div class="song-select compare-songs">
-		<div>Song 1</div>
-		<div>Song 2</div>
+		<div class="option active">Song 1</div>
+		<div class="option">Song 2</div>
 	</div>
-	<div id="track-error">
+	<div id="spotify-error">
 		Spotify returned an error! Please double check your input and try again.
 	</div>
 	<div class="track-cont">
 		<div class="track-info">
 			<div class="album-image-cont">
 				<img class="record hidden" src="record.png">
-				<img class="album-image" src="">
+				<img class="album-image" src="album-art-placeholder.png">
 			</div>
 			<div class="track-text">
 				<h2 id="title" class="no-bold"></h2>

@@ -154,7 +154,7 @@ input[type="text"]
 	font-size: 14px;
 	outline: none !important;
 }
-#track-search
+#search-field
 {
 	margin-top: 5px;
 	background-image: url("search.svg");
@@ -211,7 +211,7 @@ input[type="text"]
 .listing-text .author { font-size: 14px; }
 /* End Search Styling */
 
-#track-error
+#spotify-error
 {
 	display: none;
 	background-color: #ff7f7f;
@@ -222,7 +222,6 @@ input[type="text"]
 	color: white;
 }
 
-.track-info { display: none; }
 .track-info .album-image-cont
 {
 	position: relative;
@@ -402,10 +401,25 @@ input[type="text"]
 
 /* Compare Songs Styling */
 .compare-songs { display: none; } /* Hide song comparison tools by default */
-.song-select { height: 40px; }
-.song-select div {
+.song-select
+{
+	border-radius: 5px;
+	overflow: hidden;
+	margin-top: 10px;
+	font-size: 0px; /* Prevent spacing from inline */
+}
+.song-select .option
+{
+	background-color: #dadada;
     width: 50%;
-    float: left;
+    display: inline-block;
     height: 40px;
     padding-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.song-select .option.active
+{
+	background-color: #673ab7;
+	color: white;
 }

@@ -35,14 +35,14 @@ $(document).ready(function()
 		login(loginComplete);
 	});
 
-	$("#get-track-data").click(getTrackDataClick);
+	$("#submit-btn").click(getTrackDataClick);
 
 	$(".search-submit").click(function()
 	{
-		spotifyApi.searchTracks($("#track-search").val(), {limit: 5}).then(handleSearch);
+		spotifyApi.searchTracks($("#search-field").val(), {limit: 5}).then(handleSearch);
 	})
 
-	$("#track-search").keyup(function(e)
+	$("#search-field").keyup(function(e)
 	{
 		if(e.keyCode == 13)
 		{
@@ -56,12 +56,35 @@ $(document).ready(function()
 	{
 		$(".menu-option").removeClass("active");
 		$(this).addClass("active");
+
+		if($(this).attr("id") == "song")
+		{
+			$(".compare-songs").hide();
+		}
+		else if($(this).attr("id") == "song-compare")
+		{
+			$(".compare-songs").show();
+		}
+		else if($(this).attr("id") == "album")
+		{
+			$(".compare-songs").hide();
+		}
+		else if($(this).attr("id") == "playlist")
+		{
+			$(".compare-songs").hide();
+		}
+	});
+
+	$(".song-select .option").click(function()
+	{
+		$(".song-select .option").removeClass("active");
+		$(this).addClass("active");
 	});
 });
 
 function getTrackDataClick()
 {
-	var trackInputData = $("#track-id").val();
+	var trackInputData = $("#spotify-id").val();
 	var trackId = trackInputData;
 
 	if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
@@ -123,7 +146,7 @@ function graphAudioFeatures(featureData)
 {
 	$(".track-cont").show();
 	$(".track-info").show();
-	$("#track-error").hide();
+	$("#spotify-error").hide();
 
 	for(key in featureData) // iterate through each feature attribute
 	{
@@ -216,7 +239,7 @@ function handleSearch(data)
 
 	$(".search-listing").click(function()
 	{
-		$("#track-id").val($(this).attr("data-uri"));
+		$("#spotify-id").val($(this).attr("data-uri"));
 		$(".search-results").hide();
 		getTrackDataClick();
 	});
@@ -279,7 +302,7 @@ function hideRecord(speed)
 // Callback for API calls that shows an error message
 function errorWithTrack()
 {
-	$("#track-error").show();
+	$("#spotify-error").show();
 	$(".track-cont").hide();
 }
 
