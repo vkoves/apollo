@@ -15,6 +15,18 @@ var spotifyApi;
 var origin = "http://viktorkoves.com"; // assume on production, and set origin variable as such
 var audioObject; // for playing previews
 
+var albumTarget; // the target album to update. Type jQuery element
+var albumNumber = 1; //number of track we're setting data for (either 1 or 2)
+
+var track1 = {
+	audioFeatures: {},
+	trackData: {}
+}
+var track2 = {
+	audioFeatures: {},
+	trackData: {}
+};
+
 if(window.location.href.indexOf("localhost") > -1) // if we're on localhost after all
 	origin = "http://localhost:4000"; // likewise set the origin to reflect this
 
@@ -29,6 +41,8 @@ $(document).ready(function()
 
 	spotifyApi = new SpotifyWebApi(); // init SpotifyWebApi
 	setupGraph();
+
+	albumTarget = $(".single-song-module .album-image-cont"); //set default target album to single song album
 
 	$("#spotify-authorize").click(function()
 	{
@@ -57,21 +71,29 @@ $(document).ready(function()
 		$(".menu-option").removeClass("active");
 		$(this).addClass("active");
 
+		$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
+
 		if($(this).attr("id") == "song")
 		{
-			$(".compare-songs").hide();
+			$(".single-song-module").show();
+			albumTarget = $(".single-song-module .album-image-cont");
+			albumNumber = 1;
 		}
 		else if($(this).attr("id") == "song-compare")
 		{
-			$(".compare-songs").show();
+			$(".compare-songs-module").show();
+			$("#track-2-select").removeClass("active");
+			$("#track-1-select").addClass("active");
+			albumTarget = $("#track-1");
+			albumNumber = 1;
 		}
 		else if($(this).attr("id") == "album")
 		{
-			$(".compare-songs").hide();
+			$(".album-module").show();
 		}
 		else if($(this).attr("id") == "playlist")
 		{
-			$(".compare-songs").hide();
+			$(".playlist-module").show();
 		}
 	});
 
@@ -79,6 +101,16 @@ $(document).ready(function()
 	{
 		$(".song-select .option").removeClass("active");
 		$(this).addClass("active");
+		if($(this).attr("id") == "track-1-select")
+		{
+			albumTarget = $("#track-1");
+			albumNumber = 1;
+		}
+		else
+		{
+			albumTarget = $("#track-2");
+			albumNumber = 2;
+		}
 	});
 });
 
@@ -127,8 +159,11 @@ function setupGraph()
 		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 		{
 			$(".graph-cont").append('<div class="graph-col ' + key + '">'
-				+ '<div class="fill">'
-					+ '<div class="value"></div>'
+				+ '<div class="fill fill-1">'
+					+ '<div class="value value-1"></div>'
+				+ '</div>'
+				+ '<div class="fill fill-2">'
+					+ '<div class="value value-2"></div>'
 				+ '</div>'
 			+ '</div>');
 			$(".graph-labels").append(""
@@ -141,11 +176,25 @@ function setupGraph()
 	}
 }
 
+// Sets the track1 and track2 variables
+function setTrackData(data, isFeatures)
+{
+	var track = track1; //default to track1
+
+	if(albumNumber == 2) //if we're really on track 2, use that
+		track = track2;
+
+	if(isFeatures)
+		track.audioFeatures = data;
+	else
+		track.trackData = data;
+}
+
 // Graph the track's audio features based on the passed in audio data
 function graphAudioFeatures(featureData)
 {
-	$(".track-cont").show();
-	$(".track-info").show();
+	setTrackData(featureData, true);
+
 	$("#spotify-error").hide();
 
 	for(key in featureData) // iterate through each feature attribute
@@ -157,8 +206,9 @@ function graphAudioFeatures(featureData)
 
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
-				$(".graph-col." + key + " .value").text(value);
-				$(".graph-col." + key + " .fill").css("height", value*100 + "%");
+				console.log(".graph-col." + key + " .value-" + albumNumber);
+				$(".graph-col." + key + " .value-" + albumNumber).text(value);
+				$(".graph-col." + key + " .fill-" + albumNumber).css("height", value*100 + "%");
 			}
 		}
 	}
@@ -197,11 +247,13 @@ function graphAudioFeatures(featureData)
 // Show information about the track from the passed in track data
 function handleTrackInfo(trackData)
 {
+	setTrackData(trackData, false);
+
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
 	if(audioObject)
 	{
 		audioObject.pause(); // pause if playing
-		if(!$(".record").hasClass("hidden")) //if record isn't hidden
+		if(!albumTarget.find(".record").hasClass("hidden")) //if record isn't hidden
 			hideRecord();
 	}
 	if(trackData.preview_url) // some songs don't have previews. Try "Gimme Gimme" by Louis La Roche - spotify:track:0EiwsLRU0PXK2cIjGXsiaa (works when searching?)
@@ -215,7 +267,7 @@ function handleTrackInfo(trackData)
 	else
 		audioObject = null;
 
-	$(".album-image").attr("src", trackData.album.images[0].url);
+	albumTarget.find(".album-image").attr("src", trackData.album.images[0].url);
 	$(".track-text #title").text(trackData.name);
 	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
 }
@@ -303,7 +355,6 @@ function hideRecord(speed)
 function errorWithTrack()
 {
 	$("#spotify-error").show();
-	$(".track-cont").hide();
 }
 
 // A helper function to combine all the artists into one nice string

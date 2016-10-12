@@ -169,7 +169,7 @@ input[type="text"]
 	position: absolute;
 	top: 73px;
 	left: 206px;
-	z-index: 10;
+	z-index: 15;
 	border-bottom-right-radius: 5px;
 	overflow: hidden;
 	border-bottom-left-radius: 5px;
@@ -222,25 +222,25 @@ input[type="text"]
 	color: white;
 }
 
-.track-info .album-image-cont
+.album-image-cont
 {
 	position: relative;
 	width: 20%;
 	display: inline-block;
 	cursor: pointer;
 }
-.track-info .album-image-cont img
+.album-image-cont img
 {
 	box-shadow: 2px 2px 5px grey;
 	margin-top: 10%;
 }
-.track-info .album-image-cont .album-image
+.album-image-cont .album-image
 {
 	position: relative;
 	width: 100%;
 	z-index: 10;
 }
-.track-info .album-image-cont .record
+.album-image-cont .record
 {
 	border-radius: 100px;
 	position: absolute;
@@ -400,7 +400,7 @@ input[type="text"]
 /* End Graph Styling */
 
 /* Compare Songs Styling */
-.compare-songs { display: none; } /* Hide song comparison tools by default */
+.compare-songs-module { display: none; } /* Hide song comparison tools by default */
 .song-select
 {
 	border-radius: 5px;
@@ -423,3 +423,7 @@ input[type="text"]
 	background-color: #673ab7;
 	color: white;
 }
+
+.two-track-cont .album-image-cont { margin: 0% 14.8%; } /* Give space between albums */
+.two-track-cont .album-image-cont img { margin-top: 20%; } /* Need larger margins when showing two albums */
+/* End Compare Songs Styling */

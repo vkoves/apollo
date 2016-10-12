@@ -72,15 +72,28 @@ scripts:
 		<div class="search-results"></div>
 	</div>
 	<!-- For Compare Songs -->
-	<div class="song-select compare-songs">
-		<div class="option active">Song 1</div>
-		<div class="option">Song 2</div>
+	<div class="song-select compare-songs-module">
+		<div id="track-1-select" class="option active">Song 1</div>
+		<div id="track-2-select" class="option">Song 2</div>
 	</div>
+
 	<div id="spotify-error">
 		Spotify returned an error! Please double check your input and try again.
 	</div>
+	
+	<div class="two-track-cont compare-songs-module">
+		<div id="track-1" class="album-image-cont">
+			<img class="record hidden" src="record.png">
+			<img class="album-image" src="album-art-placeholder.png">
+		</div>
+		<div id="track-2" class="album-image-cont">
+			<img class="record hidden" src="record.png">
+			<img class="album-image" src="album-art-placeholder.png">
+		</div>
+	</div>
+
 	<div class="track-cont">
-		<div class="track-info">
+		<div class="track-info single-song-module">
 			<div class="album-image-cont">
 				<img class="record hidden" src="record.png">
 				<img class="album-image" src="album-art-placeholder.png">
