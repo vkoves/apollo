@@ -4,9 +4,14 @@
  *
  *  TODO:
  *
+ * 		CLEANING
+ *  - Make it so each of the four views has data that properly persists, so switching between views works fine. Probably want to do this using JS for data storange
+ *  	rather than DOM to keep things light weight?
+ *
+ * 		FEATURES
  *  - Use ranges specified in the descriptions of content to make some predictions (e.g. Spotify things this is an aoustic depressing song)
  *  - Add way of comparing two tracks
- *  - Add way of graphing these properties over an entire set of tracks, like a playlist or album
+ *  - Add way of graphing audio features over an entire set of tracks, like a playlist or album
  *  - Track history during session (songs entered), so a user can go back and analyse a past analysed song
  *  - DONE: Add a way to search instead of using ID  spotifyApi.searchTracks(queryTerm, {limit: 5})
  */
@@ -18,14 +23,29 @@ var audioObject; // for playing previews
 var albumTarget; // the target album to update. Type jQuery element
 var albumNumber = 1; //number of track we're setting data for (either 1 or 2)
 
+var spotifyObjectType = "track"; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
+
+// Used for single song analysis
+var track = {
+	audioFeatures: {},
+	trackObject: {}
+}
+
+// Used for song compare
 var track1 = {
 	audioFeatures: {},
-	trackData: {}
+	trackObject: {}
 }
 var track2 = {
 	audioFeatures: {},
-	trackData: {}
+	trackObject: {}
 };
+
+// Used for album analysis
+var albumData = {};
+
+// Used for playlist analysis
+var playlist = {};
 
 if(window.location.href.indexOf("localhost") > -1) // if we're on localhost after all
 	origin = "http://localhost:4000"; // likewise set the origin to reflect this
@@ -49,53 +69,19 @@ $(document).ready(function()
 		login(loginComplete);
 	});
 
-	$("#submit-btn").click(getTrackDataClick);
+	$("#submit-btn").click(getSpotifyData);
 
-	$(".search-submit").click(function()
-	{
-		spotifyApi.searchTracks($("#search-field").val(), {limit: 5}).then(handleSearch);
-	})
+	$(".search-submit").click(spotifySearch);
 
 	$("#search-field").keyup(function(e)
 	{
-		if(e.keyCode == 13)
-		{
-			spotifyApi.searchTracks($(this).val(), {limit: 5}).then(handleSearch);
-		}
+		if(e.keyCode == 13) // if enter was pressed
+			spotifySearch();
 	});
 
 	$(".album-image-cont").click(toggleRecord);
 
-	$(".menu-option").click(function()
-	{
-		$(".menu-option").removeClass("active");
-		$(this).addClass("active");
-
-		$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
-
-		if($(this).attr("id") == "song")
-		{
-			$(".single-song-module").show();
-			albumTarget = $(".single-song-module .album-image-cont");
-			albumNumber = 1;
-		}
-		else if($(this).attr("id") == "song-compare")
-		{
-			$(".compare-songs-module").show();
-			$("#track-2-select").removeClass("active");
-			$("#track-1-select").addClass("active");
-			albumTarget = $("#track-1");
-			albumNumber = 1;
-		}
-		else if($(this).attr("id") == "album")
-		{
-			$(".album-module").show();
-		}
-		else if($(this).attr("id") == "playlist")
-		{
-			$(".playlist-module").show();
-		}
-	});
+	$(".menu-option").click(switchView);
 
 	$(".song-select .option").click(function()
 	{
@@ -114,17 +100,68 @@ $(document).ready(function()
 	});
 });
 
-function getTrackDataClick()
+// Switches to the view that is being requested per click in the menu
+function switchView()
 {
-	var trackInputData = $("#spotify-id").val();
-	var trackId = trackInputData;
+	$(".menu-option").removeClass("active");
+	$(this).addClass("active");
 
-	if(trackInputData.indexOf("spotify:track:") == 0) // if URI, trim
-		trackId = trackInputData.split("spotify:track:")[1];
+	$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
 
-	// Also can use getAudioFeaturesForTracks(Array<string>)
-	spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
-	spotifyApi.getTrack(trackId).then(handleTrackInfo, errorWithTrack);
+	if($(this).attr("id") == "song")
+	{
+		$(".single-song-module").show();
+		albumTarget = $(".single-song-module .album-image-cont");
+		albumNumber = 1;
+
+		spotifyObjectType = "track";
+	}
+	else if($(this).attr("id") == "song-compare")
+	{
+		$(".compare-songs-module").show();
+		$("#track-2-select").removeClass("active");
+		$("#track-1-select").addClass("active");
+		albumTarget = $("#track-1");
+		albumNumber = 1;
+		
+		spotifyObjectType = "track";
+	}
+	else if($(this).attr("id") == "album")
+	{
+		$(".album-module").show();
+
+		spotifyObjectType = "album";
+	}
+	else if($(this).attr("id") == "playlist")
+	{
+		$(".playlist-module").show();
+		
+		spotifyObjectType = "playlist";
+	}
+}
+
+// Puts in a search request
+function spotifySearch()
+{
+	spotifyApi.searchTracks($("#search-field").val(), {limit: 5}).then(handleSearch);
+}
+
+// Reads the URI field and updates data as needed
+function getSpotifyData()
+{
+	var spotifyURI = $("#spotify-id").val();
+	
+	if(spotifyObjectType == "track")
+	{
+		var trackId = spotifyURI;
+
+		if(spotifyURI.indexOf("spotify:track:") == 0) // if URI, trim
+			trackId = spotifyURI.split("spotify:track:")[1];
+	
+		// Also can use getAudioFeaturesForTracks(Array<string>)
+		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
+		spotifyApi.getTrack(trackId).then(handleTrackInfo, errorWithTrack);
+	}
 }
 
 // Callback for login completion, which updates buttons and sets access token in the API
@@ -187,7 +224,7 @@ function setTrackData(data, isFeatures)
 	if(isFeatures)
 		track.audioFeatures = data;
 	else
-		track.trackData = data;
+		track.trackObject = data;
 }
 
 // Graph the track's audio features based on the passed in audio data
@@ -293,7 +330,7 @@ function handleSearch(data)
 	{
 		$("#spotify-id").val($(this).attr("data-uri"));
 		$(".search-results").hide();
-		getTrackDataClick();
+		getSpotifyData();
 	});
 }
 
