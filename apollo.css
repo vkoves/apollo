@@ -68,6 +68,7 @@
 /* Style the top menu */
 .menu-bar
 {
+	display: none;
 	margin-bottom: 20px;
 	height: 70px;
 	background-color: #dadada;
