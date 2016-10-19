@@ -21,25 +21,18 @@ var origin = "http://viktorkoves.com"; // assume on production, and set origin v
 var audioObject; // for playing previews
 
 var albumTarget; // the target album to update. Type jQuery element
-var albumNumber = 1; //number of track we're setting data for (either 1 or 2)
+var trackNumber = 1; //number of track we're setting data for (either 1 or 2)
 
 var spotifyObjectType = "track"; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
 
+var currentView = "song"; //stores the ID of the current menu object
+
 // Used for single song analysis
-var track = {
-	audioFeatures: {},
-	trackObject: {}
-}
+var track = {};
 
 // Used for song compare
-var track1 = {
-	audioFeatures: {},
-	trackObject: {}
-}
-var track2 = {
-	audioFeatures: {},
-	trackObject: {}
-};
+var track1 = {};
+var track2 = {};
 
 // Used for album analysis
 var albumData = {};
@@ -90,12 +83,12 @@ $(document).ready(function()
 		if($(this).attr("id") == "track-1-select")
 		{
 			albumTarget = $("#track-1");
-			albumNumber = 1;
+			trackNumber = 1;
 		}
 		else
 		{
 			albumTarget = $("#track-2");
-			albumNumber = 2;
+			trackNumber = 2;
 		}
 	});
 });
@@ -108,33 +101,58 @@ function switchView()
 
 	$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
 
-	setupGraph();
+	currentView = $(this).attr("id");
 
-	if($(this).attr("id") == "song")
+	setupGraph(); //resetup graph for this view
+
+	if(currentView == "song")
 	{
 		$(".single-song-module").show();
 		albumTarget = $(".single-song-module .album-image-cont");
-		albumNumber = 1;
+		trackNumber = 1;
 
 		spotifyObjectType = "track";
+
+		if(Object.keys(track).length > 0) // if track is defined
+		{
+			graphAudioFeatures(track.audioFeatures);
+			handleTrackInfo(track.trackObject);
+		}
 	}
-	else if($(this).attr("id") == "song-compare")
+	else if(currentView == "song-compare")
 	{
+		if(Object.keys(track1).length > 0) // if track1 is defined
+		{
+			albumTarget = $("#track-1");
+			trackNumber = 1;
+			graphAudioFeatures(track1.audioFeatures);
+			handleTrackInfo(track1.trackObject);
+		}
+
+		if(Object.keys(track2).length > 0) // if track2 is defined
+		{
+			albumTarget = $("#track-2");
+			trackNumber = 2;
+			graphAudioFeatures(track2.audioFeatures);
+			handleTrackInfo(track2.trackObject);
+		}
+		
 		$(".compare-songs-module").show();
 		$("#track-2-select").removeClass("active");
 		$("#track-1-select").addClass("active");
 		albumTarget = $("#track-1");
-		albumNumber = 1;
+		trackNumber = 1;
 		
 		spotifyObjectType = "track";
+
 	}
-	else if($(this).attr("id") == "album")
+	else if(currentView == "album")
 	{
 		$(".album-module").show();
 
 		spotifyObjectType = "album";
 	}
-	else if($(this).attr("id") == "playlist")
+	else if(currentView == "playlist")
 	{
 		$(".playlist-module").show();
 		
@@ -199,7 +217,7 @@ function setupGraph()
 
 		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 		{
-			if($(".menu-option.active").attr("id") == "song-compare")
+			if(currentView == "song-compare")
 			{
 				var fillCols = ''
 				+ '<div class="fill fill-1">'
@@ -233,15 +251,20 @@ function setupGraph()
 // Sets the track1 and track2 variables
 function setTrackData(data, isFeatures)
 {
-	var track = track1; //default to track1
+	var currTrack = track; //default to song mode track
 
-	if(albumNumber == 2) //if we're really on track 2, use that
-		track = track2;
+	if(currentView == "song-compare")
+	{
+		if(trackNumber == 2)
+			currTrack = track2;
+		else
+			currTrack = track1;		
+	}
 
 	if(isFeatures)
-		track.audioFeatures = data;
+		currTrack.audioFeatures = data;
 	else
-		track.trackObject = data;
+		currTrack.trackObject = data;
 }
 
 // Graph the track's audio features based on the passed in audio data
@@ -260,10 +283,10 @@ function graphAudioFeatures(featureData)
 
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
-				if($(".menu-option.active").attr("id") == "song-compare")
+				if(currentView == "song-compare")
 				{
-					$(".graph-col." + key + " .value-" + albumNumber).text(value);
-					$(".graph-col." + key + " .fill-" + albumNumber).css("height", value*100 + "%");					
+					$(".graph-col." + key + " .value-" + trackNumber).text(value);
+					$(".graph-col." + key + " .fill-" + trackNumber).css("height", value*100 + "%");					
 				}
 				else
 				{
