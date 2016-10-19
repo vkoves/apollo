@@ -404,6 +404,11 @@ input[type="text"]
 	font-weight: 600;
 	font-size: 1.25em;
 }
+.value.value-1, .value.value-2 { 
+    font-size: 0.8em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 /* End Graph Styling */
 
 /* Compare Songs Styling */
