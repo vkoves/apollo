@@ -103,6 +103,8 @@ function switchView()
 
 	currentView = $(this).attr("id");
 
+	pausePlayingRecord();
+
 	setupGraph(); //resetup graph for this view
 
 	if(currentView == "song")
@@ -136,7 +138,7 @@ function switchView()
 			graphAudioFeatures(track2.audioFeatures);
 			handleTrackInfo(track2.trackObject);
 		}
-		
+
 		$(".compare-songs-module").show();
 		$("#track-2-select").removeClass("active");
 		$("#track-1-select").addClass("active");
@@ -334,18 +336,14 @@ function handleTrackInfo(trackData)
 	setTrackData(trackData, false);
 
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
-	if(audioObject)
-	{
-		audioObject.pause(); // pause if playing
-		if(!albumTarget.find(".record").hasClass("hidden")) //if record isn't hidden
-			hideRecord();
-	}
+	pausePlayingRecord();
+	
 	if(trackData.preview_url) // some songs don't have previews. Try "Gimme Gimme" by Louis La Roche - spotify:track:0EiwsLRU0PXK2cIjGXsiaa (works when searching?)
 	{
 		audioObject = new Audio(trackData.preview_url);
 		audioObject.addEventListener('ended', function()
 		{
-			hideRecord(400);
+			hideRecord($(".album-image-cont.playing .record"), 400);
 		});
 	}
 	else
@@ -382,26 +380,45 @@ function handleSearch(data)
 }
 
 // Toggle between the record being hidden and not hidden
+// Called on click by ".album-image-cont" objects, so we search for a ".record" child to pass to hideRecord() and showRecord()
 function toggleRecord()
 {
+	var elem = $(this).find(".record"); //since album-image-cont triggers the event, find the record
+
 	var speed = 400;
 
-	if($(".album-image-cont").hasClass("playing"))
-		hideRecord(speed);
+	if($(this).hasClass("playing"))
+		hideRecord(elem, speed);
 	else
-		showRecord(speed);
+		showRecord(elem, speed);
 }
 
-// Show the record, playing the audioObject when the animation ends
-function showRecord(speed)
+/**
+ * Show the record, playing the audioObject when the animation ends
+ * 
+ * @param  {jQuery Object} elem  The ".record" element to animate 
+ * @param  {integer} speed Speed of the animation in ms
+ */
+function showRecord(elem, speed)
 {
 	if(audioObject)
 	{
-		$(".album-image-cont .record").removeClass("hidden");
-		$( ".album-image-cont .record" ).animate({
+		pausePlayingRecord();
+	
+		var currTrack = track;
+
+		if(elem.closest("#track-1").length > 0) //if track 1
+			currTrack = track1;
+		else if(elem.closest("#track-2").length > 0)
+			currTrack = track2;
+
+		audioObject.src = currTrack.trackObject.preview_url
+
+		elem.removeClass("hidden");
+		elem.animate({
 			top: "-100%"
 		}, speed, function() {
-			$(".album-image-cont").addClass("playing");
+			elem.parent().addClass("playing");
 			$(this).animate({
 				top: "2%"
 			}, speed, function()
@@ -411,28 +428,42 @@ function showRecord(speed)
 		});
 	}
 }
-
-// Hide the record, pausing immediately then animating back to normal position
-// Animation goes from 2% (centered onrecord) to -100% (fully off record) to -10% (peeking out behind record)
-// We remove the playing class when the record is fully out to make the record move from in front of the album art
-// to behind it. We also add the hidden class when animation is done for hover effects
-function hideRecord(speed)
+/**
+ * Hide the record, pausing immediately then animating back to normal position
+ * Animation goes from 2% (centered onrecord) to -100% (fully off record) to -10% (peeking out behind record)
+ * We remove the playing class when the record is fully out to make the record move from in front of the album art
+ * to behind it. We also add the hidden class when animation is done for hover effects
+ * 
+ * @param  {jQuery Object} elem  The ".record" object to animate
+ * @param  {integer} speed Speed of the animation in ms
+ */
+function hideRecord(elem, speed)
 {
 	if(audioObject)
 	{
 		audioObject.pause();
-		$( ".album-image-cont .record" ).animate({
+		elem.animate({
 			top: "-100%"
 		}, speed, function() {
-			$(".album-image-cont").removeClass("playing");
+			elem.parent().removeClass("playing");
 			$(this).animate({
 				top: "-10%"
 			}, speed, function()
 			{
-				$(".album-image-cont .record").addClass("hidden");
+				elem.addClass("hidden");
 			});
 		});
 	}	
+}
+
+// If a record is playing, pauses it and hides
+function pausePlayingRecord()
+{
+	if(audioObject)
+	{
+		audioObject.pause(); // pause if playing
+		hideRecord($(".album-image-cont.playing .record"), 400);
+	}
 }
 
 // Callback for API calls that shows an error message
