@@ -391,6 +391,12 @@ input[type="text"]
 	height: 0%;
 	transition: height 1s;
 }
+.fill.fill-1, .fill.fill-2 {
+	width: 40%;
+}
+.fill.fill-1 { background-color: #8b4df9; }
+.fill.fill-2 { left: 50%; }
+
 .graph-col .value {
 	position: absolute;
 	width: 100%;

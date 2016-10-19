@@ -108,6 +108,8 @@ function switchView()
 
 	$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
 
+	setupGraph();
+
 	if($(this).attr("id") == "song")
 	{
 		$(".single-song-module").show();
@@ -189,19 +191,34 @@ function loginComplete(access_token)
 // Setup the audio feature graph, appending all needed columns
 function setupGraph()
 {
+	$(".graph-cont, .graph-labels").html(""); //clear container and labels
+
 	for(key in spotifyGraphableData)
 	{
 		keyData = spotifyGraphableData[key];
 
 		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 		{
-			$(".graph-cont").append('<div class="graph-col ' + key + '">'
+			if($(".menu-option.active").attr("id") == "song-compare")
+			{
+				var fillCols = ''
 				+ '<div class="fill fill-1">'
 					+ '<div class="value value-1"></div>'
 				+ '</div>'
 				+ '<div class="fill fill-2">'
 					+ '<div class="value value-2"></div>'
-				+ '</div>'
+				+ '</div>';
+			}
+			else
+			{
+				var fillCols = '' 
+				+ '<div class="fill">'
+					+ '<div class="value"></div>'
+				+ '</div>';
+			}
+
+			$(".graph-cont").append('<div class="graph-col ' + key + '">'
+				+ fillCols
 			+ '</div>');
 			$(".graph-labels").append(""
 			+ '<div class="col-title ' + key + '">'
@@ -243,9 +260,16 @@ function graphAudioFeatures(featureData)
 
 			if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 			{
-				console.log(".graph-col." + key + " .value-" + albumNumber);
-				$(".graph-col." + key + " .value-" + albumNumber).text(value);
-				$(".graph-col." + key + " .fill-" + albumNumber).css("height", value*100 + "%");
+				if($(".menu-option.active").attr("id") == "song-compare")
+				{
+					$(".graph-col." + key + " .value-" + albumNumber).text(value);
+					$(".graph-col." + key + " .fill-" + albumNumber).css("height", value*100 + "%");					
+				}
+				else
+				{
+					$(".graph-col." + key + " .value").text(value);
+					$(".graph-col." + key + " .fill").css("height", value*100 + "%");					
+				}
 			}
 		}
 	}
