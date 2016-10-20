@@ -179,16 +179,16 @@ function getSpotifyData()
 {
 	var spotifyURI = $("#spotify-id").val();
 	
+	var spotifyId = spotifyURI;
+
+	if(spotifyURI.indexOf("spotify:" + spotifyObjectType + ":") == 0) // if URI, trim
+		spotifyId = spotifyURI.split("spotify:" + spotifyObjectType + ":")[1];
+
 	if(spotifyObjectType == "track")
 	{
-		var trackId = spotifyURI;
-
-		if(spotifyURI.indexOf("spotify:track:") == 0) // if URI, trim
-			trackId = spotifyURI.split("spotify:track:")[1];
-	
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(trackId).then(graphAudioFeatures, errorWithTrack);
-		spotifyApi.getTrack(trackId).then(handleTrackInfo, errorWithTrack);
+		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, errorWithTrack);
+		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, errorWithTrack);
 	}
 }
 
