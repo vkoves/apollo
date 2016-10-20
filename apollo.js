@@ -96,6 +96,9 @@ $(document).ready(function()
 // Switches to the view that is being requested per click in the menu
 function switchView()
 {
+	if(this == $(".menu-option.active")[0]) //if clicking the current view, don't do anything
+		return;
+
 	$(".menu-option").removeClass("active");
 	$(this).addClass("active");
 
@@ -104,7 +107,7 @@ function switchView()
 	currentView = $(this).attr("id");
 
 	pausePlayingRecord();
-	clearSearch();
+	clearInput();
 
 	setupGraph(); //resetup graph for this view
 
@@ -192,40 +195,12 @@ function getSpotifyData()
 	}
 	else  if(spotifyObjectType == "album")
 	{
-		spotifyApi.getAlbum(spotifyId).then(function(data)
-		{
-			console.log(data);
-		}, spotifyError);
+		spotifyApi.getAlbum(spotifyId).then(handleAlbum, spotifyError);
 	}
 	else if(spotifyObjectType == "playlist")
 	{
-		spotifyApi.getPlaylist(spotifyURI.split(":")[2], spotifyURI.split(":")[4]).then(function(data)
-		{
-			console.log(data);
-		}, spotifyError);
+		spotifyApi.getPlaylist(spotifyURI.split(":")[2], spotifyURI.split(":")[4]).then(handlePlaylist, spotifyError);
 	}
-}
-
-// Callback for login completion, which updates buttons and sets access token in the API
-function loginComplete(access_token)
-{
-	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
-	$("#spotify-authorize").off(); // and disable the click event from being fired again
-
-	$(".pre-authorize").fadeOut(function()
-	{
-		$(".post-authorize").fadeIn();			
-	});
-
-	spotifyApi.setAccessToken(access_token);
-	
-	// TODO: Implement use of this later
-	/*
-	spotifyApi.getUserPlaylists({"limit": 40}).then(function(value)
-	{
-		console.log(value);
-	});
-	*/
 }
 
 // Setup the audio feature graph, appending all needed columns
@@ -374,6 +349,16 @@ function handleTrackInfo(trackData)
 	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
 }
 
+function handleAlbum(albumData)
+{
+	console.log(albumData);
+}
+
+function handlePlaylist(playlistData)
+{
+	console.log(playlistData);
+}
+
 // Called as a result of calling the search API call
 function handleSearch(data)
 {
@@ -420,10 +405,10 @@ function handleSearch(data)
 	});
 }
 
-// Hides the search and clears the field
-function clearSearch()
+// Hides the search and clears the input fields
+function clearInput()
 {
-	$("#search-field").val("");
+	$("#search-field, #spotify-id").val("");
 	$(".search-results").hide();
 }
 
@@ -533,6 +518,10 @@ function combineArtists(artistsHash)
 	return artistNames.join(", ");
 }
 
+/***************************/
+/***** LOGIN FUNCTIONS *****/
+/***************************/
+
 /* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
 function login(callback) {
 	var CLIENT_ID = '2edca4f106fc4672a68f5389579ac413';
@@ -568,3 +557,29 @@ function login(callback) {
 	);
 	
 }
+
+// Callback for login completion, which updates buttons and sets access token in the API
+function loginComplete(access_token)
+{
+	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
+	$("#spotify-authorize").off(); // and disable the click event from being fired again
+
+	$(".pre-authorize").fadeOut(function()
+	{
+		$(".post-authorize").fadeIn();			
+	});
+
+	spotifyApi.setAccessToken(access_token);
+	
+	// TODO: Implement use of this later
+	/*
+	spotifyApi.getUserPlaylists({"limit": 40}).then(function(value)
+	{
+		console.log(value);
+	});
+	*/
+}
+
+/***************************/
+/*** END LOGIN FUNCTIONS ***/
+/***************************/
