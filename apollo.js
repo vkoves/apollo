@@ -35,7 +35,7 @@ var track1 = {};
 var track2 = {};
 
 // Used for album analysis
-var albumData = {};
+var album = {};
 
 // Used for playlist analysis
 var playlist = {};
@@ -349,14 +349,26 @@ function handleTrackInfo(trackData)
 	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
 }
 
+// Analyzes an album, getting the audio features for the tracks on it
 function handleAlbum(albumData)
 {
-	console.log(albumData);
+	album = albumData;
+
+	spotifyApi.getAudioFeaturesForTracks(getTrackIds(albumData.tracks.items)).then(function(data)
+	{
+		console.log(data);		
+	}, spotifyError);
 }
 
+// Analyzes a playlist, getting the audio features for the tracks on it
 function handlePlaylist(playlistData)
-{
-	console.log(playlistData);
+{ 
+	playlist = playlistData;
+	
+	spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true)).then(function(data)
+	{
+		console.log(data);
+	}, spotifyError);
 }
 
 // Called as a result of calling the search API call
@@ -516,6 +528,24 @@ function combineArtists(artistsHash)
 	}
 
 	return artistNames.join(", ");
+}
+
+// A helper function that returns an array of track IDs given an array of tracks
+function getTrackIds(tracks, isPlaylist)
+{
+	var trackIds = [];
+
+	for(index in tracks)
+	{
+		var trackObj = tracks[index];
+
+		if(isPlaylist) //there's another level of nesting with playlists
+			trackIds.push(trackObj.track.id)
+		else
+			trackIds.push(trackObj.id);
+	}
+
+	return trackIds;
 }
 
 /***************************/
