@@ -84,7 +84,6 @@
 	height: 100%;
 	cursor: pointer;
 	float: left;
-	bprder
 }
 .menu-option:hover
 {
@@ -449,3 +448,19 @@ input[type="text"]
 .two-track-cont .album-image-cont { margin: 0% 14.8%; } /* Give space between albums */
 .two-track-cont .album-image-cont img { margin-top: 20%; } /* Need larger margins when showing two albums */
 /* End Compare Songs Styling */
+
+/* Album and Playlist Analysis Styling */
+.album-module, .playlist-module { display: none; }
+/* End Album and Playlist Analysis Styling */
+
+/* Generic Styling */
+.zero-top
+{
+	padding-top: 0px;
+	margin-top: 0px;
+}
+.zero-bot
+{
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}

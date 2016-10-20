@@ -461,10 +461,39 @@ function graphAnalysisResults()
 	$(".std-dev").remove(); // remove old analysis data
 
 	var analysisResultsObj;
+	$(".album-module.details h2").text("");
+
 	if(spotifyObjectType == "album")
+	{
+		if(album.images)
+		{
+			$(".album-module.details .album-image").attr("src", album.images[0].url);
+			$(".album-module.details h1").text(album.name);
+			$(".album-module.details h2").text("By " + combineArtists(album.artists));
+		}
+		else
+		{
+			$(".album-module.details .album-image").attr("src", "album-art-placeholder.png");
+			$(".album-module.details h1").text("Find an album to get started");
+		}
+
 		analysisResultsObj = albumAnalysisResults;
+	}
 	else if(spotifyObjectType == "playlist")
+	{
+		if(playlist.images)
+		{
+			$(".playlist-module.details .album-image").attr("src", playlist.images[0].url);
+			$(".playlist-module.details h1").text(playlist.name);
+		}
+		else
+		{
+			$(".playlist-module.details .album-image").attr("src", "album-art-placeholder.png");
+			$(".playlist-module.details h1").text("Find a playlist to get started");
+		}
+
 		analysisResultsObj = playlistAnalysisResults;
+	}
 
 	var average, stdDev;
 
