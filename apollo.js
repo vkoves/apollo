@@ -36,9 +36,11 @@ var track2 = {};
 
 // Used for album analysis
 var album = {};
+var albumAnalysisResults = {}; //stores the average and the std. dev
 
 // Used for playlist analysis
 var playlist = {};
+var playlistAnalysisResults = {}; //stores the average and std. dev
 
 if(window.location.href.indexOf("localhost") > -1) // if we're on localhost after all
 	origin = "http://localhost:4000"; // likewise set the origin to reflect this
@@ -157,12 +159,16 @@ function switchView()
 		$(".album-module").show();
 
 		spotifyObjectType = "album";
+
+		graphAnalysisResults();
 	}
 	else if(currentView == "playlist")
 	{
 		$(".playlist-module").show();
 		
 		spotifyObjectType = "playlist";
+
+		graphAnalysisResults();
 	}
 }
 
@@ -214,7 +220,7 @@ function setupGraph()
 
 		if(keyData["type"] == "zero-float") // if one of the floats with range 0...1
 		{
-			if(currentView == "song-compare")
+			if(currentView == "song-compare") // everything except song-compare view uses one column graph
 			{
 				var fillCols = ''
 				+ '<div class="fill fill-1">'
@@ -354,21 +360,123 @@ function handleAlbum(albumData)
 {
 	album = albumData;
 
-	spotifyApi.getAudioFeaturesForTracks(getTrackIds(albumData.tracks.items)).then(function(data)
-	{
-		console.log(data);		
-	}, spotifyError);
+	spotifyApi.getAudioFeaturesForTracks(getTrackIds(albumData.tracks.items)).then(analyzeAudioFeatures, spotifyError);
 }
 
 // Analyzes a playlist, getting the audio features for the tracks on it
 function handlePlaylist(playlistData)
 { 
 	playlist = playlistData;
-	
-	spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true)).then(function(data)
+
+	spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true)).then(analyzeAudioFeatures, spotifyError);
+}
+
+// Analayzes a set of audio features, determining the average, median and standard deviation for each of the graphable values
+function analyzeAudioFeatures(data)
+{
+	audioFeatures = data.audio_features;
+
+	// Step 1 - sum up each graphable value (first half of getting averages)
+
+	var sums = {};
+
+	iterateThroughFeatures(false);
+
+	// Step 2 - average the sums
+
+	var averages = {};
+
+	for(key in sums)
 	{
-		console.log(data);
-	}, spotifyError);
+		sum = sums[key];
+		averages[key] = sum/audioFeatures.length;
+	}
+
+	// Step 3 - start to get the standard deviation by iterating through again and getting the sum of the squares of the difference of each value of the mean
+	
+	var differenceSquareSums = {}; // stores the sum of the square of the differences
+
+	iterateThroughFeatures(true);
+
+	// Step 4 - sqrt all of the sums to get the final standard deviation
+
+	var standardDeviations = {};
+
+	for(key in differenceSquareSums)
+	{
+		standardDeviations[key] = Math.sqrt(differenceSquareSums[key]); // std. deviation is the sqrt of the sum of the squares of the differences from the average
+	}
+
+	// Wrap up by saving the data so we don't recompute this
+
+	if(spotifyObjectType == "album")
+	{
+		albumAnalysisResults.averages = averages;
+		albumAnalysisResults.standardDeviations = standardDeviations;
+	}
+	else if(spotifyObjectType == "playlist")
+	{
+		playlistAnalysisResults.averages = averages;
+		playlistAnalysisResults.standardDeviations = standardDeviations;
+	}
+
+	graphAnalysisResults(); //and graph it all
+
+	// A helper function to iterate through all features, either summing up the values, or getting differences from the average
+	// Needed since the data has to be run through twice (first pass for averages, second pass for std. deviation)
+	function iterateThroughFeatures(averagesCompleted)
+	{
+		for(featuresKey in audioFeatures) // iterate through each set of features (each is the audio features for one track)
+		{
+			var audioFeature = audioFeatures[featuresKey];
+
+			for(key in audioFeature)
+			{
+				if(key in spotifyGraphableData && spotifyGraphableData[key].type == "zero-float") // analyze if this data is graphable
+				{
+					value = audioFeature[key];
+
+					if(averagesCompleted)
+					{
+						if(key in differenceSquareSums)
+							differenceSquareSums[key] += Math.pow(averages[key] - value, 2);
+						else
+							differenceSquareSums[key] = Math.pow(averages[key] - value, 2);
+					}
+					else
+					{
+						if(key in sums)
+							sums[key] += value;
+						else
+							sums[key] = value;
+					}
+				}
+			}
+		}
+	}
+}
+
+function graphAnalysisResults()
+{
+	$(".std-dev").remove(); // remove old analysis data
+
+	var analysisResultsObj;
+	if(spotifyObjectType == "album")
+		analysisResultsObj = albumAnalysisResults;
+	else if(spotifyObjectType == "playlist")
+		analysisResultsObj = playlistAnalysisResults;
+
+	var average, stdDev;
+
+	for(key in analysisResultsObj.averages)
+	{
+		average = analysisResultsObj.averages[key];
+		stdDev = analysisResultsObj.standardDeviations[key];
+
+		$(".graph-col." + key + " .value").text(average);
+		$(".graph-col." + key + " .fill").css("height", average*100 + "%");
+		$(".col-title." + key + " span").after("<div class='std-dev'>Std. Dev.<br>" + stdDev + "</div>");
+	}
 }
 
 // Called as a result of calling the search API call

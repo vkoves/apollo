@@ -338,8 +338,18 @@ input[type="text"]
 	display: inline-block;
 	position: relative;
 	padding-bottom: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .col-title:hover > .col-desc { display: block; }
+.col-title .std-dev {
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 12px;
+	margin: 5px auto 0px auto;
+	color: #272727;
+}
 .col-desc {
 	position: absolute;
 	width: 250%;
@@ -403,11 +413,11 @@ input[type="text"]
 	bottom: 100%;
 	font-weight: 600;
 	font-size: 1.25em;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .value.value-1, .value.value-2 { 
     font-size: 0.8em;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 /* End Graph Styling */
 
