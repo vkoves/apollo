@@ -7,6 +7,7 @@
 
 /* Customize the header color */
 #header { background-color: rgb(90, 0, 93); }
+.footer { display: none; } /* Remove footer */
 
 /* Add basic pill button styling */
 .apollo-btn
@@ -47,20 +48,52 @@
 	margin-top: 10px;
 	font-weight: normal;
 }
+.pre-authorize .page-limiter { max-width: 1200px; }
 .pre-authorize .description-text
 {
 	line-height: 1.5;
 	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
 	text-align: left;
 }
-.pre-authorize .screenshot
+.pre-authorize .section
 {
-	width: 44%;
-	margin: 0% 2% 0% 2%;
-	box-shadow: 0px 0px 3px grey;
+	margin: 30px auto;
+	padding: 60px 0px;
 }
+.pre-authorize .section:last-of-type { padding-bottom: 0px } /* Remove bottom padding on last section, since body already has it */
+.pre-authorize .section.has-background
+{
+	background: linear-gradient(#673ab7, purple);
+	/*background-color: #673AB7;*/
+	color: white;
+}
+.pre-authorize .section h1
+{
+	text-align: left;
+	width: 80%;
+	margin-top: 40px;
+}
+.pre-authorize .section:not(.has-background) h1
+{
+	color: #673AB7;
+}
+.pre-authorize .section .screenshot
+{
+	width: 38%;
+	display: inline-block;
+}
+.pre-authorize .section .text
+{
+	width: 58%;
+	display: inline-block;
+	vertical-align: top;
+}
+.pre-authorize .section .text.right-text h1,
+.pre-authorize .section .text.right-text h3
+{
+	margin-left: 20%;
+}
+
 .pre-authorize .caption
 {
 	margin-bottom: 20px;
@@ -82,7 +115,7 @@
 	border: solid 2px white;
 	transition: background-color 0.2s;
 	padding: 8px 40px;
-	margin-top: 10px;
+	margin: 20px 0px 40px 0px;
 }
 #spotify-authorize:hover { background-color: rgba(255, 255, 255, 0.1); }
 #spotify-authorize img
