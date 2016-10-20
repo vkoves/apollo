@@ -104,6 +104,7 @@ function switchView()
 	currentView = $(this).attr("id");
 
 	pausePlayingRecord();
+	clearSearch();
 
 	setupGraph(); //resetup graph for this view
 
@@ -165,7 +166,12 @@ function switchView()
 // Puts in a search request
 function spotifySearch()
 {
-	spotifyApi.searchTracks($("#search-field").val(), {limit: 5}).then(handleSearch);
+	if(spotifyObjectType == "track")
+		spotifyApi.searchTracks($("#search-field").val(), {limit: 5}).then(handleSearch);
+	else if(spotifyObjectType == "album")
+		spotifyApi.searchAlbums($("#search-field").val(), {limit: 5}).then(handleSearch);
+	else if(spotifyObjectType == "playlist")
+		spotifyApi.searchPlaylists($("#search-field").val(), {limit: 5}).then(handleSearch);
 }
 
 // Reads the URI field and updates data as needed
@@ -337,7 +343,7 @@ function handleTrackInfo(trackData)
 
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
 	pausePlayingRecord();
-	
+
 	if(trackData.preview_url) // some songs don't have previews. Try "Gimme Gimme" by Louis La Roche - spotify:track:0EiwsLRU0PXK2cIjGXsiaa (works when searching?)
 	{
 		audioObject = new Audio(trackData.preview_url);
@@ -359,16 +365,37 @@ function handleSearch(data)
 {
 	$(".search-results").html(""); // clear the HTML of the search results
 
-	for(key in data.tracks.items) // iterate through tracks
+	// Determine the objects to iterate through depending on what type of objects we are dealing with
+	if(spotifyObjectType == "track")
+		var items = data.tracks.items;
+	else if(spotifyObjectType == "album")
+		var items = data.albums.items;
+	else if(spotifyObjectType == "playlist")
+		var items = data.playlists.items;
+
+
+	for(key in items) // iterate through spotify items
 	{
-		var track = data.tracks.items[key];
-		$(".search-results").append('<div class="search-listing" data-uri=' + track.uri + '>'
-			+ '<img src="' + track.album.images[0].url + '">'
+		var spotifyObject = items[key]; //can be a track, album or playlist
+		var artistsLine = ""; // by line for artists. Used only on tracks
+
+		if(spotifyObjectType == "track")
+		{
+			var images = spotifyObject.album.images;
+			var artistsLine = '<br><span class="author">by ' + combineArtists(spotifyObject.artists) + '</span>';
+		}
+		else
+			var images =  spotifyObject.images;
+
+		$(".search-results").append('<div class="search-listing" data-uri=' + spotifyObject.uri + '>'
+			+ '<img src="' + images[0].url + '">'
 			+ '<div class="listing-text">'
-				+ '<span class="track-title">' + track.name + '</span><br><span class="author">by ' + combineArtists(track.artists) + '</span>'
+				+ '<span class="track-title">' + spotifyObject.name + '</span>'
+				+ artistsLine
 			+ '</div>'
 		+ '</div>');
 	}
+
 	$(".search-results").slideDown();
 
 	$(".search-listing").click(function()
@@ -377,6 +404,13 @@ function handleSearch(data)
 		$(".search-results").hide();
 		getSpotifyData();
 	});
+}
+
+// Hides the search and clears the field
+function clearSearch()
+{
+	$("#search-field").val("");
+	$(".search-results").hide();
 }
 
 // Toggle between the record being hidden and not hidden
