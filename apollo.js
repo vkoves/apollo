@@ -187,8 +187,22 @@ function getSpotifyData()
 	if(spotifyObjectType == "track")
 	{
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, errorWithTrack);
-		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, errorWithTrack);
+		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, spotifyError);
+		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, spotifyError);
+	}
+	else  if(spotifyObjectType == "album")
+	{
+		spotifyApi.getAlbum(spotifyId).then(function(data)
+		{
+			console.log(data);
+		}, spotifyError);
+	}
+	else if(spotifyObjectType == "playlist")
+	{
+		spotifyApi.getPlaylist(spotifyURI.split(":")[2], spotifyURI.split(":")[4]).then(function(data)
+		{
+			console.log(data);
+		}, spotifyError);
 	}
 }
 
@@ -501,7 +515,7 @@ function pausePlayingRecord()
 }
 
 // Callback for API calls that shows an error message
-function errorWithTrack()
+function spotifyError()
 {
 	$("#spotify-error").show();
 }
