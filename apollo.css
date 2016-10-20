@@ -32,6 +32,9 @@
 /* Make grey if disabled */
 .apollo-btn.disabled { background-color: #c5c5c5; }
 
+/***************************/
+/***** PREAUTH STYLING *****/
+/***************************/
 /* Make main Apollo text very large with no bottom margin */
 .main-title
 {
@@ -71,6 +74,27 @@
 	padding: 40px;
 	margin-bottom: 30px;
 }
+/* Style button for logging in */
+#spotify-authorize
+{
+	font-size: 18px;
+	background-color: transparent;
+	border: solid 2px white;
+	transition: background-color 0.2s;
+	padding: 8px 40px;
+	margin-top: 10px;
+}
+#spotify-authorize:hover { background-color: rgba(255, 255, 255, 0.1); }
+#spotify-authorize img
+{
+	float: left;
+	height: 21px;
+	margin-right: 10px;
+}
+#spotify-authorize span { line-height: 21px; }
+/***************************/
+/*** END PREAUTH STYLING ***/
+/***************************/
 
 /* Hide feature-rich panel by default (wait till auth) */
 .post-authorize {
