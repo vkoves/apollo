@@ -183,15 +183,15 @@
 	background-repeat: no-repeat;
 	background-position: center center;
 }
-.menu-option#song .icon { background-image: url("icons/menu/song.png"); }
-.menu-option#song-compare .icon { background-image: url("icons/menu/songcompare.png"); }
-.menu-option#album .icon{ background-image: url("icons/menu/album.png"); }
-.menu-option#playlist .icon { background-image: url("icons/menu/playlist.png"); }
+.menu-option#song .icon { background-image: url("../icons/menu/song.png"); }
+.menu-option#song-compare .icon { background-image: url("../icons/menu/songcompare.png"); }
+.menu-option#album .icon{ background-image: url("../icons/menu/album.png"); }
+.menu-option#playlist .icon { background-image: url("../icons/menu/playlist.png"); }
 
-.menu-option.active#song .icon { background-image: url("icons/menu/song-white.png"); }
-.menu-option.active#song-compare .icon { background-image: url("icons/menu/songcompare-white.png"); }
-.menu-option.active#album .icon{ background-image: url("icons/menu/album-white.png"); }
-.menu-option.active#playlist .icon { background-image: url("icons/menu/playlist-white.png"); }
+.menu-option.active#song .icon { background-image: url("../icons/menu/song-white.png"); }
+.menu-option.active#song-compare .icon { background-image: url("../icons/menu/songcompare-white.png"); }
+.menu-option.active#album .icon{ background-image: url("../icons/menu/album-white.png"); }
+.menu-option.active#playlist .icon { background-image: url("../icons/menu/playlist-white.png"); }
 
 .input-bar
 {
@@ -454,13 +454,13 @@ input[type="text"]
 	background-size: 100%;
 	background-repeat: no-repeat;
 }
-.acousticness .col-icon { background-image: url("icons/acousticness.png"); }
-.danceability .col-icon { background-image: url("icons/danceability.png"); }
-.energy .col-icon { background-image: url("icons/energy.png"); }
-.instrumentalness .col-icon { background-image: url("icons/instrumentalness.png"); }
-.liveness .col-icon { background-image: url("icons/liveness.png"); }
-.speechiness .col-icon { background-image: url("icons/speechiness.png"); }
-.valence .col-icon { background-image: url("icons/valence.png"); }
+.acousticness .col-icon { background-image: url("../icons/acousticness.png"); }
+.danceability .col-icon { background-image: url("../icons/danceability.png"); }
+.energy .col-icon { background-image: url("../icons/energy.png"); }
+.instrumentalness .col-icon { background-image: url("../icons/instrumentalness.png"); }
+.liveness .col-icon { background-image: url("../icons/liveness.png"); }
+.speechiness .col-icon { background-image: url("../icons/speechiness.png"); }
+.valence .col-icon { background-image: url("../icons/valence.png"); }
 
 
 .graph-col .fill
