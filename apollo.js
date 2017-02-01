@@ -150,7 +150,7 @@ function switchView()
 		$("#track-1-select").addClass("active");
 		albumTarget = $("#track-1");
 		trackNumber = 1;
-		
+
 		spotifyObjectType = "track";
 
 	}
@@ -165,7 +165,7 @@ function switchView()
 	else if(currentView == "playlist")
 	{
 		$(".playlist-module").show();
-		
+
 		spotifyObjectType = "playlist";
 
 		graphAnalysisResults();
@@ -187,7 +187,7 @@ function spotifySearch()
 function getSpotifyData()
 {
 	var spotifyURI = $("#spotify-id").val();
-	
+
 	var spotifyId = spotifyURI;
 
 	if(spotifyURI.indexOf("spotify:" + spotifyObjectType + ":") == 0) // if URI, trim
@@ -232,7 +232,7 @@ function setupGraph()
 			}
 			else
 			{
-				var fillCols = '' 
+				var fillCols = ''
 				+ '<div class="fill">'
 					+ '<div class="value"></div>'
 				+ '</div>';
@@ -261,7 +261,7 @@ function setTrackData(data, isFeatures)
 		if(trackNumber == 2)
 			currTrack = track2;
 		else
-			currTrack = track1;		
+			currTrack = track1;
 	}
 
 	if(isFeatures)
@@ -289,12 +289,12 @@ function graphAudioFeatures(featureData)
 				if(currentView == "song-compare")
 				{
 					$(".graph-col." + key + " .value-" + trackNumber).text(value);
-					$(".graph-col." + key + " .fill-" + trackNumber).css("height", value*100 + "%");					
+					$(".graph-col." + key + " .fill-" + trackNumber).css("height", value*100 + "%");
 				}
 				else
 				{
 					$(".graph-col." + key + " .value").text(value);
-					$(".graph-col." + key + " .fill").css("height", value*100 + "%");					
+					$(".graph-col." + key + " .fill").css("height", value*100 + "%");
 				}
 			}
 		}
@@ -323,11 +323,11 @@ function graphAudioFeatures(featureData)
 
 		if(seconds < 10) //need zero buffering
 			seconds = "0" + seconds;
-		
+
 		return minutes + ":" + seconds; // get proper duration using math
 	}
 
-	
+
 	$(window).scrollTop($(document).height()); //scroll to page bottom
 }
 
@@ -365,7 +365,7 @@ function handleAlbum(albumData)
 
 // Analyzes a playlist, getting the audio features for the tracks on it
 function handlePlaylist(playlistData)
-{ 
+{
 	playlist = playlistData;
 
 	spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true)).then(analyzeAudioFeatures, spotifyError);
@@ -393,7 +393,7 @@ function analyzeAudioFeatures(data)
 	}
 
 	// Step 3 - start to get the standard deviation by iterating through again and getting the sum of the squares of the difference of each value of the mean
-	
+
 	var differenceSquareSums = {}; // stores the sum of the square of the differences
 
 	iterateThroughFeatures(true);
@@ -536,7 +536,7 @@ function handleSearch(data)
 			var images =  spotifyObject.images;
 
 		$(".search-results").append('<div class="search-listing" data-uri=' + spotifyObject.uri + '>'
-			+ '<img src="' + images[0].url + '">'
+			+ '<img src="' + images[1].url + '">'
 			+ '<div class="listing-text">'
 				+ '<span class="track-title">' + spotifyObject.name + '</span>'
 				+ artistsLine
@@ -577,8 +577,8 @@ function toggleRecord()
 
 /**
  * Show the record, playing the audioObject when the animation ends
- * 
- * @param  {jQuery Object} elem  The ".record" element to animate 
+ *
+ * @param  {jQuery Object} elem  The ".record" element to animate
  * @param  {integer} speed Speed of the animation in ms
  */
 function showRecord(elem, speed)
@@ -586,7 +586,7 @@ function showRecord(elem, speed)
 	if(audioObject)
 	{
 		pausePlayingRecord();
-	
+
 		var currTrack = track;
 
 		if(elem.closest("#track-1").length > 0) //if track 1
@@ -615,7 +615,7 @@ function showRecord(elem, speed)
  * Animation goes from 2% (centered onrecord) to -100% (fully off record) to -10% (peeking out behind record)
  * We remove the playing class when the record is fully out to make the record move from in front of the album art
  * to behind it. We also add the hidden class when animation is done for hover effects
- * 
+ *
  * @param  {jQuery Object} elem  The ".record" object to animate
  * @param  {integer} speed Speed of the animation in ms
  */
@@ -635,7 +635,7 @@ function hideRecord(elem, speed)
 				elem.addClass("hidden");
 			});
 		});
-	}	
+	}
 }
 
 // If a record is playing, pauses it and hides
@@ -658,7 +658,7 @@ function spotifyError()
 function combineArtists(artistsHash)
 {
 	var artistNames = [];
-	
+
 	for(key in artistsHash)
 	{
 		artistNames.push(artistsHash[key].name);
@@ -700,12 +700,12 @@ function login(callback) {
 		  '&scope=' + encodeURIComponent(scopes.join(' ')) +
 		  '&response_type=token';
 	}
-	
+
 	var url = getLoginURL([
 		// Specify scopes here, don't need any for track data fetching
 		// 'playlist-modify-public'
 	]);
-	
+
 	var width = 450,
 		height = 730,
 		left = (screen.width / 2) - (width / 2),
@@ -717,12 +717,12 @@ function login(callback) {
 			callback(hash["access_token"]);
 
 	}, false);
-	
+
 	var w = window.open(url,
 		'Spotify',
 		'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
 	);
-	
+
 }
 
 // Callback for login completion, which updates buttons and sets access token in the API
@@ -733,11 +733,11 @@ function loginComplete(access_token)
 
 	$(".pre-authorize").fadeOut(function()
 	{
-		$(".post-authorize").fadeIn();			
+		$(".post-authorize").fadeIn();
 	});
 
 	spotifyApi.setAccessToken(access_token);
-	
+
 	// TODO: Implement use of this later
 	/*
 	spotifyApi.getUserPlaylists({"limit": 40}).then(function(value)
