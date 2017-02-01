@@ -436,14 +436,14 @@ input[type="text"]
 	z-index: 5;
 }
 .col-desc::after {
-    content: " ";
-    position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #404040 transparent transparent transparent;
+	content: " ";
+	position: absolute;
+	top: 100%; /* At the bottom of the tooltip */
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #404040 transparent transparent transparent;
 }
 /* Add column icons */
 .col-icon
@@ -485,11 +485,11 @@ input[type="text"]
 	bottom: 100%;
 	font-weight: 600;
 	font-size: 1.25em;
-    text-overflow: ellipsis;
-    overflow: hidden;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 .value.value-1, .value.value-2 {
-    font-size: 0.8em;
+	font-size: 0.8em;
 }
 /* End Graph Styling */
 
@@ -505,12 +505,12 @@ input[type="text"]
 .song-select .option
 {
 	background-color: #dadada;
-    width: 50%;
-    display: inline-block;
-    height: 40px;
-    padding-top: 20px;
-    font-size: 16px;
-    cursor: pointer;
+	width: 50%;
+	display: inline-block;
+	height: 40px;
+	padding-top: 20px;
+	font-size: 16px;
+	cursor: pointer;
 }
 .song-select .option.active
 {
