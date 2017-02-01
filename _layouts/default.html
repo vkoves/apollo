@@ -1,18 +1,15 @@
 <html>
 <head>
-	<link href="/css/main.css" rel="stylesheet">
-	<link href="/css/syntax.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/syntax.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-	<script src="/js/main.js"></script>
+	<script src="js/main.js"></script>
 	{% for stylesheet in page.stylesheets %}
-		<link href="/css/{{  stylesheet }}" rel="stylesheet">
+		<link href="css/{{  stylesheet }}" rel="stylesheet">
 	{% endfor %}
 	{% for script in page.scripts %}
-		<script src="/js/{{ script }}"></script>
+		<script src="js/{{ script }}"></script>
 	{% endfor %}
-	{% if page.isPost %}
-		<link href="/css/post.css" rel="stylesheet">
-	{% endif %}
 	{{ stylesheets }}
 	<title>Viktor K&ouml;ves</title> <!-- Oh what fun, an Oumlaut! -->
 	<link rel="shortcut icon" type="image/png" href="/images/favicon.ico"/>
