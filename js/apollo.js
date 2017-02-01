@@ -330,9 +330,6 @@ function graphAudioFeatures(featureData)
 
 		return minutes + ":" + seconds; // get proper duration using math
 	}
-
-
-	$(window).scrollTop($(document).height()); //scroll to page bottom
 }
 
 // Show information about the track from the passed in track data
