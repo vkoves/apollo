@@ -309,12 +309,16 @@ function graphAudioFeatures(featureData)
 	featureData.key = pitches[featureData.key];
 	featureData.duration = getProperDuration(featureData.duration_ms)
 
-	$(".non-graph-data #key").text(featureData.key);
-	$(".non-graph-data #tempo").text(featureData.tempo);
-	$(".non-graph-data #time_signature").text(featureData.time_signature);
-	$(".non-graph-data #mode").text(featureData.mode);
-	$(".non-graph-data #loudness").text(featureData.loudness);
-	$(".non-graph-data #duration").text(featureData.duration);
+	// If viewing an individual song, show data for that song
+	if(currentView == "song")
+	{
+		$(".non-graph-data #key").text(featureData.key);
+		$(".non-graph-data #tempo").text(featureData.tempo);
+		$(".non-graph-data #time_signature").text(featureData.time_signature);
+		$(".non-graph-data #mode").text(featureData.mode);
+		$(".non-graph-data #loudness").text(featureData.loudness);
+		$(".non-graph-data #duration").text(featureData.duration);
+	}
 
 	function getProperDuration(duration_ms)
 	{
@@ -351,8 +355,13 @@ function handleTrackInfo(trackData)
 		audioObject = null;
 
 	albumTarget.find(".album-image").attr("src", trackData.album.images[0].url);
-	$(".track-text #title").text(trackData.name);
-	$(".track-text #artists").text("by " + combineArtists(trackData.artists));
+
+	// If viewing individaul song, update title
+	if(currentView == "song")
+	{
+		$(".track-text #title").text(trackData.name);
+		$(".track-text #artists").text("by " + combineArtists(trackData.artists));
+	}
 }
 
 // Analyzes an album, getting the audio features for the tracks on it
