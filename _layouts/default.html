@@ -1,0 +1,109 @@
+<html>
+<head>
+	<link href="/css/main.css" rel="stylesheet">
+	<link href="/css/syntax.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="/js/main.js"></script>
+	{% for stylesheet in page.stylesheets %}
+		<link href="/css/{{  stylesheet }}" rel="stylesheet">
+	{% endfor %}
+	{% for script in page.scripts %}
+		<script src="/js/{{ script }}"></script>
+	{% endfor %}
+	{% if page.isPost %}
+		<link href="/css/post.css" rel="stylesheet">
+	{% endif %}
+	{{ stylesheets }}
+	<title>Viktor K&ouml;ves</title> <!-- Oh what fun, an Oumlaut! -->
+	<link rel="shortcut icon" type="image/png" href="/images/favicon.ico"/>
+	<!-- Added Open Sans from Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,800italic,800,700,700italic,600italic,600,400italic" rel="stylesheet" type="text/css">
+	{% if page.metadata %}
+		<meta name="theme-color" content="{{ page.metadata[0].theme_color }}">
+		<meta name="description" content="{{ page.metadata[0].description }}">
+		<meta property="og:description" content="{{ page.metadata[0].description }}" />
+		<meta property="og:image" content="{{ page.metadata[0].image }}" />
+	{% else %}
+		<meta name="theme-color" content="#D80000">
+		<meta name="description" content="The personal website of Viktor K&ouml;ves - software engineer, game developer, and digital design enthusiast.">
+		<meta property="og:description" content="The personal website of Viktor K&ouml;ves - software engineer, game developer, and digital design enthusiast." />
+		<meta property="og:image" content="http://viktorkoves.com/images/logo.png" />
+	{% endif %}
+
+	<meta name="viewport" content="width=450, initial-scale=0.75">
+	<meta name="google-site-verification" content="aivQX75RILmCefXvQj496cBxd8ycZ-AWTKRMQJGoyA4" />
+	<!-- Google Analytics -->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-39148744-3', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</head>
+<body>
+	{% comment %} Site wide header {% endcomment %}
+	<div id="header" class="filter-transition">
+		<div id="header-inside">
+			<span id="title"><a href="/" class="local-link">Viktor K&ouml;ves</a></span>
+			<div id="header-buttons">
+				<span><a href="/about" class="local-link">About</a></span> |
+				<span><a href="/gallery" class="local-link">Gallery</a></span> |
+				<span><a href="/portfolio" class="local-link">Portfolio</a></span> |
+				<span><a href="/blog">Blog</a></span>
+			</div>
+			<img id="menu" src="/images/menu.svg">
+		</div>
+	</div>
+
+	<div class="page-container {{ page.pageClass }}">
+		{% if page.isPost %}
+			<a href="/blog" id="all-posts" class="red-button">&larr; Back to All Posts</a>
+			<br>
+			<h1>{{ page.title }}</h1>
+			<span class="post-date">Posted {{ page.date | date: "%B %d, %Y" }}</span>
+		{% endif %}
+
+		{{ content }}
+
+
+		{% if page.isPost %}
+		<div class="post-controls">
+			{% if page.previous %}
+				<a href="{{ page.previous.url }}" class="red-button">&larr; Previous</a>
+			{% else %}
+				<span class="red-button disabled">&larr; Previous</span>
+			{% endif %}
+
+			{% if page.next %}
+				<a href="{{ page.next.url }}" class="red-button">Next &rarr;</a>
+			{% else %}
+				<span class="red-button disabled">Next &rarr;</span>
+			{% endif %}
+		</div>
+		{% endif %}
+	</div>
+
+	{% comment %} Site wide footer {% endcomment %}
+	<div class="footer filter-transition">
+		<div class="social-bar">
+			<a href="https://github.com/vkoves" target="_blank">
+				<div class="github"></div>
+			</a>
+			<a href="http://vkstech.tumblr.com/" target="_blank">
+				<div class="tumblr"></div>
+			</a>
+			<a href="https://twitter.com/viktor_koves" target="_blank">
+				<div class="twitter"></div>
+			</a>
+			<a href="https://www.linkedin.com/in/viktorkoves" target="_blank">
+				<div class="linkedin"></div>
+			</a>
+			<a href="https://www.instagram.com/viktor_koves/" target="_blank">
+				<div class="instagram"></div>
+			</a>
+		</div>
+	</div>
+</body>
+</html>
