@@ -143,7 +143,6 @@
 {
 	/*display: none;*/
 	margin-bottom: 20px;
-	height: 70px;
 	background-color: #dadada;
 	border-radius: 5px;
 	overflow: hidden;
@@ -154,7 +153,6 @@
 	vertical-align: top;
 	padding: 10px 0px;
 	box-sizing: border-box;
-	height: 100%;
 	cursor: pointer;
 	float: left;
 	border: solid 1px #f3f3f3;
@@ -170,6 +168,7 @@
 	background-color: #673ab7;
 	color: white;
 }
+.menu-option .text { margin-top: 5px }
 .menu-sep
 {
 	width: 0.2%;
@@ -181,10 +180,13 @@
 .menu-option .icon
 {
 	height: calc(100% - 20px);
-	margin-bottom: 5px;
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 	background-position: center center;
+	float: left;
+	width: 30px;
+	height: 30px;
+	margin-left: 20px;
 }
 .menu-option#song .icon { background-image: url("../icons/menu/song.png"); }
 .menu-option#song-compare .icon { background-image: url("../icons/menu/songcompare.png"); }
