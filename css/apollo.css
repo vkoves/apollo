@@ -150,13 +150,16 @@
 }
 .menu-option
 {
-	width: 24.85%;
+	width: 25%;
 	vertical-align: top;
 	padding: 10px 0px;
 	box-sizing: border-box;
 	height: 100%;
 	cursor: pointer;
 	float: left;
+	border: solid 1px #f3f3f3;
+	border-bottom: 0px;
+	border-top: 0px;
 }
 .menu-option:hover
 {
@@ -504,12 +507,13 @@ input[type="text"]
 .song-select .option
 {
 	background-color: #dadada;
-	width: 50%;
+	width: 10%;
 	display: inline-block;
-	height: 40px;
-	padding-top: 20px;
 	font-size: 16px;
+	padding: 10px;
 	cursor: pointer;
+	margin: 0% 19%;
+	border-radius: 5px;
 }
 .song-select .option.active
 {
