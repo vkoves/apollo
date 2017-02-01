@@ -410,7 +410,6 @@ input[type="text"]
 	display: inline-block;
 	position: relative;
 	padding-bottom: 10px;
-	overflow: hidden;
 	text-overflow: ellipsis;
 }
 .col-title:hover > .col-desc { display: block; }
