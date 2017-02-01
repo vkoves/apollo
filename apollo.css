@@ -36,10 +36,17 @@
 /***************************/
 /***** PREAUTH STYLING *****/
 /***************************/
+.pre-authorize .banner
+{
+	background: linear-gradient(purple, #673ab7);
+	color: white;
+	padding: 200px 0px;
+	margin-bottom: 30px;
+}
 /* Make main Apollo text very large with no bottom margin */
 .main-title
 {
-	font-size: 72px;
+	font-size: 84px;
 	font-weight: normal;
 	margin-bottom: 0px;
 }
@@ -47,6 +54,7 @@
 {
 	margin-top: 10px;
 	font-weight: normal;
+	font-size: 28px;
 }
 .pre-authorize .page-limiter { max-width: 1200px; }
 .pre-authorize .description-text
@@ -54,13 +62,14 @@
 	line-height: 1.5;
 	width: 80%;
 	text-align: left;
+	font-size: 24px;
 }
 .pre-authorize .section
 {
 	margin: 30px auto;
-	padding: 60px 0px;
+	padding: 200px 0px;
 }
-.pre-authorize .section:last-of-type { padding-bottom: 0px } /* Remove bottom padding on last section, since body already has it */
+.pre-authorize .section:last-of-type { padding-bottom: 100px } /* Remove some bottom padding on last section, since body already has it */
 .pre-authorize .section.has-background
 {
 	background: linear-gradient(#673ab7, purple);
@@ -72,6 +81,7 @@
 	text-align: left;
 	width: 80%;
 	margin-top: 40px;
+	font-size: 38px;
 }
 .pre-authorize .section:not(.has-background) h1
 {
@@ -99,13 +109,6 @@
 	margin-bottom: 20px;
 	color: #3c3c3c;
 	margin-top: 5px;
-}
-.pre-authorize .banner
-{
-	background: linear-gradient(purple, #673ab7);
-	color: white;
-	padding: 40px;
-	margin-bottom: 30px;
 }
 /* Style button for logging in */
 #spotify-authorize
@@ -276,7 +279,7 @@ input[type="text"]
 .listing-text .track-title
 {
 	font-size: 18px;
-	font-weight: bold;	
+	font-weight: bold;
 }
 .listing-text .author { font-size: 14px; }
 /* End Search Styling */
@@ -485,7 +488,7 @@ input[type="text"]
     text-overflow: ellipsis;
     overflow: hidden;
 }
-.value.value-1, .value.value-2 { 
+.value.value-1, .value.value-2 {
     font-size: 0.8em;
 }
 /* End Graph Styling */
