@@ -12,5 +12,12 @@ To run Apollo locally, clone it and then run `jekyll serve`. If Jekyll is correc
 
 It also connects to the Spotify Web API using jQuery, which you can learn about [here](https://developer.spotify.com/web-api/).
 
+## Spotify Rules
+Apollo is only possible due to the Spotify API, which means it follows a few guidelines they set out. In particular, Apollo adheres to:
+- [The Spotify Developer Terms of Use](https://developer.spotify.com/developer-terms-of-use/)
+- [The Spotify Design Guide](https://developer.spotify.com/design/)
+
+Specifically these require proper use of the Spotify logo, making sure it is clear Apollo is powered by but not affiliated with Spotify, and making sure album art is not cropped or obscured (but is shown in original form).
+
 ## Contributing
 Want to help improve Apollo? Open an issue for a feature you want or a bug you have spotted, or fork the repository and help develop Apollo yourself.
