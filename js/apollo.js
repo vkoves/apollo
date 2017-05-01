@@ -126,6 +126,10 @@ function switchView()
 			graphAudioFeatures(track.audioFeatures);
 			handleTrackInfo(track.trackObject);
 		}
+		else
+		{
+			setupEmptyView();
+		}
 	}
 	else if(currentView == "song-compare")
 	{
@@ -153,6 +157,8 @@ function switchView()
 
 		spotifyObjectType = "track";
 
+		if(Object.keys(track1).length == 0 && Object.keys(track2).length == 0)
+			setupEmptyView();
 	}
 	else if(currentView == "album")
 	{
@@ -160,7 +166,11 @@ function switchView()
 
 		spotifyObjectType = "album";
 
-		graphAnalysisResults();
+		// If album has not been defined yet
+		if(Object.keys(album).length == 0)
+			setupEmptyView();
+		else
+			graphAnalysisResults();
 	}
 	else if(currentView == "playlist")
 	{
@@ -168,7 +178,11 @@ function switchView()
 
 		spotifyObjectType = "playlist";
 
-		graphAnalysisResults();
+		// If playlist has not been defined yet
+		if(Object.keys(playlist).length == 0)
+			setupEmptyView();
+		else
+			graphAnalysisResults();
 	}
 }
 
@@ -186,6 +200,10 @@ function spotifySearch()
 // Reads the URI field and updates data as needed
 function getSpotifyData()
 {
+	$("body").removeClass("empty-view");
+	$(".input-bar-cont").removeClass("active");
+	$("#apollo-main").fadeIn();
+
 	var spotifyURI = $("#spotify-id").val();
 
 	var spotifyId = spotifyURI;
@@ -567,6 +585,14 @@ function clearInput()
 	$(".search-results").hide();
 }
 
+// Modify the body and input-bar-cont to indicate the current view is empty
+function setupEmptyView()
+{
+	$(".input-bar-cont").addClass("active");
+	$("body").addClass("empty-view");
+	$("#apollo-main").hide();
+}
+
 // Toggle between the record being hidden and not hidden
 // Called on click by ".album-image-cont" objects, so we search for a ".record" child to pass to hideRecord() and showRecord()
 function toggleRecord()
@@ -741,6 +767,9 @@ function loginComplete(access_token)
 	{
 		$(".post-authorize").fadeIn();
 	});
+
+	// Setup first view, which is empty
+	setupEmptyView();
 
 	spotifyApi.setAccessToken(access_token);
 

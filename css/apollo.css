@@ -1,3 +1,7 @@
+/* If the current view has no Spotify object selected, give a background */
+body { transition: background 0.5s; }
+body.empty-view { background: linear-gradient(purple, #673ab7); }
+
 .page-container
 {
 	font-family: 'Montserrat', sans-serif;
@@ -132,22 +136,26 @@
 /***************************/
 
 /* Hide feature-rich panel by default (wait till auth) */
-.post-authorize {
+.post-authorize
+{
 	display: none;
 	margin-top: 10px;
 }
+
+/* Hide Apollo graphing and track display until a song is loaded */
+#apollo-main { display: none; }
 
 /* Style the top menu */
 .menu-bar
 {
 	margin-bottom: 20px;
-	background-color: #dadada;
-	border-radius: 5px;
 	overflow: hidden;
+	border-radius: 5px;
 }
 .menu-option
 {
 	width: 25%;
+	background-color: #dadada;
 	vertical-align: top;
 	padding: 10px 0px;
 	box-sizing: border-box;
@@ -157,6 +165,11 @@
 	border-bottom: 0px;
 	border-top: 0px;
 }
+
+/* Remove border on edges and added rounding */
+.menu-option:first-of-type { border-left: 0px; }
+.menu-option:last-of-type { border-right: 0px; }
+
 .menu-option:hover
 {
 	background-color: #bdbdbd;
@@ -195,6 +208,18 @@
 .menu-option.active#song-compare .icon { background-image: url("../icons/menu/songcompare-white.png"); }
 .menu-option.active#album .icon{ background-image: url("../icons/menu/album-white.png"); }
 .menu-option.active#playlist .icon { background-image: url("../icons/menu/playlist-white.png"); }
+
+.input-bar-cont.active { margin-top: 10%; }
+
+.input-bar-cont #interact-prompt
+{
+	display: none;
+	font-weight: normal;
+	color: white;
+}
+
+.input-bar-cont.active #interact-prompt { display: block; }
+
 
 .input-bar
 {
