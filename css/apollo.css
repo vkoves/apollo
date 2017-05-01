@@ -73,7 +73,6 @@
 .pre-authorize .section.has-background
 {
 	background: linear-gradient(#673ab7, purple);
-	/*background-color: #673AB7;*/
 	color: white;
 }
 .pre-authorize .section h1
@@ -141,7 +140,6 @@
 /* Style the top menu */
 .menu-bar
 {
-	/*display: none;*/
 	margin-bottom: 20px;
 	background-color: #dadada;
 	border-radius: 5px;
@@ -343,7 +341,6 @@ input[type="text"]
 	animation: spin 30s linear infinite;
 }
 .album-image-cont.playing .album-image { z-index: -5; }
-/*.track-info .album-image-cont:hover > .record { top: -50%; }*/
 .track-info .track-text
 {
 	width: 78.5%;
