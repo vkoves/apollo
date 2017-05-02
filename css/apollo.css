@@ -584,6 +584,7 @@ input[type="text"]
 	background-size: auto 50%;
 	background-repeat: no-repeat;
 	background-position: 20px center;
+	cursor: pointer;
 }
 
 .fb-share
@@ -591,12 +592,15 @@ input[type="text"]
 	background-color: #3B5998;
 	background-image: url(../images/facebook.svg);
 }
+.fb-share:hover { background-color: #567dce; }
 
 .twitter-share
 {
 	background-color: #55acee;
 	background-image: url(../images/twitter.svg);
 }
+.twitter-share:hover { background-color: #5eb9ff; }
+
 /* End Share Button Styling */
 
 /* Generic Styling */
