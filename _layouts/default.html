@@ -20,17 +20,25 @@
 		<meta name="description" content="{{ page.metadata[0].description }}">
 		{% if page.metadata[0].og_title %}
 			<meta property="og:title" content="{{ page.metadata[0].og_title }}" />
-		{% endif %}
-		{% if page.metadata[0].og_description %}
 			<meta property="og:description" content="{{ page.metadata[0].og_description }}" />
+			<meta property="og:image" content="{{ page.metadata[0].image }}" />
+
+			<!-- Twitter Info -->
+			<meta name="twitter:card" content="summary_large_image">
+			<meta name="twitter:title" content="{{ page.metadata[0].og_title }}">
+			<meta property="twitter:description" content="{{ page.metadata[0].og_description }}" />
+			<meta property="og:image" content="{{ page.metadata[0].image }}" />
 		{% endif %}
-		<meta property="og:image" content="{{ page.metadata[0].image }}" />
 	{% else %}
 		<meta name="theme-color" content="#D80000">
 		<meta name="description" content="The personal website of Viktor K&ouml;ves - software engineer, game developer, and digital design enthusiast.">
 		<meta property="og:description" content="The personal website of Viktor K&ouml;ves - software engineer, game developer, and digital design enthusiast." />
 		<meta property="og:image" content="http://viktorkoves.com/images/logo.png" />
 	{% endif %}
+
+
+
+
 
 	<meta name="viewport" content="width=450, initial-scale=0.75">
 	<meta name="google-site-verification" content="aivQX75RILmCefXvQj496cBxd8ycZ-AWTKRMQJGoyA4" />
