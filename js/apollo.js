@@ -25,7 +25,7 @@ var trackNumber = 1; //number of track we're setting data for (either 1 or 2)
 
 var spotifyObjectType = "track"; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
 
-var currentView = "song"; //stores the ID of the current menu object
+var currentView = "song"; //stores the ID of the current menu object. Can be song, song-compare, album, or playlist
 
 // Used for single song analysis
 var track = {};
@@ -585,7 +585,6 @@ function handleSearch(data)
 	else if(spotifyObjectType == "playlist")
 		var items = data.playlists.items;
 
-
 	for(key in items) // iterate through spotify items
 	{
 		var spotifyObject = items[key]; //can be a track, album or playlist
@@ -599,8 +598,10 @@ function handleSearch(data)
 		else
 			var images =  spotifyObject.images;
 
+		var idealImage = images[1] || images[0]; // try to use second image, fallback to first if only one
+
 		$(".search-results").append('<div class="search-listing" data-uri=' + spotifyObject.uri + '>'
-			+ '<img src="' + images[1].url + '">'
+			+ '<img src="' + idealImage.url + '">'
 			+ '<div class="listing-text">'
 				+ '<span class="track-title">' + spotifyObject.name + '</span>'
 				+ artistsLine
