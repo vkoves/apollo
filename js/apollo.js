@@ -241,7 +241,7 @@ function spotifySearch()
 }
 
 // Reads the URI field and updates data as needed
-function getSpotifyData(spotifyURI)
+function getSpotifyData(event, spotifyURI)
 {
 	setupFilledView();
 
