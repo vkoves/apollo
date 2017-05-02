@@ -101,10 +101,13 @@ function switchView()
 	if(this == $(".menu-option.active")[0]) //if clicking the current view, don't do anything
 		return;
 
+
 	$(".menu-option").removeClass("active");
 	$(this).addClass("active");
 
 	currentView = $(this).attr("id");
+
+	pushStateToHistory(); // push to history after currentView var has changed
 
 	pausePlayingRecord();
 	clearInput();
@@ -132,6 +135,17 @@ function switchView()
 	}
 	else if(currentView == "song-compare")
 	{
+		// Setup an empty view if no tracks are dfined
+		if(Object.keys(track1).length == 0 && Object.keys(track2).length == 0)
+		{
+			setupEmptyView(switchViewVisuals);
+		}
+		else
+		{
+			switchViewVisuals();
+			setupFilledView();
+		}
+
 		if(Object.keys(track1).length > 0) // if track1 is defined
 		{
 			albumTarget = $("#track-1");
@@ -155,18 +169,6 @@ function switchView()
 
 		spotifyObjectType = "track";
 
-		if(Object.keys(track1).length == 0 && Object.keys(track2).length == 0)
-		{
-			setupEmptyView(function()
-			{
-				switchViewVisuals();
-			});
-		}
-		else
-		{
-			switchViewVisuals();
-			setupFilledView();
-		}
 	}
 	else if(currentView == "album")
 	{
@@ -254,7 +256,9 @@ function getSpotifyData(spotifyURI)
 	if(spotifyObjectType == "track")
 	{
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, spotifyError);
+		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(function(data) {
+			graphAudioFeatures(data, true); // graph audio features and push history
+		}, spotifyError);
 		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, spotifyError);
 	}
 	else  if(spotifyObjectType == "album")
@@ -329,8 +333,11 @@ function setTrackData(data, isFeatures)
 }
 
 // Graph the track's audio features based on the passed in audio data
-function graphAudioFeatures(featureData)
+function graphAudioFeatures(featureData, pushHistory)
 {
+	if(pushHistory)
+		pushStateToHistory();
+
 	setTrackData(featureData, true);
 
 	$("#spotify-error").hide();
@@ -484,7 +491,7 @@ function analyzeAudioFeatures(data)
 		playlistAnalysisResults.standardDeviations = standardDeviations;
 	}
 
-	graphAnalysisResults(); //and graph it all
+	graphAnalysisResults(true); //and graph it all, pushing to history
 
 	// A helper function to iterate through all features, either summing up the values, or getting differences from the average
 	// Needed since the data has to be run through twice (first pass for averages, second pass for std. deviation)
@@ -520,8 +527,11 @@ function analyzeAudioFeatures(data)
 	}
 }
 
-function graphAnalysisResults()
+function graphAnalysisResults(pushHistory)
 {
+	if(pushHistory)
+		pushStateToHistory();
+
 	$(".std-dev").remove(); // remove old analysis data
 
 	var analysisResultsObj;
@@ -780,6 +790,71 @@ function getTrackIds(tracks, isPlaylist)
 	}
 
 	return trackIds;
+}
+
+// Pushes to history based on the current app state
+function pushStateToHistory()
+{
+	console.log(generateURL());
+
+	history.pushState({
+		currentView: currentView,
+		spotifyObjData: generateDataHash(),
+	}, null, generateURL());
+
+	// Generates a URL that uniquely identifies this
+	function generateURL()
+	{
+		url = "?";
+		url += "currView=" + currentView;
+
+		// Push data of what Spotify objects are loaded, if they are loaded
+		if(currentView == "song" && track.trackObject)
+		{
+			url += "&track=" + track.trackObject.uri;
+		}
+		else if(currentView == "song-compare"
+			&& track1.trackObject && track2.trackObject) // only push song compare state with both songs defined
+		{
+			url += "&track1=" + track1.trackObject.uri + "&track2=" + track2.trackObject.uri;
+		}
+		else if(currentView == "album" && album.uri)
+		{
+			url += "&album=" + album.uri;
+		}
+		else if(currentView == "playlist" && playlist.uri)
+		{
+			url += "&playlist=" + playlist.uri;
+		}
+
+		return url;
+	}
+
+	// Generates a hash of the currently used data for this view. Doesn't save all data
+	function generateDataHash()
+	{
+		var hash = {};
+
+		if(currentView == "song")
+		{
+			hash[track] = track;
+		}
+		else if(currentView == "song-compare")
+		{
+			hash[track1] = track1;
+			hash[track2] = track2;
+		}
+		else if(currentView == "album")
+		{
+			hash[album] = album;
+		}
+		else if(currentView == "playlist")
+		{
+			hash[playlist] = playlist;
+		}
+
+		return hash;
+	}
 }
 
 /***************************/
