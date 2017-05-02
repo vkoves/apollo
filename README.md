@@ -1,4 +1,5 @@
 <img src="logo.png?raw=true" align="right" width="100">
+
 # Apollo
 
 Apollo is a music analysis tool powered by the Spotify API that lets you better understand your favorite songs. It allows users to retrieve internally stored Spotify song data, including rankings such as the energy or acousticness of a song. Apollo can also run on a playlist or album and calculate averages and standard deviations for these values across the set of songs contained within.

@@ -140,6 +140,17 @@ body.empty-view
 	margin-right: 10px;
 }
 #spotify-authorize span { line-height: 21px; }
+
+/* Style Github Link */
+.github-notice { font-weight: normal; }
+.github-notice a, .github-notice a:focus, .github-notice a:hover { color: white; }
+.github-notice img
+{
+	width: 20px;
+	vertical-align: text-bottom;
+	margin-left: 10px;
+}
+
 /***************************/
 /*** END PREAUTH STYLING ***/
 /***************************/
