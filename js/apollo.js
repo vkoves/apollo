@@ -96,16 +96,26 @@ $(document).ready(function()
 });
 
 // Switches to the view that is being requested per click in the menu
-function switchView()
+// Optionally takes a string of the view desired, to allow for JS based switched
+function switchView(event, viewToSwitchTo)
 {
-	if(this == $(".menu-option.active")[0]) //if clicking the current view, don't do anything
-		return;
+	if(viewToSwitchTo && $(".menu-option#" + viewToSwitchTo).length > 0) // only use viewToSwitchTo if it's valid (has a menu item with its ID)
+	{
+		currentView = viewToSwitchTo
+		$(".menu-option").removeClass("active");
+		$(".menu-option#" + viewToSwitchTo).addClass("active");
+	}
+	else
+	{
+		if(this == $(".menu-option.active")[0]) //if clicking the current view, don't do anything
+			return;
 
+		$(".menu-option").removeClass("active");
+		$(this).addClass("active");
 
-	$(".menu-option").removeClass("active");
-	$(this).addClass("active");
+		currentView = $(this).attr("id");
+	}
 
-	currentView = $(this).attr("id");
 
 	pushStateToHistory(); // push to history after currentView var has changed
 
@@ -630,7 +640,7 @@ function handleSearch(data)
 	{
 		clearInput();
 		$(".search-results").hide();
-		getSpotifyData($(this).attr("data-uri"));
+		getSpotifyData(null, $(this).attr("data-uri"));
 	});
 }
 
@@ -855,6 +865,40 @@ function pushStateToHistory()
 	}
 }
 
+// Loads Apollo's state from the URL
+function loadStateFromURL()
+{
+	var params = getParameterHash();
+
+	if(params["currView"])
+	{
+		switchView(null, params["currView"]);
+
+		if(currentView == "song")
+			getSpotifyData(null, params["track"]);
+		else if(currentView == "album")
+			getSpotifyData(null, params["album"]);
+		else if(currentView == "playlist")
+			getSpotifyData(null, params["playlist"]);
+	}
+
+	function getParameterHash()
+	{
+		// Trim '?' from string start, then split by '&'
+		var paramsArr = window.location.search.substr(1).split("&");
+		var params = {};
+		var currParam = [];
+
+		for(var i = 0; i < paramsArr.length; i++)
+		{
+			currParam = paramsArr[i].split("=");
+			params[currParam[0]] = currParam[1];
+		}
+
+		return params;
+	}
+}
+
 /***************************/
 /***** LOGIN FUNCTIONS *****/
 /***************************/
@@ -910,6 +954,9 @@ function loginComplete(access_token)
 	setupEmptyView();
 
 	spotifyApi.setAccessToken(access_token);
+
+	if(window.location.search)
+		loadStateFromURL();
 
 	// TODO: Implement use of this later
 	/*
