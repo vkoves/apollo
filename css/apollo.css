@@ -1,6 +1,15 @@
 /* If the current view has no Spotify object selected, give a background */
-body { transition: background 0.5s; }
-body.empty-view { background: linear-gradient(purple, #673ab7); }
+body
+{
+	background-image: url("../images/grey-background.png");;
+	transition: background-image 0.5s;
+	background-size: auto 100%;
+}
+body.empty-view
+{
+	/*background: linear-gradient(purple, #673ab7); */
+	background-image: url("../images/gradient-background.png");;
+}
 
 .page-container
 {

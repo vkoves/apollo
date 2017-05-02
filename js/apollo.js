@@ -123,6 +123,7 @@ function switchView()
 
 		if(Object.keys(track).length > 0) // if track is defined
 		{
+			setupFilledView();
 			graphAudioFeatures(track.audioFeatures);
 			handleTrackInfo(track.trackObject);
 		}
@@ -159,6 +160,8 @@ function switchView()
 
 		if(Object.keys(track1).length == 0 && Object.keys(track2).length == 0)
 			setupEmptyView();
+		else
+			setupFilledView();
 	}
 	else if(currentView == "album")
 	{
@@ -170,7 +173,10 @@ function switchView()
 		if(Object.keys(album).length == 0)
 			setupEmptyView();
 		else
+		{
 			graphAnalysisResults();
+			setupFilledView();
+		}
 	}
 	else if(currentView == "playlist")
 	{
@@ -182,7 +188,10 @@ function switchView()
 		if(Object.keys(playlist).length == 0)
 			setupEmptyView();
 		else
+		{
 			graphAnalysisResults();
+			setupFilledView();
+		}
 	}
 }
 
@@ -200,9 +209,7 @@ function spotifySearch()
 // Reads the URI field and updates data as needed
 function getSpotifyData()
 {
-	$("body").removeClass("empty-view");
-	$(".input-bar-cont").removeClass("active");
-	$("#apollo-main").fadeIn();
+	setupFilledView();
 
 	var spotifyURI = $("#spotify-id").val();
 
@@ -593,6 +600,14 @@ function setupEmptyView()
 	$("#apollo-main").hide();
 }
 
+// Indicate the current view is showing data
+function setupFilledView()
+{
+	$("body").removeClass("empty-view");
+	$(".input-bar-cont").removeClass("active");
+	$("#apollo-main").fadeIn();
+}
+
 // Toggle between the record being hidden and not hidden
 // Called on click by ".album-image-cont" objects, so we search for a ".record" child to pass to hideRecord() and showRecord()
 function toggleRecord()
@@ -760,7 +775,7 @@ function login(callback) {
 // Callback for login completion, which updates buttons and sets access token in the API
 function loginComplete(access_token)
 {
-	$("#spotify-authorize").addClass("disabled").text("Authorized!"); // indicate authorization worked
+	$("#spotify-authorize").addClass("disabled"); // indicate authorization worked
 	$("#spotify-authorize").off(); // and disable the click event from being fired again
 
 	$(".pre-authorize").fadeOut(function()
