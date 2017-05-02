@@ -93,6 +93,20 @@ $(document).ready(function()
 			trackNumber = 2;
 		}
 	});
+
+	// Sharing stuff
+	$('.fb-share').click( function()
+	{
+		var shareurl = escape(window.location.href);
+		window.open('https://www.facebook.com/sharer/sharer.php?u=' + shareurl + '&t=' + document.title, '',
+		'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+	});
+
+	$(".twitter-share").click(function()
+	{
+		var shareurl = escape(window.location.href);
+		window.open("https://twitter.com/share?url=" + shareurl + "&text=" +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+	});
 });
 
 // Switches to the view that is being requested per click in the menu

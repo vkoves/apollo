@@ -572,6 +572,33 @@ input[type="text"]
 .album-module, .playlist-module { display: none; }
 /* End Album and Playlist Analysis Styling */
 
+/* Share Button Styling */
+.share-btn {
+	display: inline-block;
+	padding: 5px 10px 5px 20px;
+	border-radius: 50px;
+	color: white;
+	width: 100px;
+	margin-top: 10px;
+	font-size: 14px;
+	background-size: auto 50%;
+	background-repeat: no-repeat;
+	background-position: 20px center;
+}
+
+.fb-share
+{
+	background-color: #3B5998;
+	background-image: url(../images/facebook.svg);
+}
+
+.twitter-share
+{
+	background-color: #55acee;
+	background-image: url(../images/twitter.svg);
+}
+/* End Share Button Styling */
+
 /* Generic Styling */
 .zero-top
 {
