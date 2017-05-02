@@ -874,11 +874,28 @@ function loadStateFromURL()
 	{
 		switchView(null, params["currView"]);
 
-		if(currentView == "song")
+		if(currentView == "song" && params["track"])
 			getSpotifyData(null, params["track"]);
-		else if(currentView == "album")
+		else if(currentView == "song-compare" && params["track1"] && params["track2"])
+		{
+			// Load in second track data
+			albumTarget = $("#track-2");
+			trackNumber = 2;
+
+			getSpotifyData(null, params["track2"]);
+
+			setTimeout(function()
+			{
+				// Load in first track data after delay. First is last so the albumTarget is consistent with default of 1
+				albumTarget = $("#track-1");
+				trackNumber = 1;
+				getSpotifyData(null, params["track1"]);
+			}, 500)
+
+		}
+		else if(currentView == "album" && params["album"])
 			getSpotifyData(null, params["album"]);
-		else if(currentView == "playlist")
+		else if(currentView == "playlist" && params["playlist"])
 			getSpotifyData(null, params["playlist"]);
 	}
 
