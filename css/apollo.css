@@ -218,17 +218,15 @@ body.empty-view
 .menu-option.active#album .icon{ background-image: url("../icons/menu/album-white.png"); }
 .menu-option.active#playlist .icon { background-image: url("../icons/menu/playlist-white.png"); }
 
+.input-bar-cont { transition: margin-top 0.5s; }
+
 .input-bar-cont.active { margin-top: 10%; }
 
 .input-bar-cont #interact-prompt
 {
-	display: none;
 	font-weight: normal;
 	color: white;
 }
-
-.input-bar-cont.active #interact-prompt { display: block; }
-
 
 .input-bar
 {

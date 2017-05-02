@@ -104,18 +104,13 @@ function switchView()
 	$(".menu-option").removeClass("active");
 	$(this).addClass("active");
 
-	$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
-
 	currentView = $(this).attr("id");
 
 	pausePlayingRecord();
 	clearInput();
 
-	setupGraph(); //resetup graph for this view
-
 	if(currentView == "song")
 	{
-		$(".single-song-module").show();
 		albumTarget = $(".single-song-module .album-image-cont");
 		trackNumber = 1;
 
@@ -123,13 +118,16 @@ function switchView()
 
 		if(Object.keys(track).length > 0) // if track is defined
 		{
+			switchViewVisuals();
 			setupFilledView();
 			graphAudioFeatures(track.audioFeatures);
 			handleTrackInfo(track.trackObject);
 		}
 		else
 		{
-			setupEmptyView();
+			setupEmptyView(function() {
+				switchViewVisuals();
+			});
 		}
 	}
 	else if(currentView == "song-compare")
@@ -150,7 +148,6 @@ function switchView()
 			handleTrackInfo(track2.trackObject);
 		}
 
-		$(".compare-songs-module").show();
 		$("#track-2-select").removeClass("active");
 		$("#track-1-select").addClass("active");
 		albumTarget = $("#track-1");
@@ -159,39 +156,74 @@ function switchView()
 		spotifyObjectType = "track";
 
 		if(Object.keys(track1).length == 0 && Object.keys(track2).length == 0)
-			setupEmptyView();
+		{
+			setupEmptyView(function()
+			{
+				switchViewVisuals();
+			});
+		}
 		else
+		{
+			switchViewVisuals();
 			setupFilledView();
+		}
 	}
 	else if(currentView == "album")
 	{
-		$(".album-module").show();
-
 		spotifyObjectType = "album";
 
 		// If album has not been defined yet
 		if(Object.keys(album).length == 0)
-			setupEmptyView();
+		{
+			setupEmptyView(function()
+			{
+				switchViewVisuals();
+			});
+		}
 		else
 		{
+			switchViewVisuals();
 			graphAnalysisResults();
 			setupFilledView();
 		}
 	}
 	else if(currentView == "playlist")
 	{
-		$(".playlist-module").show();
-
 		spotifyObjectType = "playlist";
 
 		// If playlist has not been defined yet
 		if(Object.keys(playlist).length == 0)
-			setupEmptyView();
+		{
+			setupEmptyView(function()
+			{
+				switchViewVisuals();
+			});
+		}
 		else
 		{
+			switchViewVisuals();
 			graphAnalysisResults();
 			setupFilledView();
 		}
+	}
+
+	// Handles hiding old modules and showing needed ones for the new currentView
+	function switchViewVisuals()
+	{
+		// start by hiding all modules
+		$(".single-song-module, .compare-songs-module, .album-module, .playlist-module").hide();
+
+		// then show needed modules
+		if(currentView == "song")
+			$(".single-song-module").show();
+		else if(currentView == "song-compare")
+			$(".compare-songs-module").show();
+		else if(currentView == "album")
+			$(".album-module").show();
+		else if(currentView == "playlist")
+			$(".playlist-module").show();
+
+		setupGraph(); //resetup graph for this view
 	}
 }
 
@@ -593,11 +625,12 @@ function clearInput()
 }
 
 // Modify the body and input-bar-cont to indicate the current view is empty
-function setupEmptyView()
+function setupEmptyView(callback)
 {
 	$(".input-bar-cont").addClass("active");
+	$("#interact-prompt").slideDown();
 	$("body").addClass("empty-view");
-	$("#apollo-main").hide();
+	$("#apollo-main").fadeOut(callback); // pass callback to main fadeOut, so new view's elements are swapped after old ones are gone
 }
 
 // Indicate the current view is showing data
@@ -605,7 +638,17 @@ function setupFilledView()
 {
 	$("body").removeClass("empty-view");
 	$(".input-bar-cont").removeClass("active");
+	$("#interact-prompt").slideUp();
 	$("#apollo-main").fadeIn();
+}
+
+// For debugging - toggles between empty and filled view
+function toggleViewFilled()
+{
+	if($("body").hasClass("empty-view"))
+		setupFilledView();
+	else
+		setupEmptyView();
 }
 
 // Toggle between the record being hidden and not hidden
