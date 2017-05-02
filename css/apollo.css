@@ -265,7 +265,7 @@ input[type="text"]
 #search-field
 {
 	margin-top: 5px;
-	background-image: url("search.svg");
+	/*background-image: url("search.svg");*/
 	background-size: auto 70%;
 	background-repeat: no-repeat;
 	background-position: 98% center;
@@ -284,7 +284,13 @@ input[type="text"]
 	border-bottom-left-radius: 5px;
 	box-shadow: 0px 2px 3px #404040;
 	background: #bdbdbd;
+	width: 500px;
 	padding: 5px;
+}
+#search-no-results
+{
+	padding: 0px 30px;
+	font-weight: normal;
 }
 .search-listing
 {
@@ -293,7 +299,8 @@ input[type="text"]
 	background-color: #8a8a8a;
 	padding: 10px;
 	cursor: pointer;
-	width: 500px;
+	width: 100%;
+	box-shadow: border-box;
 	margin-bottom: 5px;
 }
 .search-listing:last-of-type { margin-bottom: 0px; }

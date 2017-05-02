@@ -608,6 +608,11 @@ function handleSearch(data)
 		+ '</div>');
 	}
 
+	if(items.length == 0)
+	{
+		$(".search-results").append('<h2 id="search-no-results">No results found</h2>');
+	}
+
 	$(".search-results").slideDown();
 
 	$(".search-listing").click(function()
