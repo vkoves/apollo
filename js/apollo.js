@@ -239,11 +239,12 @@ function spotifySearch()
 }
 
 // Reads the URI field and updates data as needed
-function getSpotifyData()
+function getSpotifyData(spotifyURI)
 {
 	setupFilledView();
 
-	var spotifyURI = $("#spotify-id").val();
+	if(!spotifyURI) // if URI wasn't passed in, use value from spotify-id
+		spotifyURI = $("#spotify-id").val();
 
 	var spotifyId = spotifyURI;
 
@@ -611,9 +612,9 @@ function handleSearch(data)
 
 	$(".search-listing").click(function()
 	{
-		$("#spotify-id").val($(this).attr("data-uri"));
+		clearInput();
 		$(".search-results").hide();
-		getSpotifyData();
+		getSpotifyData($(this).attr("data-uri"));
 	});
 }
 
