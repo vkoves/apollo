@@ -130,7 +130,7 @@ body.empty-view
 	border: solid 2px white;
 	transition: background-color 0.2s;
 	padding: 8px 40px;
-	margin: 20px 0px 40px 0px;
+	margin: 20px 0px;
 }
 #spotify-authorize:hover { background-color: rgba(255, 255, 255, 0.1); }
 #spotify-authorize img
@@ -142,8 +142,20 @@ body.empty-view
 #spotify-authorize span { line-height: 21px; }
 
 /* Style Github Link */
-.github-notice { font-weight: normal; }
+.github-notice
+{
+	font-weight: normal;
+	margin-top: 0px;
+}
+
 .github-notice a, .github-notice a:focus, .github-notice a:hover { color: white; }
+
+.github-notice a {
+	text-decoration: none;
+	opacity: 0.75;
+}
+.github-notice a:hover { opacity: 1; }
+
 .github-notice img
 {
 	width: 20px;
