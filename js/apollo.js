@@ -261,7 +261,7 @@ function getSpotifyData(event, spotifyURI)
 		}, spotifyError);
 		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, spotifyError);
 	}
-	else  if(spotifyObjectType == "album")
+	else if(spotifyObjectType == "album")
 	{
 		spotifyApi.getAlbum(spotifyId).then(handleAlbum, spotifyError);
 	}
@@ -795,8 +795,6 @@ function getTrackIds(tracks, isPlaylist)
 // Pushes to history based on the current app state
 function pushStateToHistory()
 {
-	console.log(generateURL());
-
 	history.pushState({
 		currentView: currentView,
 		spotifyObjData: generateDataHash(),
