@@ -280,10 +280,10 @@ function getSpotifyData(event, spotifyURI)
 	if(spotifyObjectType == "track")
 	{
 		// Also can use getAudioFeaturesForTracks(Array<string>)
-		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(function(data) {
-			graphAudioFeatures(data, true); // graph audio features and push history
+		spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, spotifyError);
+		spotifyApi.getTrack(spotifyId).then(function(data) {
+			handleTrackInfo(data, true);
 		}, spotifyError);
-		spotifyApi.getTrack(spotifyId).then(handleTrackInfo, spotifyError);
 	}
 	else if(spotifyObjectType == "album")
 	{
@@ -357,11 +357,8 @@ function setTrackData(data, isFeatures)
 }
 
 // Graph the track's audio features based on the passed in audio data
-function graphAudioFeatures(featureData, pushHistory)
+function graphAudioFeatures(featureData)
 {
-	if(pushHistory)
-		pushStateToHistory();
-
 	setTrackData(featureData, true);
 
 	$("#spotify-error").hide();
@@ -422,9 +419,13 @@ function graphAudioFeatures(featureData, pushHistory)
 }
 
 // Show information about the track from the passed in track data
-function handleTrackInfo(trackData)
+function handleTrackInfo(trackData, pushHistory)
 {
 	setTrackData(trackData, false);
+
+	// After track data is set (track, track1, or track2) objects, push history
+	if(pushHistory)
+		pushStateToHistory();
 
 	// Audio playing from http://jsfiddle.net/JMPerez/0u0v7e1b/
 	pausePlayingRecord();
