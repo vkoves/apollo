@@ -17,7 +17,7 @@
  */
 
 var spotifyApi;
-var origin = "http://viktorkoves.com"; // assume on production, and set origin variable as such
+var origin = "https://viktorkoves.com"; // assume on production, and set origin variable as such
 var audioObject; // for playing previews
 
 var albumTarget; // the target album to update. Type jQuery element
