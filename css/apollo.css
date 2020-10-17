@@ -19,8 +19,7 @@ body.empty-view
 }
 
 /* Customize the header color */
-#header { background-color: rgb(90, 0, 93); }
-.footer { display: none; } /* Remove footer */
+header { background-color: rgb(90, 0, 93); }
 
 /* Add basic pill button styling */
 .apollo-btn
