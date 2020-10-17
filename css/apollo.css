@@ -87,14 +87,14 @@ header { background-color: rgb(90, 0, 93); }
 	background: linear-gradient(#673ab7, purple);
 	color: white;
 }
-.pre-authorize .section h1
+.pre-authorize .section h2
 {
 	text-align: left;
 	width: 80%;
 	margin-top: 40px;
 	font-size: 38px;
 }
-.pre-authorize .section:not(.has-background) h1
+.pre-authorize .section:not(.has-background) h2
 {
 	color: #673AB7;
 }
@@ -109,8 +109,8 @@ header { background-color: rgb(90, 0, 93); }
 	display: inline-block;
 	vertical-align: top;
 }
-.pre-authorize .section .text.right-text h1,
-.pre-authorize .section .text.right-text h3
+.pre-authorize .section .text.right-text h2,
+.pre-authorize .section .text.right-text p
 {
 	margin-left: 20%;
 }
