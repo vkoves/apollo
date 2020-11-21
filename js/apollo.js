@@ -1,4 +1,8 @@
-/* Uses JMPerez Spotify JS Wrapper https://github.com/JMPerez/spotify-web-api-js */
+/**
+ * All the Apollo JS code
+ *
+ * Uses JMPerez Spotify JS Wrapper https://github.com/JMPerez/spotify-web-api-js
+ */
 
 /**
  *

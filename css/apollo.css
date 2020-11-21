@@ -1,14 +1,14 @@
 /* If the current view has no Spotify object selected, give a background */
 body
 {
-	background-image: url("../images/grey-background.png");;
+	background-image: url("../images/backgrounds/grey-background.png");;
 	transition: background-image 0.5s;
 	background-size: auto 100%;
 }
 body.empty-view
 {
 	/*background: linear-gradient(purple, #673ab7); */
-	background-image: url("../images/gradient-background.png");;
+	background-image: url("../images/backgrounds/gradient-background.png");;
 }
 
 .page-container
@@ -230,15 +230,15 @@ header { background-color: rgb(90, 0, 93); }
 	height: 30px;
 	margin-left: 20px;
 }
-.menu-option#song .icon { background-image: url("../icons/menu/song.png"); }
-.menu-option#song-compare .icon { background-image: url("../icons/menu/songcompare.png"); }
-.menu-option#album .icon{ background-image: url("../icons/menu/album.png"); }
-.menu-option#playlist .icon { background-image: url("../icons/menu/playlist.png"); }
+.menu-option#song .icon { background-image: url("../images/menu/song.png"); }
+.menu-option#song-compare .icon { background-image: url("../images/menu/songcompare.png"); }
+.menu-option#album .icon{ background-image: url("../images/menu/album.png"); }
+.menu-option#playlist .icon { background-image: url("../images/menu/playlist.png"); }
 
-.menu-option.active#song .icon { background-image: url("../icons/menu/song-white.png"); }
-.menu-option.active#song-compare .icon { background-image: url("../icons/menu/songcompare-white.png"); }
-.menu-option.active#album .icon{ background-image: url("../icons/menu/album-white.png"); }
-.menu-option.active#playlist .icon { background-image: url("../icons/menu/playlist-white.png"); }
+.menu-option.active#song .icon { background-image: url("../images/menu/song-white.png"); }
+.menu-option.active#song-compare .icon { background-image: url("../images/menu/songcompare-white.png"); }
+.menu-option.active#album .icon{ background-image: url("../images/menu/album-white.png"); }
+.menu-option.active#playlist .icon { background-image: url("../images/menu/playlist-white.png"); }
 
 .input-bar-cont { transition: margin-top 0.5s; }
 
@@ -521,13 +521,13 @@ input[type="text"]
 	background-size: 100%;
 	background-repeat: no-repeat;
 }
-.acousticness .col-icon { background-image: url("../icons/acousticness.png"); }
-.danceability .col-icon { background-image: url("../icons/danceability.png"); }
-.energy .col-icon { background-image: url("../icons/energy.png"); }
-.instrumentalness .col-icon { background-image: url("../icons/instrumentalness.png"); }
-.liveness .col-icon { background-image: url("../icons/liveness.png"); }
-.speechiness .col-icon { background-image: url("../icons/speechiness.png"); }
-.valence .col-icon { background-image: url("../icons/valence.png"); }
+.acousticness .col-icon { background-image: url("../images/col-icons/acousticness.png"); }
+.danceability .col-icon { background-image: url("../images/col-icons/danceability.png"); }
+.energy .col-icon { background-image: url("../images/col-icons/energy.png"); }
+.instrumentalness .col-icon { background-image: url("../images/col-icons/instrumentalness.png"); }
+.liveness .col-icon { background-image: url("../images/col-icons/liveness.png"); }
+.speechiness .col-icon { background-image: url("../images/col-icons/speechiness.png"); }
+.valence .col-icon { background-image: url("../images/col-icons/valence.png"); }
 
 
 .graph-col .fill
@@ -612,14 +612,14 @@ input[type="text"]
 .fb-share
 {
 	background-color: #3B5998;
-	background-image: url(../images/facebook.svg);
+	background-image: url(../images/icons/facebook.svg);
 }
 .fb-share:hover { background-color: #567dce; }
 
 .twitter-share
 {
 	background-color: #55acee;
-	background-image: url(../images/twitter.svg);
+	background-image: url(../images/icons/twitter.svg);
 }
 .twitter-share:hover { background-color: #5eb9ff; }
 

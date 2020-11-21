@@ -1,3 +1,8 @@
+/**
+ * JMPerez Spotify JS Wrapper
+ * https://github.com/JMPerez/spotify-web-api-js
+ */
+
 /* global module */
 'use strict';
 var SpotifyWebApi = (function() {
