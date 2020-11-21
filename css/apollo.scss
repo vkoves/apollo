@@ -16,9 +16,12 @@ body.empty-view
   background-image: url("../images/backgrounds/gradient-background.png");;
 }
 
+.page-container, .page-container * {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .page-container
 {
-  font-family: 'Montserrat', sans-serif;
   color: $text-grey;
   margin-top: 0px;
 }
@@ -31,6 +34,7 @@ header { background-color: $purple; }
 {
   display: inline-block;
   background-color: $apollo-purple;
+  border: none;
   border-radius: 100px;
   padding: 5px 30px;
   color: $white;
@@ -251,6 +255,7 @@ input[type="text"]
   position: relative;
   width: 20%;
   cursor: pointer;
+  border: none;
 }
 .album-image-cont img
 {
@@ -287,7 +292,7 @@ input[type="text"]
   -webkit-animation: spin 30s linear infinite;
   animation: spin 30s linear infinite;
 }
-.album-image-cont.playing .album-image { z-index: -5; }
+.album-image-cont.playing .album-image { z-index: 0; }
 .track-info .track-text
 {
   display: inline-block;
@@ -488,6 +493,11 @@ input[type="text"]
   background-repeat: no-repeat;
   background-position: 20px center;
   cursor: pointer;
+}
+
+.fb-share, .twitter-share {
+  background-position: 15% center;
+  border: none;
 }
 
 .fb-share

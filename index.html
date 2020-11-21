@@ -22,18 +22,21 @@ metadata:
 	<div class="banner">
 		<h1 class="main-title">Apollo</h1>
 		<div class="sub-title">The eyes for your ears</div>
-		<div id="spotify-authorize" class="apollo-btn">
-			<img src="spotify-logo.png">
+		<button id="spotify-authorize" class="apollo-btn">
+			<img src="spotify-logo.png" alt="">
 			<span>Log In With Spotify</span>
-		</div>
+		</button>
 		<div class="github-notice">
-			<a href="https://github.com/vkoves/apollo" target="_blank">Fork Apollo on Github<img src="images/icons/github.svg"></a>
+			<a href="https://github.com/vkoves/apollo" target="_blank">
+				Fork Apollo on Github
+				<img src="images/icons/github.svg" alt="">
+			</a>
 		</div>
 	</div>
 
 	<div class="section-cont">
 		<div class="section page-limiter">
-			<img src="images/home/graph.png" class="screenshot">
+			<img src="images/home/graph.png" class="screenshot" alt="Bar graph of a song's different properties, like acousticness, danceability, and more">
 			<div class="text right-text">
 				<h2>Visualize the Music You Love</h2>
 				<p class="no-bold description-text">
@@ -50,12 +53,12 @@ metadata:
 						Analyzing a song you've never listened to? You can preview songs you're viewing right in Apollo.
 					</p>
 				</div>
-				<img src="images/home/albums.png" class="screenshot">
+				<img src="images/home/albums.png" class="screenshot" alt="">
 			</div>
 		</div>
 
 		<div class="section page-limiter">
-			<img src="images/home/song-compare.png" class="screenshot">
+			<img src="images/home/song-compare.png" class="screenshot" alt="A double bar graph comparing two songs in their properties">
 			<div class="text right-text">
 				<h2>Compare Songs</h2>
 				<p class="no-bold description-text">
@@ -70,25 +73,25 @@ metadata:
 <!-- Show up after authorization completes -->
 <div class="post-authorize page-limiter">
 	<div class="menu-bar">
-		<div id="song" class="menu-option active">
+		<button id="song" class="menu-option active">
 			<div class="icon" src="images/menu/song.png"></div>
 			<div class="text">Single Song</div>
-		</div>
+		</button>
 
-		<div id="song-compare" class="menu-option">
+		<button id="song-compare" class="menu-option">
 			<div class="icon" src="images/menu/songcompare.png"></div>
 			<div class="text">Compare Songs</div>
-		</div>
+		</button>
 
-		<div id="album" class="menu-option">
+		<button id="album" class="menu-option">
 			<div class="icon" src="images/menu/album.png"></div>
 			<div class="text">Album</div>
-		</div>
+		</button>
 
-		<div id="playlist" class="menu-option">
+		<button id="playlist" class="menu-option">
 			<div class="icon" src="images/menu/playlist.png"></div>
 			<div class="text">Playlist</div>
-		</div>
+		</button>
 	</div>
 
 	<div class="input-bar-cont">
@@ -98,18 +101,18 @@ metadata:
 
 		<div class="input-bar">
 			<div class="input-label">Spotify URI </div><input type="text" id="spotify-id"></input>
-			<div id="submit-btn" class="apollo-btn">Get Song Data</div>
+			<button id="submit-btn" class="apollo-btn">Get Song Data</button>
 			<br>
 			<div class="input-label">Search </div><input type="text" id="search-field"></input>
-			<div class="apollo-btn search-submit">Search</div>
+			<button class="apollo-btn search-submit">Search</button>
 			<div class="search-results"></div>
 		</div>
 	</div>
 
 	<!-- Contains all visualization elements, including albums and graphing -->
 	<div id="apollo-main">
-		<div class="fb-share share-btn">Share</div>
-		<div class="twitter-share share-btn">Tweet</div>
+		<button class="fb-share share-btn">Share</button>
+		<button class="twitter-share share-btn">Tweet</button>
 
 		<div id="spotify-error">
 			Spotify returned an error! Please double check your input and try again.
@@ -117,10 +120,10 @@ metadata:
 
 		<!-- For Song View -->
 		<div class="track-info single-song-module">
-			<div class="album-image-cont">
-				<img class="record hidden" src="record.png">
-				<img class="album-image" src="album-art-placeholder.png">
-			</div>
+			<button class="album-image-cont">
+				<img class="record hidden" src="record.png" alt="">
+				<img class="album-image" src="album-art-placeholder.png" alt="">
+			</button>
 			<div class="track-text">
 				<h2 id="title" class="no-bold"></h2>
 				<h3 id="artists" class="no-bold"></h3>
@@ -159,19 +162,19 @@ metadata:
 
 		<!-- For Compare Songs -->
 		<div class="song-select compare-songs-module">
-			<div id="track-1-select" class="option active">Song 1</div>
-			<div id="track-2-select" class="option">Song 2</div>
+			<button id="track-1-select" class="option active">Song 1</button>
+			<button id="track-2-select" class="option">Song 2</button>
 		</div>
 
 		<div class="two-track-cont compare-songs-module">
-			<div id="track-1" class="album-image-cont">
+			<button id="track-1" class="album-image-cont">
 				<img class="record hidden" src="record.png">
 				<img class="album-image" src="album-art-placeholder.png">
-			</div>
-			<div id="track-2" class="album-image-cont">
+			</button>
+			<button id="track-2" class="album-image-cont">
 				<img class="record hidden" src="record.png">
 				<img class="album-image" src="album-art-placeholder.png">
-			</div>
+			</button>
 		</div>
 
 		<!-- For Albums and PLaylist Views -->
