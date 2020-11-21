@@ -15,6 +15,7 @@ module.exports = {
         'ecmaVersion': 2018
     },
     'rules': {
+        'curly': [ 'error', 'all' ],
         'indent': [
             'error',
             4

@@ -1,3 +1,9 @@
+/**
+ * Make sure ESLint knows we are exporting spotifyGraphableData for use
+ * apollo.js
+ */
+/* exported spotifyGraphableData */
+
 // Mostly pulled from https://developer.spotify.com/web-api/get-audio-features/
 var spotifyGraphableData = {
     'acousticness' : {
