@@ -1,4 +1,0 @@
-/**
- * Site wide JS
- */
-
