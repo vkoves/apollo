@@ -3,18 +3,21 @@
 
 @import 'colors';
 
-/* If the current view has no Spotify object selected, give a background */
-body
-{
-  background-image: url("../images/backgrounds/grey-background.png");;
+// If the current view has no Spotify object selected, give it a grey background
+// uses an image since you can't cross-fade to a linear gradient in CSS
+body {
+  background-image: url("../images/backgrounds/grey-background.png");
   transition: background-image 0.5s;
   background-size: auto 100%;
 }
-body.empty-view
-{
-  /*background: linear-gradient($purple, $apollo-purple); */
-  background-image: url("../images/backgrounds/gradient-background.png");;
+
+body.empty-view {
+  // Imitates the linear-gradient but via an image because you can't cross-fade
+  // linear gradients in CSS
+  background-image: url("../images/backgrounds/gradient-background.png");
 }
+
+a:focus, button:focus { outline: 2px $white dashed; }
 
 .page-container, .page-container * {
   font-family: 'Montserrat', sans-serif;
@@ -65,23 +68,23 @@ header { background-color: $purple; }
 #apollo-main { display: none; }
 
 /* Style the top menu */
-.menu-bar
-{
+.menu-bar {
+  display: flex;
   margin-bottom: 20px;
-  overflow: hidden;
-  border-radius: 5px;
 }
-.menu-option
-{
+
+.menu-option {
   width: 25%;
   background-color: $extra-light-grey;
   vertical-align: top;
   padding: 10px 0px;
   box-sizing: border-box;
   cursor: pointer;
-  float: left;
   border-bottom: 0px;
   border-top: 0px;
+
+  &:first-of-type { border-radius: 5px 0 0 5px; }
+  &:last-of-type { border-radius: 0 5px 5px 0; }
 }
 
 /* Remove border on edges and added rounding */
