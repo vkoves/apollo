@@ -5,7 +5,15 @@
  */
 
 /** Make sure ESLint knows we will have access to these two */
-/* global spotifyGraphableData, SpotifyWebApi */
+/* global spotifyGraphableData, SpotifyWebApi, Vue */
+
+/* exported app */
+var app = new Vue({
+    el: '#app',
+    methods: {
+        login: () => login(loginComplete)
+    }
+});
 
 /**
  *
@@ -67,11 +75,6 @@ $(document).ready(function()
     setupGraph();
 
     albumTarget = $('.single-song-module .album-image-cont'); //set default target album to single song album
-
-    $('#spotify-authorize').click(function()
-    {
-        login(loginComplete);
-    });
 
     $('#submit-btn').click(getSpotifyData);
 
@@ -960,10 +963,11 @@ function login(callback) {
           '&response_type=token';
     }
 
-    var url = getLoginURL([
-        // Specify scopes here, don't need any for track data fetching
-        // 'playlist-modify-public'
-    ]);
+    // Specify scopes here, don't need any for track data fetching since that's
+    // not related to the user at all
+    const scopes = [];
+
+    var url = getLoginURL(scopes);
 
     var width = 450,
         height = 730,
@@ -972,6 +976,7 @@ function login(callback) {
 
     window.addEventListener('message', function(event) {
         var hash = JSON.parse(event.data);
+
         if (hash['access_token']) {
             callback(hash['access_token']);
         }
@@ -987,9 +992,6 @@ function login(callback) {
 // Callback for login completion, which updates buttons and sets access token in the API
 function loginComplete(access_token)
 {
-    $('#spotify-authorize').addClass('disabled'); // indicate authorization worked
-    $('#spotify-authorize').off(); // and disable the click event from being fired again
-
     $('.pre-authorize').fadeOut(function() {
         $('.post-authorize').fadeIn();
     });
@@ -1002,14 +1004,6 @@ function loginComplete(access_token)
     if (window.location.search) {
         loadStateFromURL();
     }
-
-    // TODO: Implement use of this later
-    /*
-    spotifyApi.getUserPlaylists({"limit": 40}).then(function(value)
-    {
-        console.log(value);
-    });
-    */
 }
 
 /***************************/

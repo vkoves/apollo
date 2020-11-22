@@ -17,183 +17,187 @@ metadata:
 ---
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
-<!-- Container for panel explaining Apollo before auth -->
-<div class="pre-authorize">
-	<div class="banner">
-		<h1 class="main-title">Apollo</h1>
-		<div class="sub-title">The eyes for your ears</div>
-		<button id="spotify-authorize" class="apollo-btn">
-			<img src="spotify-logo.png" alt="">
-			<span>Log In With Spotify</span>
-		</button>
-		<div class="github-notice">
-			<a href="https://github.com/vkoves/apollo" target="_blank">
-				Fork Apollo on Github
-				<img src="images/icons/github.svg" alt="">
-			</a>
-		</div>
-	</div>
+<div id="app">
+  <!-- Container for panel explaining Apollo before auth -->
+  <div class="pre-authorize">
+    <div class="banner">
+      <h1 class="main-title">Apollo</h1>
+      <div class="sub-title">The eyes for your ears</div>
 
-	<div class="section-cont">
-		<div class="section page-limiter">
-			<img src="images/home/graph.png" class="screenshot" alt="Bar graph of a song's different properties, like acousticness, danceability, and more">
-			<div class="text right-text">
-				<h2>Visualize the Music You Love</h2>
-				<p class="no-bold description-text">
-					Learn about your favorite songs, seeing information like the beats per minute and time signature to ratings of acousticness and energy.
-				</p>
-			</div>
-		</div>
+      <button v-on:click="login" class="apollo-btn">
+        <img src="spotify-logo.png" alt="">
+        <span>Log In With Spotify</span>
+      </button>
 
-		<div class="section has-background">
-			<div class="page-limiter">
-				<div class="text">
-					<h2>Preview Songs in Browser</h2>
-					<p class="no-bold description-text">
-						Analyzing a song you've never listened to? You can preview songs you're viewing right in Apollo.
-					</p>
-				</div>
-				<img src="images/home/albums.png" class="screenshot" alt="">
-			</div>
-		</div>
+      <div class="github-notice">
+        <a href="https://github.com/vkoves/apollo" target="_blank">
+          Fork Apollo on Github
+          <img src="images/icons/github.svg" alt="">
+        </a>
+      </div>
+    </div>
 
-		<div class="section page-limiter">
-			<img src="images/home/song-compare.png" class="screenshot" alt="A double bar graph comparing two songs in their properties">
-			<div class="text right-text">
-				<h2>Compare Songs</h2>
-				<p class="no-bold description-text">
-					Apollo provides an objective source on deciding between songs, comparing songs across seven different ratings.
-				</p>
-			</div>
-		</div>
-	</div>
-</div>
+    <div class="section-cont">
+      <div class="section page-limiter">
+        <img src="images/home/graph.png" class="screenshot" alt="Bar graph of a song's different properties, like acousticness, danceability, and more">
+        <div class="text right-text">
+          <h2>Visualize the Music You Love</h2>
+          <p class="no-bold description-text">
+            Learn about your favorite songs, seeing information like the beats per minute and time signature to ratings of acousticness and energy.
+          </p>
+        </div>
+      </div>
+
+      <div class="section has-background">
+        <div class="page-limiter">
+          <div class="text">
+            <h2>Preview Songs in Browser</h2>
+            <p class="no-bold description-text">
+              Analyzing a song you've never listened to? You can preview songs you're viewing right in Apollo.
+            </p>
+          </div>
+          <img src="images/home/albums.png" class="screenshot" alt="">
+        </div>
+      </div>
+
+      <div class="section page-limiter">
+        <img src="images/home/song-compare.png" class="screenshot" alt="A double bar graph comparing two songs in their properties">
+        <div class="text right-text">
+          <h2>Compare Songs</h2>
+          <p class="no-bold description-text">
+            Apollo provides an objective source on deciding between songs, comparing songs across seven different ratings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-<!-- Show up after authorization completes -->
-<div class="post-authorize page-limiter">
-	<div class="menu-bar">
-		<button id="song" class="menu-option active">
-			<div class="icon" src="images/menu/song.png"></div>
-			<div class="text">Single Song</div>
-		</button>
+  <!-- Show up after authorization completes -->
+  <div class="post-authorize page-limiter">
+    <div class="menu-bar">
+      <button id="song" class="menu-option active">
+        <div class="icon" src="images/menu/song.png"></div>
+        <div class="text">Single Song</div>
+      </button>
 
-		<button id="song-compare" class="menu-option">
-			<div class="icon" src="images/menu/songcompare.png"></div>
-			<div class="text">Compare Songs</div>
-		</button>
+      <button id="song-compare" class="menu-option">
+        <div class="icon" src="images/menu/songcompare.png"></div>
+        <div class="text">Compare Songs</div>
+      </button>
 
-		<button id="album" class="menu-option">
-			<div class="icon" src="images/menu/album.png"></div>
-			<div class="text">Album</div>
-		</button>
+      <button id="album" class="menu-option">
+        <div class="icon" src="images/menu/album.png"></div>
+        <div class="text">Album</div>
+      </button>
 
-		<button id="playlist" class="menu-option">
-			<div class="icon" src="images/menu/playlist.png"></div>
-			<div class="text">Playlist</div>
-		</button>
-	</div>
+      <button id="playlist" class="menu-option">
+        <div class="icon" src="images/menu/playlist.png"></div>
+        <div class="text">Playlist</div>
+      </button>
+    </div>
 
-	<div class="input-bar-cont">
-		<h2 id="interact-prompt">
-			Search or enter a Spotify URI to get started!
-		</h2>
+    <div class="input-bar-cont">
+      <h2 id="interact-prompt">
+        Search or enter a Spotify URI to get started!
+      </h2>
 
-		<div class="input-bar">
-			<div class="input-label">Spotify URI </div><input type="text" id="spotify-id"></input>
-			<button id="submit-btn" class="apollo-btn">Get Song Data</button>
-			<br>
-			<div class="input-label">Search </div><input type="text" id="search-field"></input>
-			<button class="apollo-btn search-submit">Search</button>
-			<div class="search-results"></div>
-		</div>
-	</div>
+      <div class="input-bar">
+        <div class="input-label">Spotify URI </div><input type="text" id="spotify-id"></input>
+        <button id="submit-btn" class="apollo-btn">Get Song Data</button>
+        <br>
+        <div class="input-label">Search </div><input type="text" id="search-field"></input>
+        <button class="apollo-btn search-submit">Search</button>
+        <div class="search-results"></div>
+      </div>
+    </div>
 
-	<!-- Contains all visualization elements, including albums and graphing -->
-	<div id="apollo-main">
-		<button class="fb-share share-btn">Share</button>
-		<button class="twitter-share share-btn">Tweet</button>
+    <!-- Contains all visualization elements, including albums and graphing -->
+    <div id="apollo-main">
+      <button class="fb-share share-btn">Share</button>
+      <button class="twitter-share share-btn">Tweet</button>
 
-		<div id="spotify-error">
-			Spotify returned an error! Please double check your input and try again.
-		</div>
+      <div id="spotify-error">
+        Spotify returned an error! Please double check your input and try again.
+      </div>
 
-		<!-- For Song View -->
-		<div class="track-info single-song-module">
-			<button class="album-image-cont">
-				<img class="record hidden" src="record.png" alt="">
-				<img class="album-image" src="album-art-placeholder.png" alt="">
-			</button>
-			<div class="track-text">
-				<h2 id="title" class="no-bold"></h2>
-				<h3 id="artists" class="no-bold"></h3>
-				<div class="non-graph-data">
-					<div class="left-col">
-						<div class="data-item">
-							<div class="left-text">Tempo:</div>
-							<div class="right-text"><span id="tempo"></span> BPM</div>
-						</div>
-						<div class="data-item">
-							<div class="left-text">Key:</div>
-							<div class="right-text"><span id="key"></span></div>
-						</div>
-						<div class="data-item">
-							<div class="left-text">Loudness:</div>
-							<div class="right-text"><span id="loudness"></span> dB</div>
-						</div>
-					</div>
-					<div class="right-col">
-						<div class="data-item">
-							<div class="left-text">Time Signature:</div>
-							<div class="right-text"><span id="time_signature"></span></div>
-						</div>
-						<div class="data-item">
-							<div class="left-text">Mode:</div>
-							<div class="right-text"><span id="mode"></span></div>
-						</div>
-						<div class="data-item">
-							<div class="left-text">Length:</div>
-							<div class="right-text"><span id="duration"></span></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+      <!-- For Song View -->
+      <div class="track-info single-song-module">
+        <button class="album-image-cont">
+          <img class="record hidden" src="record.png" alt="">
+          <img class="album-image" src="album-art-placeholder.png" alt="">
+        </button>
+        <div class="track-text">
+          <h2 id="title" class="no-bold"></h2>
+          <h3 id="artists" class="no-bold"></h3>
+          <div class="non-graph-data">
+            <div class="left-col">
+              <div class="data-item">
+                <div class="left-text">Tempo:</div>
+                <div class="right-text"><span id="tempo"></span> BPM</div>
+              </div>
+              <div class="data-item">
+                <div class="left-text">Key:</div>
+                <div class="right-text"><span id="key"></span></div>
+              </div>
+              <div class="data-item">
+                <div class="left-text">Loudness:</div>
+                <div class="right-text"><span id="loudness"></span> dB</div>
+              </div>
+            </div>
+            <div class="right-col">
+              <div class="data-item">
+                <div class="left-text">Time Signature:</div>
+                <div class="right-text"><span id="time_signature"></span></div>
+              </div>
+              <div class="data-item">
+                <div class="left-text">Mode:</div>
+                <div class="right-text"><span id="mode"></span></div>
+              </div>
+              <div class="data-item">
+                <div class="left-text">Length:</div>
+                <div class="right-text"><span id="duration"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-		<!-- For Compare Songs -->
-		<div class="song-select compare-songs-module">
-			<button id="track-1-select" class="option active">Song 1</button>
-			<button id="track-2-select" class="option">Song 2</button>
-		</div>
+      <!-- For Compare Songs -->
+      <div class="song-select compare-songs-module">
+        <button id="track-1-select" class="option active">Song 1</button>
+        <button id="track-2-select" class="option">Song 2</button>
+      </div>
 
-		<div class="two-track-cont compare-songs-module">
-			<button id="track-1" class="album-image-cont">
-				<img class="record hidden" src="record.png">
-				<img class="album-image" src="album-art-placeholder.png">
-			</button>
-			<button id="track-2" class="album-image-cont">
-				<img class="record hidden" src="record.png">
-				<img class="album-image" src="album-art-placeholder.png">
-			</button>
-		</div>
+      <div class="two-track-cont compare-songs-module">
+        <button id="track-1" class="album-image-cont">
+          <img class="record hidden" src="record.png">
+          <img class="album-image" src="album-art-placeholder.png">
+        </button>
+        <button id="track-2" class="album-image-cont">
+          <img class="record hidden" src="record.png">
+          <img class="album-image" src="album-art-placeholder.png">
+        </button>
+      </div>
 
-		<!-- For Albums and PLaylist Views -->
-		<div class="details track-info album-module playlist-module">
-			<div class="album-image-cont">
-				<img class="album-image" src="album-art-placeholder.png">
-			</div>
-			<div class="track-text">
-				<h1 class="zero-bot">Pick an item to get started</h1>
-				<h2 class="zero-top no-bold"></h2>
-			</div>
-		</div>
+      <!-- For Albums and PLaylist Views -->
+      <div class="details track-info album-module playlist-module">
+        <div class="album-image-cont">
+          <img class="album-image" src="album-art-placeholder.png">
+        </div>
+        <div class="track-text">
+          <h1 class="zero-bot">Pick an item to get started</h1>
+          <h2 class="zero-top no-bold"></h2>
+        </div>
+      </div>
 
-		<!-- Used by each module for graphing -->
-		<div class="graph-top-cont">
-			<div class="graph-cont">
-			</div>
-			<div class="graph-labels">
-			</div>
-		</div>
-	</div>
+      <!-- Used by each module for graphing -->
+      <div class="graph-top-cont">
+        <div class="graph-cont">
+        </div>
+        <div class="graph-labels">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
