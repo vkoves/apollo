@@ -7,14 +7,6 @@
 /** Make sure ESLint knows we will have access to these two */
 /* global spotifyGraphableData, SpotifyWebApi, Vue */
 
-/* exported app */
-var app = new Vue({
-    el: '#app',
-    methods: {
-        login: () => login(loginComplete)
-    }
-});
-
 /**
  *
  *  TODO:
@@ -64,6 +56,15 @@ if (window.location.href.indexOf('localhost') > -1) { // if we're on localhost a
 
 $(document).ready(function()
 {
+    /* exported app */
+    var app = new Vue({
+        el: '#app',
+        methods: {
+            login: () => login(loginComplete)
+        }
+    });
+
+
     if (window.location.href.indexOf('access_token') > -1) // if this is a redirect from Spotify authorization
     {
         var dataToPass = {'access_token': window.location.href.split('access_token=')[1].split('&')[0]}; // create a hash with the data to pass to the other window
