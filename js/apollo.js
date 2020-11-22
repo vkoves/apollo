@@ -56,14 +56,15 @@ if (window.location.href.indexOf('localhost') > -1) { // if we're on localhost a
 
 $(document).ready(function()
 {
-    /* exported app */
     var app = new Vue({
         el: '#app',
+        data: {
+            isLoggedIn: false
+        },
         methods: {
             login: () => login(loginComplete)
         }
     });
-
 
     if (window.location.href.indexOf('access_token') > -1) // if this is a redirect from Spotify authorization
     {
@@ -120,6 +121,9 @@ $(document).ready(function()
         var shareurl = escape(window.location.href);
         window.open('https://twitter.com/share?url=' + shareurl + '&text=' +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
     });
+
+    // Attempt auto-login
+    autoLogin();
 });
 
 // Switches to the view that is being requested per click in the menu
@@ -978,6 +982,8 @@ function login(callback) {
     window.addEventListener('message', function(event) {
         var hash = JSON.parse(event.data);
 
+        console.log('hash', hash);
+
         if (hash['access_token']) {
             callback(hash['access_token']);
         }
@@ -990,9 +996,29 @@ function login(callback) {
     );
 }
 
+/**
+ * Try to login with a previous access token stored in sessionStorage. Does NOT
+ * run if we see the #home hash in the header, which is usefulf or testing or
+ * if people click the home link
+ */
+function autoLogin() {
+    // Guard against #home anchor, which ignores auto-login
+    if (location.href.split('#')[1] === 'home') {
+        return;
+    }
+
+    const oldToken = sessionStorage.getItem('accessToken');
+
+    if (oldToken) {
+        loginComplete(oldToken);
+    }
+}
+
 // Callback for login completion, which updates buttons and sets access token in the API
-function loginComplete(access_token)
+function loginComplete(accessToken)
 {
+    sessionStorage.setItem('accessToken', accessToken);
+
     $('.pre-authorize').fadeOut(function() {
         $('.post-authorize').fadeIn();
     });
@@ -1000,10 +1026,13 @@ function loginComplete(access_token)
     // Setup first view, which is empty
     setupEmptyView();
 
-    spotifyApi.setAccessToken(access_token);
+    spotifyApi.setAccessToken(accessToken);
 
     if (window.location.search) {
         loadStateFromURL();
+    }
+    else {
+        pushStateToHistory();
     }
 }
 
