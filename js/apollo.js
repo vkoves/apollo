@@ -90,6 +90,17 @@ $(document).ready(function()
     }
 
     spotifyApi = new SpotifyWebApi(); // init SpotifyWebApi
+
+    // Attempt auto-login
+    autoLogin();
+});
+
+/**
+ * A temporary functionf or setting up event listeners after auth.
+ *
+ * TODO: Deprecate this function, as all these event handlers should be in Vue
+ */
+function setupPostLoginEvents() {
     setupGraph();
 
     albumTarget = $('.single-song-module .album-image-cont'); //set default target album to single song album
@@ -137,10 +148,7 @@ $(document).ready(function()
         var shareurl = escape(window.location.href);
         window.open('https://twitter.com/share?url=' + shareurl + '&text=' +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
     });
-
-    // Attempt auto-login
-    autoLogin();
-});
+}
 
 // Switches to the view that is being requested per click in the menu
 // Optionally takes a string of the view desired, to allow for JS based switched
@@ -186,9 +194,7 @@ function switchView(event, viewToSwitchTo)
         }
         else
         {
-            setupEmptyView(function() {
-                switchViewVisuals();
-            });
+            setupEmptyView(switchViewVisuals);
         }
     }
     else if (currentView == 'song-compare')
@@ -233,9 +239,7 @@ function switchView(event, viewToSwitchTo)
 
         // If album has not been defined yet
         if (Object.keys(album).length == 0) {
-            setupEmptyView(function() {
-                switchViewVisuals();
-            });
+            setupEmptyView(switchViewVisuals);
         }
         else
         {
@@ -250,9 +254,7 @@ function switchView(event, viewToSwitchTo)
 
         // If playlist has not been defined yet
         if (Object.keys(playlist).length == 0) {
-            setupEmptyView(function() {
-                switchViewVisuals();
-            });
+            setupEmptyView(switchViewVisuals);
         }
         else {
             switchViewVisuals();
@@ -726,24 +728,17 @@ function setupEmptyView(callback)
 {
     VueApp.viewEmpty = true;
 
-    $('#interact-prompt').slideDown();
-    $('body').addClass('empty-view');
-    $('#apollo-main').fadeOut(callback); // pass callback to main fadeOut, so new view's elements are swapped after old ones are gone
+    if (callback) {
+        setTimeout(callback, 500);
+    }
 }
 
 /**
  * Indicate the current view is showing data
- *
- * WIP: Converting to Vue
  */
 function setupFilledView()
 {
     VueApp.viewEmpty = false;
-
-    $('body').removeClass('empty-view');
-    $('.input-bar-cont').removeClass('active');
-    $('#interact-prompt').slideUp();
-    $('#apollo-main').fadeIn();
 }
 
 // Toggle between the record being hidden and not hidden
@@ -983,7 +978,12 @@ function loadStateFromURL()
 /***** LOGIN FUNCTIONS *****/
 /***************************/
 
-/* Lifted from JMPerez JSFiddle http://jsfiddle.net/JMPerez/j1sqq4g0/ */
+/**
+ * Show a Spotify auth window to prompt the user to login with their Spotify. If
+ * they're already logged in, this window will open and close immediately.
+ *
+ * Copied from JMPerez's JSFiddle: http://jsfiddle.net/JMPerez/j1sqq4g0/
+ */
 function login(callback) {
     var CLIENT_ID = '2edca4f106fc4672a68f5389579ac413';
     var REDIRECT_URI = currOrigin + '/apollo/';
@@ -1008,8 +1008,6 @@ function login(callback) {
 
     window.addEventListener('message', function(event) {
         var hash = JSON.parse(event.data);
-
-        console.log('hash', hash);
 
         if (hash['access_token']) {
             callback(hash['access_token']);
@@ -1041,12 +1039,19 @@ function autoLogin() {
     }
 }
 
-// Callback for login completion, which updates buttons and sets access token in the API
+/**
+ * Callback for login completion, which updates buttons and sets the access
+ * token in the API
+ */
 function loginComplete(accessToken)
 {
     sessionStorage.setItem('accessToken', accessToken);
 
     VueApp.isLoggedIn = true;
+
+    // Wait for new element to be in DOM before setting up events. This is
+    // temporary while these are all in jQuery
+    setTimeout(setupPostLoginEvents, 1000);
 
     // Setup first view, which is empty
     setupEmptyView();

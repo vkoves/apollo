@@ -17,7 +17,7 @@ metadata:
 ---
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
-<div id="app">
+<div id="app" class="app-cont" v-bind:class="{ 'empty-view': viewEmpty }">
   <transition name="fade" mode="out-in">
     <!-- Container for panel explaining Apollo before auth. Key attribute
       prevents Vue just swapping contents, which would not animate  -->
@@ -99,9 +99,11 @@ metadata:
       </div>
 
       <div class="input-bar-cont" v-bind:class="{ active: viewEmpty }">
-        <h2 id="interact-prompt">
-          Search or enter a Spotify URI to get started!
-        </h2>
+        <transition name="slide-vertical">
+          <h2 id="interact-prompt" v-if="viewEmpty">
+            Search or enter a Spotify URI to get started!
+          </h2>
+        </transition>
 
         <div class="input-bar">
           <div class="input-label">Spotify URI </div><input type="text" id="spotify-id"></input>
@@ -113,93 +115,95 @@ metadata:
         </div>
       </div>
 
-      <!-- Contains all visualization elements, including albums and graphing -->
-      <div id="apollo-main">
-        <button class="fb-share share-btn">Share</button>
-        <button class="twitter-share share-btn">Tweet</button>
+      <transition name="fade">
+        <!-- Contains all visualization elements, including albums and graphing -->
+        <div id="apollo-main" v-show="!viewEmpty">
+          <button class="fb-share share-btn">Share</button>
+          <button class="twitter-share share-btn">Tweet</button>
 
-        <div id="spotify-error">
-          Spotify returned an error! Please double check your input and try again.
-        </div>
+          <div id="spotify-error">
+            Spotify returned an error! Please double check your input and try again.
+          </div>
 
-        <!-- For Song View -->
-        <div class="track-info single-song-module">
-          <button class="album-image-cont">
-            <img class="record hidden" src="record.png" alt="">
-            <img class="album-image" src="album-art-placeholder.png" alt="">
-          </button>
-          <div class="track-text">
-            <h2 id="title" class="no-bold"></h2>
-            <h3 id="artists" class="no-bold"></h3>
-            <div class="non-graph-data">
-              <div class="left-col">
-                <div class="data-item">
-                  <div class="left-text">Tempo:</div>
-                  <div class="right-text"><span id="tempo"></span> BPM</div>
+          <!-- For Song View -->
+          <div class="track-info single-song-module">
+            <button class="album-image-cont">
+              <img class="record hidden" src="record.png" alt="">
+              <img class="album-image" src="album-art-placeholder.png" alt="">
+            </button>
+            <div class="track-text">
+              <h2 id="title" class="no-bold"></h2>
+              <h3 id="artists" class="no-bold"></h3>
+              <div class="non-graph-data">
+                <div class="left-col">
+                  <div class="data-item">
+                    <div class="left-text">Tempo:</div>
+                    <div class="right-text"><span id="tempo"></span> BPM</div>
+                  </div>
+                  <div class="data-item">
+                    <div class="left-text">Key:</div>
+                    <div class="right-text"><span id="key"></span></div>
+                  </div>
+                  <div class="data-item">
+                    <div class="left-text">Loudness:</div>
+                    <div class="right-text"><span id="loudness"></span> dB</div>
+                  </div>
                 </div>
-                <div class="data-item">
-                  <div class="left-text">Key:</div>
-                  <div class="right-text"><span id="key"></span></div>
-                </div>
-                <div class="data-item">
-                  <div class="left-text">Loudness:</div>
-                  <div class="right-text"><span id="loudness"></span> dB</div>
-                </div>
-              </div>
-              <div class="right-col">
-                <div class="data-item">
-                  <div class="left-text">Time Signature:</div>
-                  <div class="right-text"><span id="time_signature"></span></div>
-                </div>
-                <div class="data-item">
-                  <div class="left-text">Mode:</div>
-                  <div class="right-text"><span id="mode"></span></div>
-                </div>
-                <div class="data-item">
-                  <div class="left-text">Length:</div>
-                  <div class="right-text"><span id="duration"></span></div>
+                <div class="right-col">
+                  <div class="data-item">
+                    <div class="left-text">Time Signature:</div>
+                    <div class="right-text"><span id="time_signature"></span></div>
+                  </div>
+                  <div class="data-item">
+                    <div class="left-text">Mode:</div>
+                    <div class="right-text"><span id="mode"></span></div>
+                  </div>
+                  <div class="data-item">
+                    <div class="left-text">Length:</div>
+                    <div class="right-text"><span id="duration"></span></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- For Compare Songs -->
-        <div class="song-select compare-songs-module">
-          <button id="track-1-select" class="option active">Song 1</button>
-          <button id="track-2-select" class="option">Song 2</button>
-        </div>
+          <!-- For Compare Songs -->
+          <div class="song-select compare-songs-module">
+            <button id="track-1-select" class="option active">Song 1</button>
+            <button id="track-2-select" class="option">Song 2</button>
+          </div>
 
-        <div class="two-track-cont compare-songs-module">
-          <button id="track-1" class="album-image-cont">
-            <img class="record hidden" src="record.png">
-            <img class="album-image" src="album-art-placeholder.png">
-          </button>
-          <button id="track-2" class="album-image-cont">
-            <img class="record hidden" src="record.png">
-            <img class="album-image" src="album-art-placeholder.png">
-          </button>
-        </div>
+          <div class="two-track-cont compare-songs-module">
+            <button id="track-1" class="album-image-cont">
+              <img class="record hidden" src="record.png">
+              <img class="album-image" src="album-art-placeholder.png">
+            </button>
+            <button id="track-2" class="album-image-cont">
+              <img class="record hidden" src="record.png">
+              <img class="album-image" src="album-art-placeholder.png">
+            </button>
+          </div>
 
-        <!-- For Albums and PLaylist Views -->
-        <div class="details track-info album-module playlist-module">
-          <div class="album-image-cont">
-            <img class="album-image" src="album-art-placeholder.png">
+          <!-- For Albums and PLaylist Views -->
+          <div class="details track-info album-module playlist-module">
+            <div class="album-image-cont">
+              <img class="album-image" src="album-art-placeholder.png">
+            </div>
+            <div class="track-text">
+              <h1 class="zero-bot">Pick an item to get started</h1>
+              <h2 class="zero-top no-bold"></h2>
+            </div>
           </div>
-          <div class="track-text">
-            <h1 class="zero-bot">Pick an item to get started</h1>
-            <h2 class="zero-top no-bold"></h2>
-          </div>
-        </div>
 
-        <!-- Used by each module for graphing -->
-        <div class="graph-top-cont">
-          <div class="graph-cont">
-          </div>
-          <div class="graph-labels">
+          <!-- Used by each module for graphing -->
+          <div class="graph-top-cont">
+            <div class="graph-cont">
+            </div>
+            <div class="graph-labels">
+            </div>
           </div>
         </div>
-      </div>
+      </transition>
     </div>
   </transition>
 </div>

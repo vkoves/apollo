@@ -11,10 +11,17 @@ body {
   background-size: auto 100%;
 }
 
-body.empty-view {
+.app-cont {
+  height: 100%;
+  padding-top: 40px;
+  box-sizing: border-box;
+}
+
+.empty-view {
   // Imitates the linear-gradient but via an image because you can't cross-fade
   // linear gradients in CSS
   background-image: url("../images/backgrounds/gradient-background.png");
+  background-size: auto 100%;
 }
 
 a:focus, button:focus { outline: 2px $white dashed; }
@@ -60,9 +67,6 @@ header { background-color: $purple; }
 .post-authorize {
   margin-top: 10px;
 }
-
-/* Hide Apollo graphing and track display until a song is loaded */
-#apollo-main { display: none; }
 
 /* Style the top menu */
 .menu-bar {
@@ -525,6 +529,15 @@ input[type="text"]
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.slide-vertical-enter-active, .slide-vertical-leave-active {
+  transition: max-height .5s, margin .5s, padding .5s;
+}
+.slide-vertical-enter, .slide-vertical-leave-to {
+  max-height: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /**
