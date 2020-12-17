@@ -23,6 +23,9 @@
  *  - DONE: Add a way to search instead of using ID  spotifyApi.searchTracks(queryTerm, {limit: 5})
  */
 
+/** The Vue app instance */
+var VueApp;
+
 var spotifyApi;
 var currOrigin = 'https://viktorkoves.com'; // assume on production, and set origin variable as such
 var audioObject; // for playing previews
@@ -56,10 +59,23 @@ if (window.location.href.indexOf('localhost') > -1) { // if we're on localhost a
 
 $(document).ready(function()
 {
-    var app = new Vue({
+    VueApp = new Vue({
         el: '#app',
         data: {
-            isLoggedIn: false
+            /** Whether the user is logged in or not */
+            isLoggedIn: false,
+
+            /**
+             * The ID of the current menu object. Can be song, song-compare,
+             * album, or playlist
+             */
+            currentView: 'song',
+
+            /**
+             * Whether the current view is empty (not showing data), which makes
+             * the search more prominent
+             */
+            viewEmpty: true,
         },
         methods: {
             login: () => login(loginComplete)
@@ -701,18 +717,29 @@ function clearInput()
     $('.search-results').hide();
 }
 
-// Modify the body and input-bar-cont to indicate the current view is empty
+/**
+ * Modify the body and input-bar-cont to indicate the current view is empty
+ *
+ * WIP: Converting to Vue
+ */
 function setupEmptyView(callback)
 {
-    $('.input-bar-cont').addClass('active');
+    VueApp.viewEmpty = true;
+
     $('#interact-prompt').slideDown();
     $('body').addClass('empty-view');
     $('#apollo-main').fadeOut(callback); // pass callback to main fadeOut, so new view's elements are swapped after old ones are gone
 }
 
-// Indicate the current view is showing data
+/**
+ * Indicate the current view is showing data
+ *
+ * WIP: Converting to Vue
+ */
 function setupFilledView()
 {
+    VueApp.viewEmpty = false;
+
     $('body').removeClass('empty-view');
     $('.input-bar-cont').removeClass('active');
     $('#interact-prompt').slideUp();
@@ -1019,9 +1046,7 @@ function loginComplete(accessToken)
 {
     sessionStorage.setItem('accessToken', accessToken);
 
-    $('.pre-authorize').fadeOut(function() {
-        $('.post-authorize').fadeIn();
-    });
+    VueApp.isLoggedIn = true;
 
     // Setup first view, which is empty
     setupEmptyView();

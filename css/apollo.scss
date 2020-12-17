@@ -57,10 +57,7 @@ header { background-color: $purple; }
 /* Make grey if disabled */
 .apollo-btn.disabled { background-color: $light-grey; }
 
-/* Hide feature-rich panel by default (wait till auth) */
-.post-authorize
-{
-  display: none;
+.post-authorize {
   margin-top: 10px;
 }
 
@@ -519,14 +516,26 @@ input[type="text"]
 
 /* End Share Button Styling */
 
-/* Generic Styling */
-.zero-top
-{
+
+/**
+ * Vue Animation styling
+ */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/**
+ * Generic Styling (Helpers)
+ */
+.zero-top {
   padding-top: 0px;
   margin-top: 0px;
 }
-.zero-bot
-{
+
+.zero-bot {
   padding-bottom: 0px;
   margin-bottom: 0px;
 }
