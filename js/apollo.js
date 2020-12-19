@@ -31,7 +31,6 @@ var currOrigin = 'https://viktorkoves.com'; // assume on production, and set ori
 var audioObject; // for playing previews
 
 var albumTarget; // the target album to update. Type jQuery element
-var trackNumber = 1; //number of track we're setting data for (either 1 or 2)
 
 var spotifyObjectType = 'track'; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
 
@@ -76,9 +75,22 @@ $(document).ready(function()
              * the search more prominent
              */
             viewEmpty: false,
+
+            /** The currently selected track that the user is updating. Most
+                important on song-compare */
+            selectedTrackNum: 1,
         },
         methods: {
-            login: () => login(loginComplete)
+            login: () => login(loginComplete),
+            /**
+             * Expose functions defined in this file to Vue
+             */
+            getSpotifyData: getSpotifyData,
+            selectSong: selectSong,
+            shareOnTwitter: shareOnTwitter,
+            spotifySearch: spotifySearch,
+            switchView: switchView,
+            toggleRecord: toggleRecord
         }
     });
 
@@ -104,55 +116,10 @@ function setupPostLoginEvents() {
     setupGraph();
 
     albumTarget = $('.single-song-module .album-image-cont'); //set default target album to single song album
-
-    $('#submit-btn').click(getSpotifyData);
-
-    $('.search-submit').click(spotifySearch);
-
-    $('#search-field').keyup(function(e)
-    {
-        if (e.keyCode === 13) { // if enter was pressed
-            spotifySearch();
-        }
-    });
-
-    $('.album-image-cont').click(toggleRecord);
-
-    $('.menu-option').click(switchView);
-
-    $('.song-select .option').click(function()
-    {
-        $('.song-select .option').removeClass('active');
-        $(this).addClass('active');
-        if ($(this).attr('id') === 'track-1-select') {
-            albumTarget = $('#track-1');
-            trackNumber = 1;
-        }
-        else
-        {
-            albumTarget = $('#track-2');
-            trackNumber = 2;
-        }
-    });
-
-    // Sharing stuff
-    $('.fb-share').click( function()
-    {
-        var shareurl = escape(window.location.href);
-        window.open('https://www.facebook.com/sharer/sharer.php?u=' + shareurl + '&t=' + document.title, '',
-            'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-    });
-
-    $('.twitter-share').click(function()
-    {
-        var shareurl = escape(window.location.href);
-        window.open('https://twitter.com/share?url=' + shareurl + '&text=' +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-    });
 }
 
 // Switches to the view that is being requested per click in the menu
-// Optionally takes a string of the view desired, to allow for JS based switched
-function switchView(event, viewToSwitchTo)
+function switchView(viewToSwitchTo)
 {
     if (viewToSwitchTo && $('.menu-option#' + viewToSwitchTo).length > 0) // only use viewToSwitchTo if it's valid (has a menu item with its ID)
     {
@@ -181,7 +148,7 @@ function switchView(event, viewToSwitchTo)
     if (currentView === 'song')
     {
         albumTarget = $('.single-song-module .album-image-cont');
-        trackNumber = 1;
+        VueApp.selectedTrackNum = 1;
 
         spotifyObjectType = 'track';
 
@@ -212,7 +179,7 @@ function switchView(event, viewToSwitchTo)
         if (Object.keys(track1).length > 0) // if track1 is defined
         {
             albumTarget = $('#track-1');
-            trackNumber = 1;
+            VueApp.selectedTrackNum = 1;
             graphAudioFeatures(track1.audioFeatures);
             handleTrackInfo(track1.trackObject);
         }
@@ -220,15 +187,13 @@ function switchView(event, viewToSwitchTo)
         if (Object.keys(track2).length > 0) // if track2 is defined
         {
             albumTarget = $('#track-2');
-            trackNumber = 2;
+            VueApp.selectedTrackNum = 2;
             graphAudioFeatures(track2.audioFeatures);
             handleTrackInfo(track2.trackObject);
         }
 
-        $('#track-2-select').removeClass('active');
-        $('#track-1-select').addClass('active');
         albumTarget = $('#track-1');
-        trackNumber = 1;
+        VueApp.selectedTrackNum = 1;
 
         spotifyObjectType = 'track';
 
@@ -379,7 +344,7 @@ function setTrackData(data, isFeatures)
     var currTrack = track; //default to song mode track
 
     if (currentView === 'song-compare') {
-        if (trackNumber === 2) {
+        if (VueApp.selectedTrackNum === 2) {
             currTrack = track2;
         }
         else {
@@ -413,8 +378,8 @@ function graphAudioFeatures(featureData)
             if (keyData['type'] === 'zero-float') {
                 if (currentView === 'song-compare')
                 {
-                    $('.graph-col.' + key + ' .value-' + trackNumber).text(value);
-                    $('.graph-col.' + key + ' .fill-' + trackNumber).css('height', value*100 + '%');
+                    $('.graph-col.' + key + ' .value-' + VueApp.selectedTrackNum).text(value);
+                    $('.graph-col.' + key + ' .fill-' + VueApp.selectedTrackNum).css('height', value*100 + '%');
                 }
                 else
                 {
@@ -460,6 +425,21 @@ function graphAudioFeatures(featureData)
         }
 
         return minutes + ':' + seconds; // get proper duration using math
+    }
+}
+
+/**
+ * Select the song to currently be selectable in the song compare view
+ */
+function selectSong(trackNum) {
+    if (trackNum === 1) {
+        albumTarget = $('#track-1');
+        VueApp.selectedTrackNum = 1;
+    }
+    else
+    {
+        albumTarget = $('#track-2');
+        VueApp.selectedTrackNum = 2;
     }
 }
 
@@ -741,28 +721,30 @@ function setupFilledView()
 
 // Toggle between the record being hidden and not hidden
 // Called on click by ".album-image-cont" objects, so we search for a ".record" child to pass to hideRecord() and showRecord()
-function toggleRecord()
+function toggleRecord(clickEvent)
 {
-    var elem = $(this).find('.record'); //since album-image-cont triggers the event, find the record
+    var recordElem = clickEvent.currentTarget.children[0];
 
     var speed = 400;
 
-    if ($(this).hasClass('playing')) {
-        hideRecord(elem, speed);
+    if (clickEvent.currentTarget.classList.contains('playing')) {
+        hideRecord(recordElem, speed);
     }
     else {
-        showRecord(elem, speed);
+        showRecord(recordElem, speed);
     }
 }
 
 /**
  * Show the record, playing the audioObject when the animation ends
  *
- * @param  {jQuery Object} elem  The ".record" element to animate
+ * @param  {HtmlElement} element The ".record" element to animate
  * @param  {integer} speed Speed of the animation in ms
  */
-function showRecord(elem, speed)
+function showRecord(element, speed)
 {
+    const elem = $(element);
+
     if (audioObject)
     {
         pausePlayingRecord();
@@ -799,11 +781,13 @@ function showRecord(elem, speed)
  * We remove the playing class when the record is fully out to make the record move from in front of the album art
  * to behind it. We also add the hidden class when animation is done for hover effects
  *
- * @param  {jQuery Object} elem  The ".record" object to animate
+ * @param  {HtmlElement Object} element  The ".record" object to animate
  * @param  {integer} speed Speed of the animation in ms
  */
-function hideRecord(elem, speed)
+function hideRecord(element, speed)
 {
+    const elem = $(element);
+
     if (audioObject)
     {
         audioObject.pause();
@@ -942,14 +926,14 @@ function loadStateFromURL()
         else if (currentView === 'song-compare' && params['track1'] && params['track2']) {
             // Load in second track data
             albumTarget = $('#track-2');
-            trackNumber = 2;
+            VueApp.selectedTrackNum = 2;
 
             getSpotifyData(null, params['track2']);
 
             setTimeout(function() {
                 // Load in first track data after delay. First is last so the albumTarget is consistent with default of 1
                 albumTarget = $('#track-1');
-                trackNumber = 1;
+                VueApp.selectedTrackNum = 1;
                 getSpotifyData(null, params['track1']);
             }, 500);
 
@@ -1072,3 +1056,12 @@ function loginComplete(accessToken)
 /***************************/
 /*** END LOGIN FUNCTIONS ***/
 /***************************/
+
+
+/**
+ * Social Media Sharing Functions
+ */
+function shareOnTwitter() {
+    var shareurl = escape(window.location.href);
+    window.open('https://twitter.com/share?url=' + shareurl + '&text=' +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+}

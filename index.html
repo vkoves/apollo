@@ -77,22 +77,22 @@ metadata:
     <!-- Show up after authorization completes -->
     <div class="post-authorize page-limiter" v-else key="postAuth">
       <div class="menu-bar">
-        <button id="song" class="menu-option active">
+        <button id="song" class="menu-option active" v-on:click="switchView('song')">
           <div class="icon" src="images/menu/song.png"></div>
           <div class="text">Single Song</div>
         </button>
 
-        <button id="song-compare" class="menu-option">
+        <button id="song-compare" class="menu-option" v-on:click="switchView('song-compare')">
           <div class="icon" src="images/menu/songcompare.png"></div>
           <div class="text">Compare Songs</div>
         </button>
 
-        <button id="album" class="menu-option">
+        <button id="album" class="menu-option" v-on:click="switchView('album')">
           <div class="icon" src="images/menu/album.png"></div>
           <div class="text">Album</div>
         </button>
 
-        <button id="playlist" class="menu-option">
+        <button id="playlist" class="menu-option" v-on:click="switchView('playlist')">
           <div class="icon" src="images/menu/playlist.png"></div>
           <div class="text">Playlist</div>
         </button>
@@ -106,11 +106,20 @@ metadata:
         </transition>
 
         <div class="input-bar">
-          <div class="input-label">Spotify URI </div><input type="text" id="spotify-id"></input>
-          <button id="submit-btn" class="apollo-btn">Get Song Data</button>
+          <div class="input-label">Spotify URI </div>
+          <input type="text" id="spotify-id" v-on:keyup.enter="getSpotifyData">
+          <button id="submit-btn" class="apollo-btn" v-on:click="getSpotifyData">
+            Get Song Data
+          </button>
+
           <br>
-          <div class="input-label">Search </div><input type="text" id="search-field"></input>
-          <button class="apollo-btn search-submit">Search</button>
+
+          <div class="input-label">Search </div>
+          <input type="text" id="search-field" v-on:keyup.enter="spotifySearch">
+          <button class="apollo-btn search-submit" v-on:click="spotifySearch">
+            Search
+          </button>
+
           <div class="search-results"></div>
         </div>
       </div>
@@ -118,8 +127,9 @@ metadata:
       <transition name="fade">
         <!-- Contains all visualization elements, including albums and graphing -->
         <div id="apollo-main" v-show="!viewEmpty">
-          <button class="fb-share share-btn">Share</button>
-          <button class="twitter-share share-btn">Tweet</button>
+          <button class="twitter-share share-btn" v-on:click="shareOnTwitter">
+            Tweet
+          </button>
 
           <div id="spotify-error">
             Spotify returned an error! Please double check your input and try again.
@@ -127,7 +137,7 @@ metadata:
 
           <!-- For Song View -->
           <div class="track-info single-song-module">
-            <button class="album-image-cont">
+            <button class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png" alt="">
               <img class="album-image" src="album-art-placeholder.png" alt="">
             </button>
@@ -169,16 +179,24 @@ metadata:
 
           <!-- For Compare Songs -->
           <div class="song-select compare-songs-module">
-            <button id="track-1-select" class="option active">Song 1</button>
-            <button id="track-2-select" class="option">Song 2</button>
+            <button class="option"
+              v-bind:class="{ 'active': selectedTrackNum === 1 }"
+               v-on:click="selectSong(1)">
+              Song 1
+            </button>
+            <button class="option"
+              v-bind:class="{ 'active': selectedTrackNum === 2 }"
+               v-on:click="selectSong(2)">
+              Song 2
+            </button>
           </div>
 
           <div class="two-track-cont compare-songs-module">
-            <button id="track-1" class="album-image-cont">
+            <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png">
               <img class="album-image" src="album-art-placeholder.png">
             </button>
-            <button id="track-2" class="album-image-cont">
+            <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png">
               <img class="album-image" src="album-art-placeholder.png">
             </button>
@@ -186,7 +204,7 @@ metadata:
 
           <!-- For Albums and PLaylist Views -->
           <div class="details track-info album-module playlist-module">
-            <div class="album-image-cont">
+            <div class="album-image-cont" v-on:click="toggleRecord">
               <img class="album-image" src="album-art-placeholder.png">
             </div>
             <div class="track-text">
