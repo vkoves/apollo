@@ -75,7 +75,7 @@ $(document).ready(function()
              * Whether the current view is empty (not showing data), which makes
              * the search more prominent
              */
-            viewEmpty: true,
+            viewEmpty: false,
         },
         methods: {
             login: () => login(loginComplete)
