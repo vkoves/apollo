@@ -111,7 +111,7 @@ function setupPostLoginEvents() {
 
     $('#search-field').keyup(function(e)
     {
-        if (e.keyCode == 13) { // if enter was pressed
+        if (e.keyCode === 13) { // if enter was pressed
             spotifySearch();
         }
     });
@@ -124,7 +124,7 @@ function setupPostLoginEvents() {
     {
         $('.song-select .option').removeClass('active');
         $(this).addClass('active');
-        if ($(this).attr('id') == 'track-1-select') {
+        if ($(this).attr('id') === 'track-1-select') {
             albumTarget = $('#track-1');
             trackNumber = 1;
         }
@@ -162,7 +162,7 @@ function switchView(event, viewToSwitchTo)
     }
     else
     {
-        if (this == $('.menu-option.active')[0]) { //if clicking the current view, don't do anything
+        if (this === $('.menu-option.active')[0]) { //if clicking the current view, don't do anything
             return;
         }
 
@@ -178,7 +178,7 @@ function switchView(event, viewToSwitchTo)
     pausePlayingRecord();
     clearInput();
 
-    if (currentView == 'song')
+    if (currentView === 'song')
     {
         albumTarget = $('.single-song-module .album-image-cont');
         trackNumber = 1;
@@ -197,10 +197,10 @@ function switchView(event, viewToSwitchTo)
             setupEmptyView(switchViewVisuals);
         }
     }
-    else if (currentView == 'song-compare')
+    else if (currentView === 'song-compare')
     {
         // Setup an empty view if no tracks are dfined
-        if (Object.keys(track1).length == 0 && Object.keys(track2).length == 0) {
+        if (Object.keys(track1).length === 0 && Object.keys(track2).length === 0) {
             setupEmptyView(switchViewVisuals);
         }
         else
@@ -233,12 +233,12 @@ function switchView(event, viewToSwitchTo)
         spotifyObjectType = 'track';
 
     }
-    else if (currentView == 'album')
+    else if (currentView === 'album')
     {
         spotifyObjectType = 'album';
 
         // If album has not been defined yet
-        if (Object.keys(album).length == 0) {
+        if (Object.keys(album).length === 0) {
             setupEmptyView(switchViewVisuals);
         }
         else
@@ -248,12 +248,12 @@ function switchView(event, viewToSwitchTo)
             setupFilledView();
         }
     }
-    else if (currentView == 'playlist')
+    else if (currentView === 'playlist')
     {
         spotifyObjectType = 'playlist';
 
         // If playlist has not been defined yet
-        if (Object.keys(playlist).length == 0) {
+        if (Object.keys(playlist).length === 0) {
             setupEmptyView(switchViewVisuals);
         }
         else {
@@ -270,10 +270,10 @@ function switchView(event, viewToSwitchTo)
         $('.single-song-module, .compare-songs-module, .album-module, .playlist-module').hide();
 
         // then show needed modules
-        if (currentView == 'song') {$('.single-song-module').show();}
-        else if (currentView == 'song-compare') {$('.compare-songs-module').show();}
-        else if (currentView == 'album') {$('.album-module').show();}
-        else if (currentView == 'playlist') {$('.playlist-module').show();}
+        if (currentView === 'song') {$('.single-song-module').show();}
+        else if (currentView === 'song-compare') {$('.compare-songs-module').show();}
+        else if (currentView === 'album') {$('.album-module').show();}
+        else if (currentView === 'playlist') {$('.playlist-module').show();}
 
         setupGraph(); //resetup graph for this view
     }
@@ -282,15 +282,15 @@ function switchView(event, viewToSwitchTo)
 // Puts in a search request
 function spotifySearch()
 {
-    if (spotifyObjectType == 'track') {
+    if (spotifyObjectType === 'track') {
         spotifyApi.searchTracks($('#search-field').val(), { limit: 5 })
             .then(handleSearch);
     }
-    else if (spotifyObjectType == 'album') {
+    else if (spotifyObjectType === 'album') {
         spotifyApi.searchAlbums($('#search-field').val(), { limit: 5 })
             .then(handleSearch);
     }
-    else if (spotifyObjectType == 'playlist') {
+    else if (spotifyObjectType === 'playlist') {
         spotifyApi.searchPlaylists($('#search-field').val(), { limit: 5 })
             .then(handleSearch);
     }
@@ -307,11 +307,11 @@ function getSpotifyData(event, spotifyURI)
 
     var spotifyId = spotifyURI;
 
-    if (spotifyURI.indexOf('spotify:' + spotifyObjectType + ':') == 0) { // if URI, trim
+    if (spotifyURI.indexOf('spotify:' + spotifyObjectType + ':') === 0) { // if URI, trim
         spotifyId = spotifyURI.split('spotify:' + spotifyObjectType + ':')[1];
     }
 
-    if (spotifyObjectType == 'track')
+    if (spotifyObjectType === 'track')
     {
         // Also can use getAudioFeaturesForTracks(Array<string>)
         spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, spotifyError);
@@ -319,11 +319,11 @@ function getSpotifyData(event, spotifyURI)
             handleTrackInfo(data, true);
         }, spotifyError);
     }
-    else if (spotifyObjectType == 'album')
+    else if (spotifyObjectType === 'album')
     {
         spotifyApi.getAlbum(spotifyId).then(handleAlbum, spotifyError);
     }
-    else if (spotifyObjectType == 'playlist')
+    else if (spotifyObjectType === 'playlist')
     {
         spotifyApi.getPlaylist(spotifyURI.split(':')[2], spotifyURI.split(':')[4]).then(handlePlaylist, spotifyError);
     }
@@ -338,11 +338,11 @@ function setupGraph()
     {
         var keyData = spotifyGraphableData[key];
 
-        if (keyData['type'] == 'zero-float') // if one of the floats with range 0...1
+        if (keyData['type'] === 'zero-float') // if one of the floats with range 0...1
         {
             var fillCols;
 
-            if (currentView == 'song-compare') // everything except song-compare view uses one column graph
+            if (currentView === 'song-compare') // everything except song-compare view uses one column graph
             {
                 fillCols =
                     '<div class="fill fill-1">' +
@@ -378,8 +378,8 @@ function setTrackData(data, isFeatures)
 {
     var currTrack = track; //default to song mode track
 
-    if (currentView == 'song-compare') {
-        if (trackNumber == 2) {
+    if (currentView === 'song-compare') {
+        if (trackNumber === 2) {
             currTrack = track2;
         }
         else {
@@ -410,8 +410,8 @@ function graphAudioFeatures(featureData)
             var value = featureData[key];
 
             // if one of the floats with range 0...1
-            if (keyData['type'] == 'zero-float') {
-                if (currentView == 'song-compare')
+            if (keyData['type'] === 'zero-float') {
+                if (currentView === 'song-compare')
                 {
                     $('.graph-col.' + key + ' .value-' + trackNumber).text(value);
                     $('.graph-col.' + key + ' .fill-' + trackNumber).css('height', value*100 + '%');
@@ -425,7 +425,7 @@ function graphAudioFeatures(featureData)
         }
     }
 
-    if (featureData.mode == 1) // major
+    if (featureData.mode === 1) // major
     {
         featureData.mode = 'Major';
     }
@@ -439,7 +439,7 @@ function graphAudioFeatures(featureData)
     featureData.duration = getProperDuration(featureData.duration_ms);
 
     // If viewing an individual song, show data for that song
-    if (currentView == 'song')
+    if (currentView === 'song')
     {
         $('.non-graph-data #key').text(featureData.key);
         $('.non-graph-data #tempo').text(featureData.tempo);
@@ -492,7 +492,7 @@ function handleTrackInfo(trackData, pushHistory)
     albumTarget.find('.album-image').attr('src', trackData.album.images[0].url);
 
     // If viewing individaul song, update title
-    if (currentView == 'song')
+    if (currentView === 'song')
     {
         $('.track-text #title').text(trackData.name);
         $('.track-text #artists').text('by ' + combineArtists(trackData.artists));
@@ -553,12 +553,12 @@ function analyzeAudioFeatures(data)
 
     // Wrap up by saving the data so we don't recompute this
 
-    if (spotifyObjectType == 'album')
+    if (spotifyObjectType === 'album')
     {
         albumAnalysisResults.averages = averages;
         albumAnalysisResults.standardDeviations = standardDeviations;
     }
-    else if (spotifyObjectType == 'playlist')
+    else if (spotifyObjectType === 'playlist')
     {
         playlistAnalysisResults.averages = averages;
         playlistAnalysisResults.standardDeviations = standardDeviations;
@@ -574,7 +574,7 @@ function analyzeAudioFeatures(data)
             var audioFeature = audioFeatures[featuresKey];
 
             for (var key in audioFeature) {
-                if (key in spotifyGraphableData && spotifyGraphableData[key].type == 'zero-float') { // analyze if this data is graphable
+                if (key in spotifyGraphableData && spotifyGraphableData[key].type === 'zero-float') { // analyze if this data is graphable
                     var value = audioFeature[key];
 
                     if (averagesCompleted) {
@@ -612,7 +612,7 @@ function graphAnalysisResults(pushHistory)
     var analysisResultsObj;
     $('.album-module.details h2').text('');
 
-    if (spotifyObjectType == 'album')
+    if (spotifyObjectType === 'album')
     {
         if (album.images) {
             $('.album-module.details .album-image').attr('src', album.images[0].url);
@@ -626,7 +626,7 @@ function graphAnalysisResults(pushHistory)
 
         analysisResultsObj = albumAnalysisResults;
     }
-    else if (spotifyObjectType == 'playlist')
+    else if (spotifyObjectType === 'playlist')
     {
         if (playlist.images) {
             $('.playlist-module.details .album-image').attr('src', playlist.images[0].url);
@@ -662,13 +662,13 @@ function handleSearch(data)
     // Determine the objects to iterate through depending on what type of objects we are dealing with
     var items;
 
-    if (spotifyObjectType == 'track') {
+    if (spotifyObjectType === 'track') {
         items = data.tracks.items;
     }
-    else if (spotifyObjectType == 'album') {
+    else if (spotifyObjectType === 'album') {
         items = data.albums.items;
     }
-    else if (spotifyObjectType == 'playlist') {
+    else if (spotifyObjectType === 'playlist') {
         items = data.playlists.items;
     }
 
@@ -678,7 +678,7 @@ function handleSearch(data)
         var artistsLine = ''; // by line for artists. Used only on tracks
         var images;
 
-        if (spotifyObjectType == 'track') {
+        if (spotifyObjectType === 'track') {
             images = spotifyObject.album.images;
             artistsLine = '<br><span class="author">by ' + combineArtists(spotifyObject.artists) + '</span>';
         }
@@ -697,7 +697,7 @@ function handleSearch(data)
         + '</div>');
     }
 
-    if (items.length == 0)
+    if (items.length === 0)
     {
         $('.search-results').append('<h2 id="search-no-results">No results found</h2>');
     }
@@ -721,8 +721,6 @@ function clearInput()
 
 /**
  * Modify the body and input-bar-cont to indicate the current view is empty
- *
- * WIP: Converting to Vue
  */
 function setupEmptyView(callback)
 {
@@ -882,20 +880,25 @@ function pushStateToHistory()
     function generateURL()
     {
         var url = '?';
+
+        if (!currentView) {
+            return;
+        }
+
         url += 'currView=' + currentView;
 
         // Push data of what Spotify objects are loaded, if they are loaded
-        if (currentView == 'song' && track.trackObject) {
+        if (currentView === 'song' && track.trackObject) {
             url += '&track=' + track.trackObject.uri;
         }
-        else if (currentView == 'song-compare'
+        else if (currentView === 'song-compare'
             && track1.trackObject && track2.trackObject) { // only push song compare state with both songs defined
             url += '&track1=' + track1.trackObject.uri + '&track2=' + track2.trackObject.uri;
         }
-        else if (currentView == 'album' && album.uri) {
+        else if (currentView === 'album' && album.uri) {
             url += '&album=' + album.uri;
         }
-        else if (currentView == 'playlist' && playlist.uri) {
+        else if (currentView === 'playlist' && playlist.uri) {
             url += '&playlist=' + playlist.uri;
         }
 
@@ -907,17 +910,17 @@ function pushStateToHistory()
     {
         var hash = {};
 
-        if (currentView == 'song') {
+        if (currentView === 'song') {
             hash[track] = track;
         }
-        else if (currentView == 'song-compare') {
+        else if (currentView === 'song-compare') {
             hash[track1] = track1;
             hash[track2] = track2;
         }
-        else if (currentView == 'album') {
+        else if (currentView === 'album') {
             hash[album] = album;
         }
-        else if (currentView == 'playlist') {
+        else if (currentView === 'playlist') {
             hash[playlist] = playlist;
         }
 
@@ -933,10 +936,10 @@ function loadStateFromURL()
     if (params['currView']) {
         switchView(null, params['currView']);
 
-        if (currentView == 'song' && params['track']) {
+        if (currentView === 'song' && params['track']) {
             getSpotifyData(null, params['track']);
         }
-        else if (currentView == 'song-compare' && params['track1'] && params['track2']) {
+        else if (currentView === 'song-compare' && params['track1'] && params['track2']) {
             // Load in second track data
             albumTarget = $('#track-2');
             trackNumber = 2;
@@ -951,10 +954,10 @@ function loadStateFromURL()
             }, 500);
 
         }
-        else if (currentView == 'album' && params['album']) {
+        else if (currentView === 'album' && params['album']) {
             getSpotifyData(null, params['album']);
         }
-        else if (currentView == 'playlist' && params['playlist']) {
+        else if (currentView === 'playlist' && params['playlist']) {
             getSpotifyData(null, params['playlist']);
         }
     }
