@@ -34,8 +34,6 @@ var albumTarget; // the target album to update. Type jQuery element
 
 var spotifyObjectType = 'track'; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
 
-var currentView = 'song'; //stores the ID of the current menu object. Can be song, song-compare, album, or playlist
-
 // Used for single song analysis
 var track = {};
 
@@ -120,31 +118,23 @@ function setupPostLoginEvents() {
 // Switches to the view that is being requested per click in the menu
 function switchView(viewToSwitchTo)
 {
-    if (viewToSwitchTo && $('.menu-option#' + viewToSwitchTo).length > 0) // only use viewToSwitchTo if it's valid (has a menu item with its ID)
-    {
-        currentView = viewToSwitchTo;
-        $('.menu-option').removeClass('active');
-        $('.menu-option#' + viewToSwitchTo).addClass('active');
-    }
-    else
-    {
-        if (this === $('.menu-option.active')[0]) { //if clicking the current view, don't do anything
-            return;
-        }
-
-        $('.menu-option').removeClass('active');
-        $(this).addClass('active');
-
-        currentView = $(this).attr('id');
+    // If already on this view, do nothing
+    if (VueApp.currentView === viewToSwitchTo) {
+        return;
     }
 
+    VueApp.currentView = viewToSwitchTo;
 
-    pushStateToHistory(); // push to history after currentView var has changed
+    $('.menu-option').removeClass('active');
+    $('.menu-option#' + viewToSwitchTo).addClass('active');
+
+
+    pushStateToHistory(); // push to history after VueApp.currentView var has changed
 
     pausePlayingRecord();
     clearInput();
 
-    if (currentView === 'song')
+    if (VueApp.currentView === 'song')
     {
         albumTarget = $('.single-song-module .album-image-cont');
         VueApp.selectedTrackNum = 1;
@@ -163,7 +153,7 @@ function switchView(viewToSwitchTo)
             setupEmptyView(switchViewVisuals);
         }
     }
-    else if (currentView === 'song-compare')
+    else if (VueApp.currentView === 'song-compare')
     {
         // Setup an empty view if no tracks are dfined
         if (Object.keys(track1).length === 0 && Object.keys(track2).length === 0) {
@@ -197,7 +187,7 @@ function switchView(viewToSwitchTo)
         spotifyObjectType = 'track';
 
     }
-    else if (currentView === 'album')
+    else if (VueApp.currentView === 'album')
     {
         spotifyObjectType = 'album';
 
@@ -212,7 +202,7 @@ function switchView(viewToSwitchTo)
             setupFilledView();
         }
     }
-    else if (currentView === 'playlist')
+    else if (VueApp.currentView === 'playlist')
     {
         spotifyObjectType = 'playlist';
 
@@ -234,10 +224,10 @@ function switchView(viewToSwitchTo)
         $('.single-song-module, .compare-songs-module, .album-module, .playlist-module').hide();
 
         // then show needed modules
-        if (currentView === 'song') {$('.single-song-module').show();}
-        else if (currentView === 'song-compare') {$('.compare-songs-module').show();}
-        else if (currentView === 'album') {$('.album-module').show();}
-        else if (currentView === 'playlist') {$('.playlist-module').show();}
+        if (VueApp.currentView === 'song') {$('.single-song-module').show();}
+        else if (VueApp.currentView === 'song-compare') {$('.compare-songs-module').show();}
+        else if (VueApp.currentView === 'album') {$('.album-module').show();}
+        else if (VueApp.currentView === 'playlist') {$('.playlist-module').show();}
 
         setupGraph(); //resetup graph for this view
     }
@@ -311,7 +301,7 @@ function setupGraph()
         {
             var fillCols;
 
-            if (currentView === 'song-compare') // everything except song-compare view uses one column graph
+            if (VueApp.currentView === 'song-compare') // everything except song-compare view uses one column graph
             {
                 fillCols =
                     '<div class="fill fill-1">' +
@@ -347,7 +337,7 @@ function setTrackData(data, isFeatures)
 {
     var currTrack = track; //default to song mode track
 
-    if (currentView === 'song-compare') {
+    if (VueApp.currentView === 'song-compare') {
         if (VueApp.selectedTrackNum === 2) {
             currTrack = track2;
         }
@@ -380,7 +370,7 @@ function graphAudioFeatures(featureData)
 
             // if one of the floats with range 0...1
             if (keyData['type'] === 'zero-float') {
-                if (currentView === 'song-compare')
+                if (VueApp.currentView === 'song-compare')
                 {
                     $('.graph-col.' + key + ' .value-' + VueApp.selectedTrackNum).text(value);
                     $('.graph-col.' + key + ' .fill-' + VueApp.selectedTrackNum).css('height', value*100 + '%');
@@ -408,7 +398,7 @@ function graphAudioFeatures(featureData)
     featureData.duration = getProperDuration(featureData.duration_ms);
 
     // If viewing an individual song, show data for that song
-    if (currentView === 'song')
+    if (VueApp.currentView === 'song')
     {
         $('.non-graph-data #key').text(featureData.key);
         $('.non-graph-data #tempo').text(featureData.tempo);
@@ -476,7 +466,7 @@ function handleTrackInfo(trackData, pushHistory)
     albumTarget.find('.album-image').attr('src', trackData.album.images[0].url);
 
     // If viewing individaul song, update title
-    if (currentView === 'song')
+    if (VueApp.currentView === 'song')
     {
         $('.track-text #title').text(trackData.name);
         $('.track-text #artists').text('by ' + combineArtists(trackData.artists));
@@ -860,7 +850,7 @@ function getTrackIds(tracks, isPlaylist)
 function pushStateToHistory()
 {
     history.pushState({
-        currentView: currentView,
+        currentView: VueApp.currentView,
         spotifyObjData: generateDataHash(),
     }, null, generateURL());
 
@@ -869,24 +859,24 @@ function pushStateToHistory()
     {
         var url = '?';
 
-        if (!currentView) {
+        if (!VueApp.currentView) {
             return;
         }
 
-        url += 'currView=' + currentView;
+        url += 'currView=' + VueApp.currentView;
 
         // Push data of what Spotify objects are loaded, if they are loaded
-        if (currentView === 'song' && track.trackObject) {
+        if (VueApp.currentView === 'song' && track.trackObject) {
             url += '&track=' + track.trackObject.uri;
         }
-        else if (currentView === 'song-compare'
+        else if (VueApp.currentView === 'song-compare'
             && track1.trackObject && track2.trackObject) { // only push song compare state with both songs defined
             url += '&track1=' + track1.trackObject.uri + '&track2=' + track2.trackObject.uri;
         }
-        else if (currentView === 'album' && album.uri) {
+        else if (VueApp.currentView === 'album' && album.uri) {
             url += '&album=' + album.uri;
         }
-        else if (currentView === 'playlist' && playlist.uri) {
+        else if (VueApp.currentView === 'playlist' && playlist.uri) {
             url += '&playlist=' + playlist.uri;
         }
 
@@ -898,17 +888,17 @@ function pushStateToHistory()
     {
         var hash = {};
 
-        if (currentView === 'song') {
+        if (VueApp.currentView === 'song') {
             hash[track] = track;
         }
-        else if (currentView === 'song-compare') {
+        else if (VueApp.currentView === 'song-compare') {
             hash[track1] = track1;
             hash[track2] = track2;
         }
-        else if (currentView === 'album') {
+        else if (VueApp.currentView === 'album') {
             hash[album] = album;
         }
-        else if (currentView === 'playlist') {
+        else if (VueApp.currentView === 'playlist') {
             hash[playlist] = playlist;
         }
 
@@ -922,12 +912,12 @@ function loadStateFromURL()
     var params = getParameterHash();
 
     if (params['currView']) {
-        switchView(null, params['currView']);
+        switchView(params['currView']);
 
-        if (currentView === 'song' && params['track']) {
+        if (VueApp.currentView === 'song' && params['track']) {
             getSpotifyData(params['track']);
         }
-        else if (currentView === 'song-compare' && params['track1'] && params['track2']) {
+        else if (VueApp.currentView === 'song-compare' && params['track1'] && params['track2']) {
             // Load in second track data
             albumTarget = $('#track-2');
             VueApp.selectedTrackNum = 2;
@@ -942,10 +932,10 @@ function loadStateFromURL()
             }, 500);
 
         }
-        else if (currentView === 'album' && params['album']) {
+        else if (VueApp.currentView === 'album' && params['album']) {
             getSpotifyData(params['album']);
         }
-        else if (currentView === 'playlist' && params['playlist']) {
+        else if (VueApp.currentView === 'playlist' && params['playlist']) {
             getSpotifyData(params['playlist']);
         }
     }
@@ -1040,9 +1030,7 @@ function loginComplete(accessToken)
 
     VueApp.isLoggedIn = true;
 
-    // Wait for new element to be in DOM before setting up events. This is
-    // temporary while these are all in jQuery
-    setTimeout(setupPostLoginEvents, 1000);
+    setupPostLoginEvents();
 
     // Setup first view, which is empty
     setupEmptyView();

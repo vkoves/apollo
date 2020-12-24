@@ -82,61 +82,86 @@ header { background-color: $purple; }
 }
 
 .menu-option {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 25%;
   background-color: $extra-light-grey;
   vertical-align: top;
   padding: 10px 0px;
   box-sizing: border-box;
   cursor: pointer;
-  border-bottom: 0px;
-  border-top: 0px;
+  border: solid 3px transparent;
+  height: 60px;
+  margin-right: 3px;
 
-  &:first-of-type { border-radius: 5px 0 0 5px; }
-  &:last-of-type { border-radius: 0 5px 5px 0; }
+  &:first-of-type {
+    border-radius: 5px 0 0 5px;
+  }
+  &:last-of-type {
+    border-radius: 0 5px 5px 0;
+    margin-right: 0;
+  }
+  &:focus {
+    outline: none;
+    border-color: $white;
+  }
+
+  &:hover {
+    background-color: $light-grey;
+  }
+
+  &.active, &:focus {
+    background-color: $apollo-purple;
+    color: $white;
+  }
+
+  &.-song {
+     .icon { background-image: url("../images/menu/song.png"); }
+
+    &.active, &:focus {
+      .icon { background-image: url("../images/menu/song-white.png"); }
+    }
+  }
+
+  &.-song-compare {
+     .icon { background-image: url("../images/menu/songcompare.png"); }
+
+    &.active, &:focus {
+      .icon { background-image: url("../images/menu/songcompare-white.png"); }
+    }
+  }
+
+  &.-album {
+     .icon { background-image: url("../images/menu/album.png"); }
+
+    &.active, &:focus {
+      .icon { background-image: url("../images/menu/album-white.png"); }
+    }
+  }
+
+  &.-playlist {
+     .icon { background-image: url("../images/menu/playlist.png"); }
+
+    &.active, &:focus {
+      .icon { background-image: url("../images/menu/playlist-white.png"); }
+    }
+  }
+
+  .text { margin-top: 5px }
+  .icon
+  {
+    height: calc(100% - 20px);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 30px;
+    height: 30px;
+    margin: 0 20px;
+  }
 }
 
-/* Remove border on edges and added rounding */
-.menu-option:first-of-type { border-left: 0px; }
-.menu-option:last-of-type { border-right: 0px; }
-
-.menu-option:hover
-{
-  background-color: $light-grey;
-}
-.menu-option.active
-{
-  background-color: $apollo-purple;
-  color: $white;
-}
-.menu-option .text { margin-top: 5px }
-.menu-sep
-{
-  width: 0.2%;
-  height: 80%;
-  margin-top: 0.7%;
-  background: $mid-grey;
-  float: left;
-}
-.menu-option .icon
-{
-  height: calc(100% - 20px);
-  background-size: auto 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  float: left;
-  width: 30px;
-  height: 30px;
-  margin-left: 20px;
-}
-.menu-option#song .icon { background-image: url("../images/menu/song.png"); }
-.menu-option#song-compare .icon { background-image: url("../images/menu/songcompare.png"); }
-.menu-option#album .icon { background-image: url("../images/menu/album.png"); }
-.menu-option#playlist .icon { background-image: url("../images/menu/playlist.png"); }
-
-.menu-option.active#song .icon { background-image: url("../images/menu/song-white.png"); }
-.menu-option.active#song-compare .icon { background-image: url("../images/menu/songcompare-white.png"); }
-.menu-option.active#album .icon { background-image: url("../images/menu/album-white.png"); }
-.menu-option.active#playlist .icon { background-image: url("../images/menu/playlist-white.png"); }
 
 .input-bar-cont {
   transition: margin-top 0.5s;
@@ -517,24 +542,19 @@ header { background-color: $purple; }
   cursor: pointer;
 }
 
-.fb-share, .twitter-share {
+.twitter-share {
   background-position: 15% center;
   border: none;
-}
-
-.fb-share
-{
-  background-color: $fb-blue;
-  background-image: url(../images/icons/facebook.svg);
-}
-.fb-share:hover { background-color: $fb-blue-dark; }
-
-.twitter-share
-{
   background-color: $twitter-blue;
   background-image: url(../images/icons/twitter.svg);
+
+  &:hover, &:focus { background-color: $twitter-blue-dark; }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px $twitter-blue-dark;
+  }
 }
-.twitter-share:hover { background-color: $twitter-blue-dark; }
 
 /* End Share Button Styling */
 

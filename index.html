@@ -77,23 +77,31 @@ metadata:
     <!-- Show up after authorization completes -->
     <div class="post-authorize page-limiter" v-else key="postAuth">
       <div class="menu-bar">
-        <button id="song" class="menu-option active" v-on:click="switchView('song')">
-          <div class="icon" src="images/menu/song.png"></div>
+        <button class="menu-option -song"
+          v-bind:class="{ active: currentView === 'song' }"
+          v-on:click="switchView('song')">
+          <div class="icon"></div>
           <div class="text">Single Song</div>
         </button>
 
-        <button id="song-compare" class="menu-option" v-on:click="switchView('song-compare')">
-          <div class="icon" src="images/menu/songcompare.png"></div>
+        <button class="menu-option -song-compare"
+          v-bind:class="{ active: currentView === 'song-compare' }"
+          v-on:click="switchView('song-compare')">
+          <div class="icon"></div>
           <div class="text">Compare Songs</div>
         </button>
 
-        <button id="album" class="menu-option" v-on:click="switchView('album')">
-          <div class="icon" src="images/menu/album.png"></div>
+        <button class="menu-option -album"
+          v-bind:class="{ active: currentView === 'album' }"
+          v-on:click="switchView('album')">
+          <div class="icon"></div>
           <div class="text">Album</div>
         </button>
 
-        <button id="playlist" class="menu-option" v-on:click="switchView('playlist')">
-          <div class="icon" src="images/menu/playlist.png"></div>
+        <button class="menu-option -playlist"
+          v-bind:class="{ active: currentView === 'playlist' }"
+          v-on:click="switchView('playlist')">
+          <div class="icon"></div>
           <div class="text">Playlist</div>
         </button>
       </div>
