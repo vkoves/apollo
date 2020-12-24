@@ -85,7 +85,6 @@ $(document).ready(function()
             /**
              * Expose functions defined in this file to Vue
              */
-            getSpotifyData: getSpotifyData,
             selectSong: selectSong,
             shareOnTwitter: shareOnTwitter,
             spotifySearch: spotifySearch,
@@ -247,28 +246,33 @@ function switchView(viewToSwitchTo)
 // Puts in a search request
 function spotifySearch()
 {
+    const textInput = $('#search-field').val();
+
+    // Spotify URIs always start with spotify:, which isn't likely to be a
+    // search query, so if we get that, fetch by URI
+    if (textInput.startsWith('spotify:')) {
+        getSpotifyData(textInput);
+        return;
+    }
+
     if (spotifyObjectType === 'track') {
-        spotifyApi.searchTracks($('#search-field').val(), { limit: 5 })
+        spotifyApi.searchTracks(textInput, { limit: 5 })
             .then(handleSearch);
     }
     else if (spotifyObjectType === 'album') {
-        spotifyApi.searchAlbums($('#search-field').val(), { limit: 5 })
+        spotifyApi.searchAlbums(textInput, { limit: 5 })
             .then(handleSearch);
     }
     else if (spotifyObjectType === 'playlist') {
-        spotifyApi.searchPlaylists($('#search-field').val(), { limit: 5 })
+        spotifyApi.searchPlaylists(textInput, { limit: 5 })
             .then(handleSearch);
     }
 }
 
 // Reads the URI field and updates data as needed
-function getSpotifyData(event, spotifyURI)
+function getSpotifyData(spotifyURI)
 {
     setupFilledView();
-
-    if (!spotifyURI) { // if URI wasn't passed in, use value from spotify-id
-        spotifyURI = $('#spotify-id').val();
-    }
 
     var spotifyId = spotifyURI;
 
@@ -688,14 +692,14 @@ function handleSearch(data)
     {
         clearInput();
         $('.search-results').hide();
-        getSpotifyData(null, $(this).attr('data-uri'));
+        getSpotifyData($(this).attr('data-uri'));
     });
 }
 
 // Hides the search and clears the input fields
 function clearInput()
 {
-    $('#search-field, #spotify-id').val('');
+    $('#search-field').val('');
     $('.search-results').hide();
 }
 
@@ -921,28 +925,28 @@ function loadStateFromURL()
         switchView(null, params['currView']);
 
         if (currentView === 'song' && params['track']) {
-            getSpotifyData(null, params['track']);
+            getSpotifyData(params['track']);
         }
         else if (currentView === 'song-compare' && params['track1'] && params['track2']) {
             // Load in second track data
             albumTarget = $('#track-2');
             VueApp.selectedTrackNum = 2;
 
-            getSpotifyData(null, params['track2']);
+            getSpotifyData(params['track2']);
 
             setTimeout(function() {
                 // Load in first track data after delay. First is last so the albumTarget is consistent with default of 1
                 albumTarget = $('#track-1');
                 VueApp.selectedTrackNum = 1;
-                getSpotifyData(null, params['track1']);
+                getSpotifyData(params['track1']);
             }, 500);
 
         }
         else if (currentView === 'album' && params['album']) {
-            getSpotifyData(null, params['album']);
+            getSpotifyData(params['album']);
         }
         else if (currentView === 'playlist' && params['playlist']) {
-            getSpotifyData(null, params['playlist']);
+            getSpotifyData(params['playlist']);
         }
     }
 

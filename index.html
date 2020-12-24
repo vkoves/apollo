@@ -100,25 +100,23 @@ metadata:
 
       <div class="input-bar-cont" v-bind:class="{ active: viewEmpty }">
         <transition name="slide-vertical">
-          <h2 id="interact-prompt" v-if="viewEmpty">
+          <h2 id="interact-prompt" v-show="viewEmpty">
             Search or enter a Spotify URI to get started!
           </h2>
         </transition>
 
         <div class="input-bar">
-          <div class="input-label">Spotify URI </div>
-          <input type="text" id="spotify-id" v-on:keyup.enter="getSpotifyData">
-          <button id="submit-btn" class="apollo-btn" v-on:click="getSpotifyData">
-            Get Song Data
-          </button>
+          <label class="input-label" for="search-field">
+            Search or Spotify URI
+          </label>
 
-          <br>
+          <div class="input-row">
+            <input type="text" id="search-field" v-on:keyup.enter="spotifySearch">
 
-          <div class="input-label">Search </div>
-          <input type="text" id="search-field" v-on:keyup.enter="spotifySearch">
-          <button class="apollo-btn search-submit" v-on:click="spotifySearch">
-            Search
-          </button>
+            <button class="apollo-btn search-submit" v-on:click="spotifySearch">
+              Submit
+            </button>
+          </div>
 
           <div class="search-results"></div>
         </div>

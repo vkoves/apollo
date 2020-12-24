@@ -100,17 +100,19 @@
   transition: background-color 0.2s;
   padding: 8px 40px;
   margin: 20px 0px;
+
+  &:hover, &:focus { background-color: $apollo-purple-dark; }
+  &:focus { box-shadow: 0px 0px 10px $white; }
+
+  img {
+    float: left;
+    height: 21px;
+    margin-right: 10px;
+  }
+
+  span { line-height: 21px; }
 }
 
-#spotify-authorize:hover { background-color: $transparent-white; }
-#spotify-authorize img
-{
-  float: left;
-  height: 21px;
-  margin-right: 10px;
-}
-
-#spotify-authorize span { line-height: 21px; }
 
 /* Style Github Link */
 .github-notice
