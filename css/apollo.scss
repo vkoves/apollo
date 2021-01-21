@@ -6,7 +6,7 @@
 // If the current view has no Spotify object selected, give it a grey background
 // uses an image since you can't cross-fade to a linear gradient in CSS
 body {
-  background-image: url("../images/backgrounds/grey-background.png");
+  background: #f3f3f3;
   transition: background-image 0.5s;
   background-size: auto 100%;
 }
@@ -17,12 +17,21 @@ body {
   box-sizing: border-box;
 }
 
-.empty-view {
-  // Imitates the linear-gradient but via an image because you can't cross-fade
-  // linear gradients in CSS
-  background-image: url("../images/backgrounds/gradient-background.png");
-  background-size: auto 100%;
+.app-cont {
+  // To fade from a gradient to grey, we use a four step gradient scale 300% -
+  // the top third is our starting gradient, the middle third is our transition
+  // from that to grey, and the last third is grey. We can then animate the
+  // background position to get a smooth background transition
+  background-image: linear-gradient(#800080 0%, #673AB7 33%, #f3f3f3 66%, #f3f3f3 100%);
+  background-position: 0 0;
+  background-size: 100% 300%;
+  transition: background-position 0.6s;
+
+  &:not(.empty-view) {
+    background-position: 0 -200vh;
+  }
 }
+
 
 a:focus, button:focus { outline: 2px $white dashed; }
 

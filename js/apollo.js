@@ -124,7 +124,11 @@ function setupPostLoginEvents() {
     albumTarget = $('.single-song-module .album-image-cont'); //set default target album to single song album
 }
 
-// Switches to the view that is being requested per click in the menu
+/**
+ * Switches to the view that is being requested per click in the menu
+ *
+ * TODO: Move to Vue
+ */
 function switchView(viewToSwitchTo)
 {
     // If already on this view, do nothing
@@ -297,7 +301,11 @@ function getSpotifyData(spotifyURI)
     }
 }
 
-// Setup the audio feature graph, appending all needed columns
+/**
+ * Setup the audio feature graph, appending all needed columns
+ *
+ * TODO: Move to Vue
+ */
 function setupGraph()
 {
     $('.graph-cont, .graph-labels').html(''); //clear container and labels
@@ -363,7 +371,11 @@ function setTrackData(data, isFeatures)
     }
 }
 
-// Graph the track's audio features based on the passed in audio data
+/**
+ * Graph the track's audio features based on the passed in audio data
+ *
+ * TODO: Move to Vue
+ */
 function graphAudioFeatures(featureData)
 {
     setTrackData(featureData, true);
@@ -433,6 +445,8 @@ function graphAudioFeatures(featureData)
 
 /**
  * Select the song to currently be selectable in the song compare view
+ *
+ * TODO: Move to Vue
  */
 function selectSong(trackNum) {
     if (trackNum === 1) {
@@ -446,7 +460,11 @@ function selectSong(trackNum) {
     }
 }
 
-// Show information about the track from the passed in track data
+/**
+ * Show information about the track from the passed in track data
+ *
+ * TODO: Move to Vue
+ */
 function handleTrackInfo(trackData, pushHistory)
 {
     setTrackData(trackData, false);
