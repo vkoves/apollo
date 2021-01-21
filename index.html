@@ -80,28 +80,28 @@ metadata:
         <button class="menu-option -song"
           v-bind:class="{ active: currentView === 'song' }"
           v-on:click="switchView('song')">
-          <div class="icon"></div>
+          {% include svgs/song.svg %}
           <div class="text">Single Song</div>
         </button>
 
         <button class="menu-option -song-compare"
           v-bind:class="{ active: currentView === 'song-compare' }"
           v-on:click="switchView('song-compare')">
-          <div class="icon"></div>
+          {% include svgs/songcompare.svg %}
           <div class="text">Compare Songs</div>
         </button>
 
         <button class="menu-option -album"
           v-bind:class="{ active: currentView === 'album' }"
           v-on:click="switchView('album')">
-          <div class="icon"></div>
+          {% include svgs/album.svg %}
           <div class="text">Album</div>
         </button>
 
         <button class="menu-option -playlist"
           v-bind:class="{ active: currentView === 'playlist' }"
           v-on:click="switchView('playlist')">
-          <div class="icon"></div>
+          {% include svgs/playlist.svg %}
           <div class="text">Playlist</div>
         </button>
       </div>
@@ -115,7 +115,7 @@ metadata:
 
         <div class="input-bar">
           <label class="input-label" for="search-field">
-            Search or Spotify URI
+            Search or enter Spotify URI
           </label>
 
           <div class="input-row">

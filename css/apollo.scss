@@ -82,14 +82,15 @@ header { background-color: $purple; }
 }
 
 .menu-option {
-  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 25%;
+  color: $text-grey;
   background-color: $extra-light-grey;
   vertical-align: top;
   padding: 10px 0px;
+  font-size: 16px;
   box-sizing: border-box;
   cursor: pointer;
   border: solid 3px transparent;
@@ -117,45 +118,10 @@ header { background-color: $purple; }
     color: $white;
   }
 
-  &.-song {
-     .icon { background-image: url("../images/menu/song.png"); }
-
-    &.active, &:focus {
-      .icon { background-image: url("../images/menu/song-white.png"); }
-    }
-  }
-
-  &.-song-compare {
-     .icon { background-image: url("../images/menu/songcompare.png"); }
-
-    &.active, &:focus {
-      .icon { background-image: url("../images/menu/songcompare-white.png"); }
-    }
-  }
-
-  &.-album {
-     .icon { background-image: url("../images/menu/album.png"); }
-
-    &.active, &:focus {
-      .icon { background-image: url("../images/menu/album-white.png"); }
-    }
-  }
-
-  &.-playlist {
-     .icon { background-image: url("../images/menu/playlist.png"); }
-
-    &.active, &:focus {
-      .icon { background-image: url("../images/menu/playlist-white.png"); }
-    }
-  }
-
   .text { margin-top: 5px }
-  .icon
-  {
+
+  svg {
     height: calc(100% - 20px);
-    background-size: auto 100%;
-    background-repeat: no-repeat;
-    background-position: center center;
     width: 30px;
     height: 30px;
     margin: 0 20px;
