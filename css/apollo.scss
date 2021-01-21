@@ -30,8 +30,7 @@ a:focus, button:focus { outline: 2px $white dashed; }
   font-family: 'Montserrat', sans-serif;
 }
 
-.page-container
-{
+.page-container {
   color: $text-grey;
   margin-top: 0px;
 }
@@ -40,8 +39,7 @@ a:focus, button:focus { outline: 2px $white dashed; }
 header { background-color: $purple; }
 
 /* Add basic pill button styling */
-.apollo-btn
-{
+.apollo-btn {
   display: inline-block;
   background-color: $apollo-purple;
   border: none;
@@ -182,8 +180,7 @@ header { background-color: $purple; }
 }
 
 /* Search Styling */
-.search-results
-{
+.search-results {
   display: none;
   position: absolute;
   top: 73px;
@@ -197,13 +194,11 @@ header { background-color: $purple; }
   width: 500px;
   padding: 5px;
 }
-#search-no-results
-{
+#search-no-results {
   padding: 0px 30px;
   font-weight: normal;
 }
-.search-listing
-{
+.search-listing {
   height: 100px;
   text-align: left;
   background-color: $light-grey;
@@ -214,35 +209,30 @@ header { background-color: $purple; }
   margin-bottom: 5px;
 }
 .search-listing:last-of-type { margin-bottom: 0px; }
-.search-listing:hover
-{
+.search-listing:hover {
   background-color: $extra-light-grey;
 }
-.search-listing img
-{
+.search-listing img {
   display: inline-block;
   height: 100px;
   width: 100px;
   margin-right: 10px;
 }
-.search-listing .listing-text
-{
+.search-listing .listing-text {
   display: inline-block;
   position: relative;
   vertical-align: top;
   top: 25%;
   max-width: calc(100% - 120px)
 }
-.listing-text .track-title
-{
+.listing-text .track-title {
   font-size: 18px;
   font-weight: bold;
 }
 .listing-text .author { font-size: 14px; }
 /* End Search Styling */
 
-#spotify-error
-{
+#spotify-error {
   display: none;
   background-color: $apollo-red;
   padding: 10px 30px;
@@ -306,8 +296,7 @@ header { background-color: $purple; }
   to { transform: rotate(360deg); }
 }
 
-.track-info .track-text
-{
+.track-info .track-text {
   display: inline-block;
   width: 78.5%;
   margin-left: 1%;
@@ -322,29 +311,24 @@ header { background-color: $purple; }
 .track-info #artists { margin-top: 0px; }
 
 
-.non-graph-data .left-col, .right-col
-{
+.non-graph-data .left-col, .right-col {
   display: inline-block;
   text-align: left;
   width: 48%;
   box-sizing: border-box;
 }
-.non-graph-data .left-col
-{
+.non-graph-data .left-col {
   padding-left: 20%;
 }
-.non-graph-data .right-col
-{
+.non-graph-data .right-col {
   padding-right: 20%;
   margin-left: 2%;
 }
-.non-graph-data .data-item
-{
+.non-graph-data .data-item {
   margin-right: 10px;
   height: 30px;
 }
-.non-graph-data .left-text
-{
+.non-graph-data .left-text {
   color: $text-grey;
   float: left;
 }
@@ -352,27 +336,23 @@ header { background-color: $purple; }
 
 
 /* Graph Styling */
-.graph-top-cont
-{
+.graph-top-cont {
   background: $extra-light-grey;
   border-radius: 5px;
   margin-top: 10px;
 }
-.graph-cont
-{
+.graph-cont {
   padding-top: 2%;
   background: $white;
   height: 50%;
 }
-.graph-col
-{
+.graph-col {
   display: inline-block;
   position: relative;
   width: calc(100% / 7);
   height: 100%;
 }
-.col-title
-{
+.col-title {
   display: inline-block;
   width: calc(100%/7);
   position: relative;
@@ -412,8 +392,7 @@ header { background-color: $purple; }
   border-color: $charcoal transparent transparent transparent;
 }
 /* Add column icons */
-.col-icon
-{
+.col-icon {
   width: 25%;
   padding-bottom: 25%; /* Makes divs square if matches width */
   margin: 10% auto 5% auto;
@@ -429,8 +408,7 @@ header { background-color: $purple; }
 .valence .col-icon { background-image: url("../images/col-icons/valence.png"); }
 
 
-.graph-col .fill
-{
+.graph-col .fill {
   background: $apollo-purple;
   position: absolute;
   bottom: 0;
@@ -461,15 +439,13 @@ header { background-color: $purple; }
 
 /* Compare Songs Styling */
 .compare-songs-module { display: none; } /* Hide song comparison tools by default */
-.song-select
-{
+.song-select {
   border-radius: 5px;
   overflow: hidden;
   margin-top: 10px;
   font-size: 0px; /* Prevent spacing from inline */
 }
-.song-select .option
-{
+.song-select .option {
   display: inline-block;
   background-color: $extra-light-grey;
   width: 10%;
@@ -479,8 +455,7 @@ header { background-color: $purple; }
   margin: 0% 19%;
   border-radius: 5px;
 }
-.song-select .option.active
-{
+.song-select .option.active {
   background-color: $apollo-purple;
   color: $white;
 }
