@@ -119,14 +119,37 @@ metadata:
           </label>
 
           <div class="input-row">
-            <input type="text" id="search-field" v-on:keyup.enter="spotifySearch">
+            <input id="search-field"
+              type="text"
+              v-model="searchText"
+              v-on:keyup.enter="spotifySearch">
 
             <button class="apollo-btn search-submit" v-on:click="spotifySearch">
               Submit
             </button>
           </div>
 
-          <div class="search-results"></div>
+          <transition name="slide-vertical">
+            <div class="search-results" v-show="searchItems">
+              <span v-if="searchItems && searchItems.length === 0"
+                id="search-no-results">
+                No results found!
+              </span>
+
+              <ul v-if="searchItems && searchItems.length > 0">
+                <li v-for="item in searchItems" :key="item.uri"
+                  class="search-listing"
+                  v-on:click="searchResultClick(item.uri)">
+                  <img v-bind:src="item.imageUrl">
+                  <div class="listing-text">
+                    <div class="track-title">(( item.name ))</div>
+
+                    (( item.artists ))
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </transition>
         </div>
       </div>
 

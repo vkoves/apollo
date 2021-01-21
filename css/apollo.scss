@@ -139,7 +139,7 @@ header { background-color: $purple; }
   #interact-prompt {
     font-weight: normal;
     color: $white;
-    max-height: 30px;
+    max-height: 30px; // set max-height for slide-vertical transition
   }
 }
 
@@ -181,7 +181,6 @@ header { background-color: $purple; }
 
 /* Search Styling */
 .search-results {
-  display: none;
   position: absolute;
   top: 73px;
   left: 206px;
@@ -193,6 +192,12 @@ header { background-color: $purple; }
   background: $light-grey;
   width: 500px;
   padding: 5px;
+  max-height: 700px; // set max-height for slide-vertical transition
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 }
 #search-no-results {
   padding: 0px 30px;

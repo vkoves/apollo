@@ -58,6 +58,9 @@ $(document).ready(function()
 {
     VueApp = new Vue({
         el: '#app',
+        // Jekyll uses Liquid, which would interpret {{ }} on compile time, so we move
+        // Vue to use (( )) instead
+        delimiters: ['((', '))'],
         data: {
             /** Whether the user is logged in or not */
             isLoggedIn: false,
@@ -74,6 +77,11 @@ $(document).ready(function()
              */
             viewEmpty: false,
 
+            searchItems: undefined,
+
+            /** Text of the search/URI input */
+            searchText: '',
+
             /** The currently selected track that the user is updating. Most
                 important on song-compare */
             selectedTrackNum: 1,
@@ -83,6 +91,7 @@ $(document).ready(function()
             /**
              * Expose functions defined in this file to Vue
              */
+            searchResultClick: searchResultClick,
             selectSong: selectSong,
             shareOnTwitter: shareOnTwitter,
             spotifySearch: spotifySearch,
@@ -236,7 +245,7 @@ function switchView(viewToSwitchTo)
 // Puts in a search request
 function spotifySearch()
 {
-    const textInput = $('#search-field').val();
+    const textInput = VueApp.searchText;
 
     // Spotify URIs always start with spotify:, which isn't likely to be a
     // search query, so if we get that, fetch by URI
@@ -575,6 +584,7 @@ function analyzeAudioFeatures(data)
     }
 }
 
+// TODO: Convert to Vue
 function graphAnalysisResults(pushHistory)
 {
     if (pushHistory) {
@@ -628,11 +638,13 @@ function graphAnalysisResults(pushHistory)
     }
 }
 
-// Called as a result of calling the search API call
+/**
+ * Called as a result of calling the search API call, and renders search results
+ *
+ * TODO: Convert to Vue
+ */
 function handleSearch(data)
 {
-    $('.search-results').html(''); // clear the HTML of the search results
-
     // Determine the objects to iterate through depending on what type of objects we are dealing with
     var items;
 
@@ -646,51 +658,49 @@ function handleSearch(data)
         items = data.playlists.items;
     }
 
-    for (var key in items) // iterate through spotify items
-    {
-        var spotifyObject = items[key]; //can be a track, album or playlist
-        var artistsLine = ''; // by line for artists. Used only on tracks
+    // Map search items to pick the ideal image and get an artists line
+    VueApp.searchItems = items.map(spotifyObj => {
+        var artists = ''; // by line for artists=
         var images;
 
         if (spotifyObjectType === 'track') {
-            images = spotifyObject.album.images;
-            artistsLine = '<br><span class="author">by ' + combineArtists(spotifyObject.artists) + '</span>';
+            images = spotifyObj.album.images;
         }
         else {
-            images = spotifyObject.images;
+            images = spotifyObj.images;
         }
 
-        var idealImage = images[1] || images[0]; // try to use second image, fallback to first if only one
+        if (spotifyObj.artists) {
+            artists = combineArtists(spotifyObj.artists);
+        }
 
-        $('.search-results').append('<div class="search-listing" data-uri=' + spotifyObject.uri + '>'
-            + '<img src="' + idealImage.url + '">'
-            + '<div class="listing-text">'
-                + '<span class="track-title">' + spotifyObject.name + '</span>'
-                + artistsLine
-            + '</div>'
-        + '</div>');
-    }
+        // try to use second image, fallback to first if only one
+        var idealImage = images[1] || images[0];
 
-    if (items.length === 0)
-    {
-        $('.search-results').append('<h2 id="search-no-results">No results found</h2>');
-    }
-
-    $('.search-results').slideDown();
-
-    $('.search-listing').click(function()
-    {
-        clearInput();
-        $('.search-results').hide();
-        getSpotifyData($(this).attr('data-uri'));
+        return {
+            artists,
+            imageUrl: idealImage.url,
+            name: spotifyObj.name,
+            uri: spotifyObj.uri
+        };
     });
 }
 
-// Hides the search and clears the input fields
+/**
+ * Called on click of a search result item
+ */
+function searchResultClick(uri) {
+    clearInput();
+    getSpotifyData(uri);
+}
+
+/**
+ * Hides the search and clears the input fields
+ */
 function clearInput()
 {
-    $('#search-field').val('');
-    $('.search-results').hide();
+    VueApp.searchText = '';
+    VueApp.searchItems = undefined;
 }
 
 /**
