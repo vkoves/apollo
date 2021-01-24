@@ -30,8 +30,6 @@ var spotifyApi;
 var currOrigin = 'https://viktorkoves.com'; // assume on production, and set origin variable as such
 var audioObject; // for playing previews
 
-var albumTarget; // the target album to update. Type jQuery element
-
 var spotifyObjectType = 'track'; // the type of object being manipulated in the current view. String that can be "track", "album", "playlist"
 
 // Used for single song analysis
@@ -85,6 +83,13 @@ $(document).ready(function()
             /** The currently selected track that the user is updating. Most
                 important on song-compare */
             selectedTrackNum: 1,
+
+            /** Track data objects */
+            album: undefined,
+            playlist: undefined,
+            track1: undefined,
+            track2: undefined,
+            track: undefined,
         },
         methods: {
             login: () => login(loginComplete),
@@ -120,8 +125,6 @@ $(document).ready(function()
  */
 function setupPostLoginEvents() {
     setupGraph();
-
-    albumTarget = $('.single-song-module .album-image-cont'); //set default target album to single song album
 }
 
 /**
@@ -138,10 +141,6 @@ function switchView(viewToSwitchTo)
 
     VueApp.currentView = viewToSwitchTo;
 
-    $('.menu-option').removeClass('active');
-    $('.menu-option#' + viewToSwitchTo).addClass('active');
-
-
     pushStateToHistory(); // push to history after VueApp.currentView var has changed
 
     pausePlayingRecord();
@@ -149,7 +148,6 @@ function switchView(viewToSwitchTo)
 
     if (VueApp.currentView === 'song')
     {
-        albumTarget = $('.single-song-module .album-image-cont');
         VueApp.selectedTrackNum = 1;
 
         spotifyObjectType = 'track';
@@ -180,7 +178,6 @@ function switchView(viewToSwitchTo)
 
         if (Object.keys(track1).length > 0) // if track1 is defined
         {
-            albumTarget = $('#track-1');
             VueApp.selectedTrackNum = 1;
             graphAudioFeatures(track1.audioFeatures);
             handleTrackInfo(track1.trackObject);
@@ -188,13 +185,11 @@ function switchView(viewToSwitchTo)
 
         if (Object.keys(track2).length > 0) // if track2 is defined
         {
-            albumTarget = $('#track-2');
             VueApp.selectedTrackNum = 2;
             graphAudioFeatures(track2.audioFeatures);
             handleTrackInfo(track2.trackObject);
         }
 
-        albumTarget = $('#track-1');
         VueApp.selectedTrackNum = 1;
 
         spotifyObjectType = 'track';
@@ -450,12 +445,10 @@ function graphAudioFeatures(featureData)
  */
 function selectSong(trackNum) {
     if (trackNum === 1) {
-        albumTarget = $('#track-1');
         VueApp.selectedTrackNum = 1;
     }
     else
     {
-        albumTarget = $('#track-2');
         VueApp.selectedTrackNum = 2;
     }
 }
@@ -490,13 +483,30 @@ function handleTrackInfo(trackData, pushHistory)
         audioObject = null;
     }
 
-    albumTarget.find('.album-image').attr('src', trackData.album.images[0].url);
+    const imgUrl = trackData.album.images[0].url;
 
+    if (VueApp.currentView === 'song-compare') {
+        if (VueApp.selectedTrackNum === 1) {
+            VueApp.track1 = { imgUrl };
+        }
+        else {
+            VueApp.track2 = { imgUrl };
+        }
+    }
+    else if (VueApp.currentView === 'album') {
+        VueApp.album = { imgUrl };
+    }
+    else if (VueApp.currentView === 'playlist') {
+        VueApp.playlist = { imgUrl };
+    }
     // If viewing individaul song, update title
-    if (VueApp.currentView === 'song')
+    else if (VueApp.currentView === 'song')
     {
-        $('.track-text #title').text(trackData.name);
-        $('.track-text #artists').text('by ' + combineArtists(trackData.artists));
+        VueApp.track = {
+            imgUrl,
+            name: trackData.name,
+            artists: 'by ' + combineArtists(trackData.artists)
+        };
     }
 }
 
@@ -946,15 +956,11 @@ function loadStateFromURL()
             getSpotifyData(params['track']);
         }
         else if (VueApp.currentView === 'song-compare' && params['track1'] && params['track2']) {
-            // Load in second track data
-            albumTarget = $('#track-2');
             VueApp.selectedTrackNum = 2;
 
             getSpotifyData(params['track2']);
 
             setTimeout(function() {
-                // Load in first track data after delay. First is last so the albumTarget is consistent with default of 1
-                albumTarget = $('#track-1');
                 VueApp.selectedTrackNum = 1;
                 getSpotifyData(params['track1']);
             }, 500);

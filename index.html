@@ -168,11 +168,11 @@ metadata:
           <div class="track-info single-song-module">
             <button class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png" alt="">
-              <img class="album-image" src="album-art-placeholder.png" alt="">
+              <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
             </button>
             <div class="track-text">
-              <h2 id="title" class="no-bold"></h2>
-              <h3 id="artists" class="no-bold"></h3>
+              <h2 class="no-bold">(( track?.name ))</h2>
+              <h3 class="no-bold">(( track?.artists ))</h3>
               <div class="non-graph-data">
                 <div class="left-col">
                   <div class="data-item">
@@ -223,18 +223,18 @@ metadata:
           <div class="two-track-cont compare-songs-module">
             <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png">
-              <img class="album-image" src="album-art-placeholder.png">
+              <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
             </button>
             <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png">
-              <img class="album-image" src="album-art-placeholder.png">
+              <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
             </button>
           </div>
 
-          <!-- For Albums and PLaylist Views -->
+          <!-- For Album and Playlist Views -->
           <div class="details track-info album-module playlist-module">
             <div class="album-image-cont" v-on:click="toggleRecord">
-              <img class="album-image" src="album-art-placeholder.png">
+              <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
             </div>
             <div class="track-text">
               <h1 class="zero-bot">Pick an item to get started</h1>
