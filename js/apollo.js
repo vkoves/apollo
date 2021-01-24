@@ -90,6 +90,8 @@ $(document).ready(function()
             track1: undefined,
             track2: undefined,
             track: undefined,
+
+            songExtraData: undefined,
         },
         methods: {
             login: () => login(loginComplete),
@@ -416,14 +418,19 @@ function graphAudioFeatures(featureData)
     // If viewing an individual song, show data for that song
     if (VueApp.currentView === 'song')
     {
-        $('.non-graph-data #key').text(featureData.key);
-        $('.non-graph-data #tempo').text(featureData.tempo);
-        $('.non-graph-data #time_signature').text(featureData.time_signature);
-        $('.non-graph-data #mode').text(featureData.mode);
-        $('.non-graph-data #loudness').text(featureData.loudness);
-        $('.non-graph-data #duration').text(featureData.duration);
+        VueApp.songExtraData = {
+            key: featureData.key,
+            tempo: featureData.tempo,
+            timeSignature: featureData.time_signature,
+            mode: featureData.mode,
+            loudness: featureData.loudness,
+            duration: featureData.duration,
+        };
     }
 
+    /**
+     * Convert a ms song duration to the human readable minute second format
+     */
     function getProperDuration(duration_ms)
     {
         var minutes = Math.floor(duration_ms/(1000*60));
@@ -440,17 +447,9 @@ function graphAudioFeatures(featureData)
 
 /**
  * Select the song to currently be selectable in the song compare view
- *
- * TODO: Move to Vue
  */
 function selectSong(trackNum) {
-    if (trackNum === 1) {
-        VueApp.selectedTrackNum = 1;
-    }
-    else
-    {
-        VueApp.selectedTrackNum = 2;
-    }
+    VueApp.selectedTrackNum = trackNum;
 }
 
 /**
@@ -612,7 +611,11 @@ function analyzeAudioFeatures(data)
     }
 }
 
-// TODO: Convert to Vue
+/**
+ * Graph audio analysis details for an image
+ *
+ * TODO: Convert to Vue
+ */
 function graphAnalysisResults(pushHistory)
 {
     if (pushHistory) {
@@ -815,6 +818,8 @@ function showRecord(element, speed)
  *
  * @param  {HtmlElement Object} element  The ".record" object to animate
  * @param  {integer} speed Speed of the animation in ms
+ *
+ * TODO: Convert to Vue
  */
 function hideRecord(element, speed)
 {
@@ -1089,5 +1094,9 @@ function loginComplete(accessToken)
  */
 function shareOnTwitter() {
     var shareurl = escape(window.location.href);
-    window.open('https://twitter.com/share?url=' + shareurl + '&text=' +document.title, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+
+    window.open(
+        'https://twitter.com/share?url=' + shareurl + '&text=' + document.title,
+        '',
+        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
 }
