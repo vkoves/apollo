@@ -456,7 +456,6 @@ header { background-color: $purple; }
 /* End Graph Styling */
 
 /* Compare Songs Styling */
-.compare-songs-module { display: none; } /* Hide song comparison tools by default */
 .song-select {
   border-radius: 5px;
   overflow: hidden;
@@ -481,10 +480,6 @@ header { background-color: $purple; }
 .two-track-cont .album-image-cont { margin: 0% 14.8%; } /* Give space between albums */
 .two-track-cont .album-image-cont img { margin-top: 20%; } /* Need larger margins when showing two albums */
 /* End Compare Songs Styling */
-
-/* Album and Playlist Analysis Styling */
-.album-module, .playlist-module { display: none; }
-/* End Album and Playlist Analysis Styling */
 
 /* Share Button Styling */
 .share-btn {

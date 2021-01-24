@@ -165,7 +165,8 @@ metadata:
           </div>
 
           <!-- For Song View -->
-          <div class="track-info single-song-module">
+          <div v-if="currentView === 'song'"
+            class="track-info single-song-module">
             <button class="album-image-cont" v-on:click="toggleRecord">
               <img class="record hidden" src="record.png" alt="">
               <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
@@ -207,32 +208,35 @@ metadata:
           </div>
 
           <!-- For Compare Songs -->
-          <div class="song-select compare-songs-module">
-            <button class="option"
-              v-bind:class="{ 'active': selectedTrackNum === 1 }"
-               v-on:click="selectSong(1)">
-              Song 1
-            </button>
-            <button class="option"
-              v-bind:class="{ 'active': selectedTrackNum === 2 }"
-               v-on:click="selectSong(2)">
-              Song 2
-            </button>
-          </div>
+          <template v-if="currentView === 'song-compare'">
+            <div class="song-select compare-songs-module">
+              <button class="option"
+                v-bind:class="{ 'active': selectedTrackNum === 1 }"
+                 v-on:click="selectSong(1)">
+                Song 1
+              </button>
+              <button class="option"
+                v-bind:class="{ 'active': selectedTrackNum === 2 }"
+                 v-on:click="selectSong(2)">
+                Song 2
+              </button>
+            </div>
 
-          <div class="two-track-cont compare-songs-module">
-            <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
-              <img class="record hidden" src="record.png">
-              <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
-            </button>
-            <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
-              <img class="record hidden" src="record.png">
-              <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
-            </button>
-          </div>
+            <div class="two-track-cont compare-songs-module">
+              <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
+                <img class="record hidden" src="record.png">
+                <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
+              </button>
+              <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
+                <img class="record hidden" src="record.png">
+                <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
+              </button>
+            </div>
+          </template>
 
           <!-- For Album and Playlist Views -->
-          <div class="details track-info album-module playlist-module">
+          <div v-if="currentView === 'album' || currentView === 'playlist'"
+            class="details track-info album-module playlist-module">
             <div class="album-image-cont" v-on:click="toggleRecord">
               <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
             </div>
@@ -245,12 +249,33 @@ metadata:
           <!-- Used by each module for graphing -->
           <div class="graph-top-cont">
             <div class="graph-cont">
+              <template v-for="(keyData, key) in spotifyGraphableData">
+                <div v-if="keyData.type === 'zero-float'"
+                  class="graph-col" v-bind:class="key">
+                    <div class="fill fill-1">
+                        <div class="value value-1"></div>
+                    </div>
+                    <div v-if="currentView === 'song-compare'" class="fill fill-2">
+                        <div class="value value-2"></div>
+                    </div>
+                </div>
+              </template>
             </div>
+
             <div class="graph-labels">
+              <template v-for="(keyData, key) in spotifyGraphableData">
+                <div v-if="keyData.type === 'zero-float'"
+                  class="col-title" v-bind:class="key">
+                    <div class="col-icon"></div>
+                    <span>(( keyData.name ))</span>
+                    <div class="col-desc">(( keyData.description ))</div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
       </transition>
-    </div>
+
+    </div><!-- close .post-authorize -->
   </transition>
 </div>

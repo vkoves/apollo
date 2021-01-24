@@ -92,6 +92,7 @@ $(document).ready(function()
             track: undefined,
 
             songExtraData: undefined,
+            spotifyGraphableData: spotifyGraphableData,
         },
         methods: {
             login: () => login(loginComplete),
@@ -121,15 +122,6 @@ $(document).ready(function()
 });
 
 /**
- * A temporary functionf or setting up event listeners after auth.
- *
- * TODO: Deprecate this function, as all these event handlers should be in Vue
- */
-function setupPostLoginEvents() {
-    setupGraph();
-}
-
-/**
  * Switches to the view that is being requested per click in the menu
  *
  * TODO: Move to Vue
@@ -156,25 +148,23 @@ function switchView(viewToSwitchTo)
 
         if (Object.keys(track).length > 0) // if track is defined
         {
-            switchViewVisuals();
             setupFilledView();
             graphAudioFeatures(track.audioFeatures);
             handleTrackInfo(track.trackObject);
         }
         else
         {
-            setupEmptyView(switchViewVisuals);
+            setupEmptyView();
         }
     }
     else if (VueApp.currentView === 'song-compare')
     {
         // Setup an empty view if no tracks are dfined
         if (Object.keys(track1).length === 0 && Object.keys(track2).length === 0) {
-            setupEmptyView(switchViewVisuals);
+            setupEmptyView();
         }
         else
         {
-            switchViewVisuals();
             setupFilledView();
         }
 
@@ -203,11 +193,10 @@ function switchView(viewToSwitchTo)
 
         // If album has not been defined yet
         if (Object.keys(album).length === 0) {
-            setupEmptyView(switchViewVisuals);
+            setupEmptyView();
         }
         else
         {
-            switchViewVisuals();
             graphAnalysisResults();
             setupFilledView();
         }
@@ -218,28 +207,12 @@ function switchView(viewToSwitchTo)
 
         // If playlist has not been defined yet
         if (Object.keys(playlist).length === 0) {
-            setupEmptyView(switchViewVisuals);
+            setupEmptyView();
         }
         else {
-            switchViewVisuals();
             graphAnalysisResults();
             setupFilledView();
         }
-    }
-
-    // Handles hiding old modules and showing needed ones for the new currentView
-    function switchViewVisuals()
-    {
-        // start by hiding all modules
-        $('.single-song-module, .compare-songs-module, .album-module, .playlist-module').hide();
-
-        // then show needed modules
-        if (VueApp.currentView === 'song') {$('.single-song-module').show();}
-        else if (VueApp.currentView === 'song-compare') {$('.compare-songs-module').show();}
-        else if (VueApp.currentView === 'album') {$('.album-module').show();}
-        else if (VueApp.currentView === 'playlist') {$('.playlist-module').show();}
-
-        setupGraph(); //resetup graph for this view
     }
 }
 
@@ -295,54 +268,6 @@ function getSpotifyData(spotifyURI)
     else if (spotifyObjectType === 'playlist')
     {
         spotifyApi.getPlaylist(spotifyURI.split(':')[2], spotifyURI.split(':')[4]).then(handlePlaylist, spotifyError);
-    }
-}
-
-/**
- * Setup the audio feature graph, appending all needed columns
- *
- * TODO: Move to Vue
- */
-function setupGraph()
-{
-    $('.graph-cont, .graph-labels').html(''); //clear container and labels
-
-    for (var key in spotifyGraphableData)
-    {
-        var keyData = spotifyGraphableData[key];
-
-        if (keyData['type'] === 'zero-float') // if one of the floats with range 0...1
-        {
-            var fillCols;
-
-            if (VueApp.currentView === 'song-compare') // everything except song-compare view uses one column graph
-            {
-                fillCols =
-                    '<div class="fill fill-1">' +
-                        '<div class="value value-1"></div>' +
-                    '</div>' +
-                    '<div class="fill fill-2">' +
-                        '<div class="value value-2"></div>' +
-                    '</div>';
-            }
-            else
-            {
-                fillCols =
-                    '<div class="fill">' +
-                        '<div class="value"></div>' +
-                    '</div>';
-            }
-
-            $('.graph-cont').append('<div class="graph-col ' + key + '">'
-                + fillCols
-            + '</div>');
-            $('.graph-labels').append(''
-            + '<div class="col-title ' + key + '">'
-                + '<div class="col-icon"></div>'
-                + '<span>' + keyData['name'] + '</span>'
-                + '<div class="col-desc">' + keyData['description'] + '</div>'
-            + '</div>');
-        }
     }
 }
 
@@ -1068,8 +993,6 @@ function loginComplete(accessToken)
     sessionStorage.setItem('accessToken', accessToken);
 
     VueApp.isLoggedIn = true;
-
-    setupPostLoginEvents();
 
     // Setup first view, which is empty
     setupEmptyView();
