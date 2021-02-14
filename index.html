@@ -172,8 +172,8 @@ metadata:
               <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
             </button>
             <div class="track-text">
-              <h2 class="no-bold">(( track?.name ))</h2>
-              <h3 class="no-bold">(( track?.artists ))</h3>
+              <h2 class="title">(( track?.name ))</h2>
+              <h3 class="artists">(( track?.artists ))</h3>
               <div class="non-graph-data">
                 <div class="left-col">
                   <div class="data-item">
@@ -234,15 +234,26 @@ metadata:
             </div>
           </template>
 
-          <!-- For Album and Playlist Views -->
-          <div v-if="currentView === 'album' || currentView === 'playlist'"
-            class="details track-info album-module playlist-module">
+          <!-- For Album View -->
+          <div v-if="currentView === 'album'"
+            class="details track-info album-module">
+            <div class="album-image-cont" v-on:click="toggleRecord">
+              <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
+            </div>
+            <div class="track-text">
+              <h1 class="title">(( album ? album.name : '' ))</h1>
+              <h2 class="artists">(( album ? album.artists : '' ))</h2>
+            </div>
+          </div>
+
+          <!-- For Playlist View -->
+          <div v-if="currentView === 'playlist'"
+            class="details track-info playlist-module">
             <div class="album-image-cont" v-on:click="toggleRecord">
               <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
             </div>
             <div class="track-text">
-              <h1 class="zero-bot">Pick an item to get started</h1>
-              <h2 class="zero-top no-bold"></h2>
+              <h1 class="title">(( playlist ? playlist.name : '' ))</h1>
             </div>
           </div>
 

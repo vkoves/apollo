@@ -84,7 +84,7 @@ $(document).ready(function()
                 important on song-compare */
             selectedTrackNum: 1,
 
-            /** Track data objects */
+            /** View data objects */
             album: undefined,
             playlist: undefined,
             track1: undefined,
@@ -123,8 +123,6 @@ $(document).ready(function()
 
 /**
  * Switches to the view that is being requested per click in the menu
- *
- * TODO: Move to Vue
  */
 function switchView(viewToSwitchTo)
 {
@@ -263,11 +261,26 @@ function getSpotifyData(spotifyURI)
     }
     else if (spotifyObjectType === 'album')
     {
-        spotifyApi.getAlbum(spotifyId).then(handleAlbum, spotifyError);
+        spotifyApi.getAlbum(spotifyId)
+            .then(handleAlbum, spotifyError);
     }
     else if (spotifyObjectType === 'playlist')
     {
-        spotifyApi.getPlaylist(spotifyURI.split(':')[2], spotifyURI.split(':')[4]).then(handlePlaylist, spotifyError);
+        let actualUri;
+
+        // User playlists have a URI like so:
+        // spotify:user:USERID:playlist:PLAYLISTID
+        if (spotifyURI.includes('user')) {
+            actualUri = spotifyURI.split(':')[4];
+        }
+        // Other (like Spotify official) playlists have URIs like so:
+        // spotify:playlist:37i9dQZF1DXa1rZf8gLhyz
+        else {
+            actualUri = spotifyURI.split(':')[2];
+        }
+
+        spotifyApi.getPlaylist(actualUri)
+            .then(handlePlaylist, spotifyError);
     }
 }
 
@@ -417,13 +430,7 @@ function handleTrackInfo(trackData, pushHistory)
             VueApp.track2 = { imgUrl };
         }
     }
-    else if (VueApp.currentView === 'album') {
-        VueApp.album = { imgUrl };
-    }
-    else if (VueApp.currentView === 'playlist') {
-        VueApp.playlist = { imgUrl };
-    }
-    // If viewing individaul song, update title
+    // If viewing individual song, update title
     else if (VueApp.currentView === 'song')
     {
         VueApp.track = {
@@ -439,7 +446,17 @@ function handleAlbum(albumData)
 {
     album = albumData;
 
-    spotifyApi.getAudioFeaturesForTracks(getTrackIds(albumData.tracks.items)).then(analyzeAudioFeatures, spotifyError);
+    const imgUrl = albumData.images[0].url;
+
+    VueApp.album = {
+        imgUrl,
+        name: albumData.name,
+        uri: albumData.uri,
+        artists: 'By ' + combineArtists(albumData.artists)
+    };
+
+    spotifyApi.getAudioFeaturesForTracks(getTrackIds(albumData.tracks.items))
+        .then(analyzeAudioFeatures, spotifyError);
 }
 
 // Analyzes a playlist, getting the audio features for the tracks on it
@@ -447,7 +464,16 @@ function handlePlaylist(playlistData)
 {
     playlist = playlistData;
 
-    spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true)).then(analyzeAudioFeatures, spotifyError);
+    const imgUrl = playlistData.images[0].url;
+
+    VueApp.playlist = {
+        imgUrl,
+        name: playlistData.name,
+        uri: playlistData.uri,
+    };
+
+    spotifyApi.getAudioFeaturesForTracks(getTrackIds(playlistData.tracks.items, true))
+        .then(analyzeAudioFeatures, spotifyError);
 }
 
 // Analayzes a set of audio features, determining the average, median and standard deviation for each of the graphable values
@@ -456,69 +482,68 @@ function analyzeAudioFeatures(data)
     var audioFeatures = data.audio_features;
 
     // Step 1 - sum up each graphable value (first half of getting averages)
-
     var sums = {};
 
     iterateThroughFeatures(false);
 
     // Step 2 - average the sums
-
     var averages = {};
 
-    for (var key in sums)
-    {
+    for (var key in sums) {
         var sum = sums[key];
         averages[key] = sum / audioFeatures.length;
     }
 
     // Step 3 - start to get the standard deviation by iterating through again and getting the sum of the squares of the difference of each value of the mean
-
     var differenceSquareSums = {}; // stores the sum of the square of the differences
 
     iterateThroughFeatures(true);
 
     // Step 4 - sqrt all of the sums to get the final standard deviation
-
     var standardDeviations = {};
 
-    for (key in differenceSquareSums)
-    {
-        standardDeviations[key] = Math.sqrt(differenceSquareSums[key]); // std. deviation is the sqrt of the sum of the squares of the differences from the average
+    for (key in differenceSquareSums) {
+        // std. deviation is the sqrt of the sum of the squares of the
+        // differences from the average
+        standardDeviations[key] = Math.sqrt(differenceSquareSums[key]);
     }
 
     // Wrap up by saving the data so we don't recompute this
-
-    if (spotifyObjectType === 'album')
-    {
-        albumAnalysisResults.averages = averages;
-        albumAnalysisResults.standardDeviations = standardDeviations;
+    if (spotifyObjectType === 'album') {
+        albumAnalysisResults = {
+            averages,
+            standardDeviations
+        };
     }
-    else if (spotifyObjectType === 'playlist')
-    {
-        playlistAnalysisResults.averages = averages;
-        playlistAnalysisResults.standardDeviations = standardDeviations;
+    else if (spotifyObjectType === 'playlist') {
+        playlistAnalysisResults = {
+            averages,
+            standardDeviations
+        };
     }
 
     graphAnalysisResults(true); //and graph it all, pushing to history
 
-    // A helper function to iterate through all features, either summing up the values, or getting differences from the average
-    // Needed since the data has to be run through twice (first pass for averages, second pass for std. deviation)
+    // A helper function to iterate through all features, either summing up the
+    // values, or getting differences from the average.
+    // Needed since the data has to be run through twice (first pass for
+    // averages, second pass for std. deviation)
     function iterateThroughFeatures(averagesCompleted)
     {
-        for (var featuresKey in audioFeatures) { // iterate through each set of features (each is the audio features for one track) {
+        // iterate through each set of features (each is the audio features for one track) {
+        for (var featuresKey in audioFeatures) {
             var audioFeature = audioFeatures[featuresKey];
 
             for (var key in audioFeature) {
-                if (key in spotifyGraphableData && spotifyGraphableData[key].type === 'zero-float') { // analyze if this data is graphable
+                // analyze if this data is graphable
+                if (key in spotifyGraphableData && spotifyGraphableData[key].type === 'zero-float') {
                     var value = audioFeature[key];
 
                     if (averagesCompleted) {
-                        if (key in differenceSquareSums)
-                        {
+                        if (key in differenceSquareSums) {
                             differenceSquareSums[key] += Math.pow(averages[key] - value, 2);
                         }
-                        else
-                        {
+                        else {
                             differenceSquareSums[key] = Math.pow(averages[key] - value, 2);
                         }
                     }
@@ -550,34 +575,13 @@ function graphAnalysisResults(pushHistory)
     $('.std-dev').remove(); // remove old analysis data
 
     var analysisResultsObj;
-    $('.album-module.details h2').text('');
 
     if (spotifyObjectType === 'album')
     {
-        if (album.images) {
-            $('.album-module.details .album-image').attr('src', album.images[0].url);
-            $('.album-module.details h1').text(album.name);
-            $('.album-module.details h2').text('By ' + combineArtists(album.artists));
-        }
-        else {
-            $('.album-module.details .album-image').attr('src', 'album-art-placeholder.png');
-            $('.album-module.details h1').text('Find an album to get started');
-        }
-
         analysisResultsObj = albumAnalysisResults;
     }
     else if (spotifyObjectType === 'playlist')
     {
-        if (playlist.images) {
-            $('.playlist-module.details .album-image').attr('src', playlist.images[0].url);
-            $('.playlist-module.details h1').text(playlist.name);
-        }
-        else
-        {
-            $('.playlist-module.details .album-image').attr('src', 'album-art-placeholder.png');
-            $('.playlist-module.details h1').text('Find a playlist to get started');
-        }
-
         analysisResultsObj = playlistAnalysisResults;
     }
 
@@ -841,11 +845,11 @@ function pushStateToHistory()
             && track1.trackObject && track2.trackObject) { // only push song compare state with both songs defined
             url += '&track1=' + track1.trackObject.uri + '&track2=' + track2.trackObject.uri;
         }
-        else if (VueApp.currentView === 'album' && album.uri) {
-            url += '&album=' + album.uri;
+        else if (VueApp.currentView === 'album' && VueApp.album) {
+            url += '&album=' + VueApp.album.uri;
         }
-        else if (VueApp.currentView === 'playlist' && playlist.uri) {
-            url += '&playlist=' + playlist.uri;
+        else if (VueApp.currentView === 'playlist' && VueApp.playlist) {
+            url += '&playlist=' + VueApp.playlist.uri;
         }
 
         return url;

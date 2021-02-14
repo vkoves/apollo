@@ -266,7 +266,6 @@ header { background-color: $purple; }
   cursor: pointer;
   border: none;
   padding: 0;
-  margin-top: 20px;
 
   // The button encompasses the record and the album art, so we do custom focus
   outline: none;
@@ -314,19 +313,29 @@ header { background-color: $purple; }
   to { transform: rotate(360deg); }
 }
 
-.track-info .track-text {
-  display: inline-block;
-  width: 78.5%;
-  margin-left: 1%;
-  vertical-align: top;
-  margin-top: 20px;
-  background: $extra-light-grey;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-radius: 5px;
+.track-info {
+  display: flex;
+  align-items: stretch;
+  height: 200px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+
+  .track-text {
+    display: inline-block;
+    width: 78.5%;
+    margin-left: 1%;
+    vertical-align: top;
+    background: $extra-light-grey;
+    padding: 20px 0;
+    border-radius: 5px;
+  }
+
+  .title { margin: 0px; }
+  .artists {
+    margin-top: 0px;
+    font-weight: normal;
+  }
 }
-.track-info #title { margin: 0px; }
-.track-info #artists { margin-top: 0px; }
 
 
 .non-graph-data .left-col, .right-col {
