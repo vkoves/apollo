@@ -161,8 +161,9 @@ metadata:
       <transition name="fade">
         <!-- Contains all visualization elements, including albums and graphing -->
         <div id="apollo-main" v-if="!viewEmpty">
-          <button class="twitter-share share-btn" v-on:click="shareOnTwitter">
-            Tweet
+          <button class="twitter-share share-btn" v-on:click="shareOnTwitter"
+            aria-label="Share on Twitter">
+            Share
           </button>
 
           <!-- Fade out old view before fading in new view -->
@@ -176,7 +177,7 @@ metadata:
               </button>
               <div class="track-text">
                 <h2 class="title">(( track?.name ))</h2>
-                <h3 class="artists">(( track?.artists ))</h3>
+                <div class="artists">(( track?.artists ))</div>
                 <div class="non-graph-data">
                   <div class="left-col">
                     <div class="data-item">
@@ -260,8 +261,8 @@ metadata:
                 <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
               </div>
               <div class="track-text">
-                <h1 class="title">(( album ? album.name : '' ))</h1>
-                <h2 class="artists">(( album ? album.artists : '' ))</h2>
+                <h2 class="title">(( album ? album.name : '' ))</h1>
+                <div class="artists">(( album ? album.artists : '' ))</div>
               </div>
             </div>
 
@@ -272,7 +273,7 @@ metadata:
                 <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
               </div>
               <div class="track-text">
-                <h1 class="title">(( playlist ? playlist.name : '' ))</h1>
+                <h2 class="title">(( playlist ? playlist.name : '' ))</h1>
               </div>
             </div>
           </transition>

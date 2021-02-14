@@ -245,17 +245,17 @@ function spotifySearch()
     if (spotifyObjectType === 'track') {
         spotifyApi.searchTracks(textInput, { limit: 5 })
             .then(handleSearch)
-            .catch(() => VueApp.spotifyErrored = true);
+            .catch(spotifyError);
     }
     else if (spotifyObjectType === 'album') {
         spotifyApi.searchAlbums(textInput, { limit: 5 })
             .then(handleSearch)
-            .catch(() => VueApp.spotifyErrored = true);
+            .catch(spotifyError);
     }
     else if (spotifyObjectType === 'playlist') {
         spotifyApi.searchPlaylists(textInput, { limit: 5 })
             .then(handleSearch)
-            .catch(() => VueApp.spotifyErrored = true);
+            .catch(spotifyError);
     }
 }
 
@@ -777,9 +777,17 @@ function pausePlayingRecord()
 }
 
 // Callback for API calls that shows an error message
-function spotifyError()
+function spotifyError(requestError)
 {
-    VueApp.spotifyErrored = true;
+    // The access token expired
+    if (requestError && requestError.status === 401) {
+        sessionStorage.setItem('accessToken', undefined);
+
+        VueApp.isLoggedIn = false;
+    }
+    else {
+        VueApp.spotifyErrored = true;
+    }
 }
 
 // A helper function to combine all the artists into one nice string

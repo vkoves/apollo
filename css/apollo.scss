@@ -337,8 +337,9 @@ header { background-color: $purple; }
   }
 
   .title { margin: 0px; }
+
   .artists {
-    margin-top: 0px;
+    margin-bottom: 30px;
     font-weight: normal;
   }
 }
@@ -521,6 +522,7 @@ header { background-color: $purple; }
       font-size: 16px;
       font-weight: bold;
     }
+
     .artists { font-size: 12px; }
   }
 
