@@ -137,15 +137,17 @@ metadata:
               </span>
 
               <ul v-if="searchItems && searchItems.length > 0">
-                <li v-for="item in searchItems" :key="item.uri"
-                  class="search-listing"
-                  v-on:click="searchResultClick(item.uri)">
-                  <img v-bind:src="item.imageUrl">
-                  <div class="listing-text">
-                    <div class="track-title">(( item.name ))</div>
+                <li v-for="item in searchItems" :key="item.uri">
+                  <button
+                    class="search-listing"
+                    v-on:click="searchResultClick(item.uri)">
+                    <img v-bind:src="item.imageUrl">
+                    <div class="listing-text">
+                      <div class="track-title">(( item.name ))</div>
 
-                    (( item.artists ))
-                  </div>
+                      (( item.artists ))
+                    </div>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -171,10 +173,14 @@ metadata:
             <!-- For Song View -->
             <div v-if="currentView === 'song'" key="song"
               class="top-cont track-info">
-              <button class="album-image-cont" v-on:click="toggleRecord">
+
+              <button class="album-image-cont"
+                v-bind:aria-label="`Preview Track '${track?.name}'`"
+                v-on:click="toggleRecord">
                 <img class="record hidden" src="record.png" alt="">
                 <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
               </button>
+
               <div class="track-text">
                 <h2 class="title">(( track?.name ))</h2>
                 <div class="artists">(( track?.artists ))</div>
@@ -221,21 +227,25 @@ metadata:
                     Select <br> Track 1
                   </button>
 
-                  <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
-                    <img class="record hidden" src="record.png">
-                    <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
+                  <button id="track-1" class="album-image-cont"
+                    v-bind:aria-label="`Preview Track '${track1?.name}'`"
+                    v-on:click="toggleRecord">
+                    <img class="record hidden" src="record.png" alt="">
+                    <img class="album-image"
+                      v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'"
+                      alt="">
                   </button>
                 </div>
 
                 <div class="track-versus">
-                  <div class="track -one" v-if="track1">
-                    <div class="name">(( track1.name ))</div>
-                    <div class="artists">(( track1.artists ))</div>
+                  <div class="track -one">
+                    <div class="name">(( track1?.name ))</div>
+                    <div class="artists">(( track1?.artists ))</div>
                   </div>
                   <div class="divider-cont"><hr></div>
-                  <div class="track -two" v-if="track2">
-                    <div class="name">(( track2.name ))</div>
-                    <div class="artists">(( track2.artists ))</div>
+                  <div class="track -two">
+                    <div class="name">(( track2?.name ))</div>
+                    <div class="artists">(( track2?.artists ))</div>
                   </div>
                 </div>
 
@@ -246,9 +256,13 @@ metadata:
                     Select <br> Track 2
                   </button>
 
-                  <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
-                    <img class="record hidden" src="record.png">
-                    <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
+                  <button id="track-2" class="album-image-cont"
+                    v-bind:aria-label="`Preview Track '${track2?.name}'`"
+                    v-on:click="toggleRecord">
+                    <img class="record hidden" src="record.png" alt="">
+                    <img class="album-image"
+                      v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'"
+                      alt="">
                   </button>
                 </div>
               </div>
@@ -258,11 +272,13 @@ metadata:
             <div v-if="currentView === 'album'" key="album"
               class="top-cont track-info">
               <div class="album-image-cont" v-on:click="toggleRecord">
-                <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
+                <img class="album-image"
+                  v-bind:src="album?.imgUrl || 'album-art-placeholder.png'"
+                  alt="">
               </div>
               <div class="track-text">
-                <h2 class="title">(( album ? album.name : '' ))</h1>
-                <div class="artists">(( album ? album.artists : '' ))</div>
+                <h2 class="title">(( album?.name ))</h1>
+                <div class="artists">(( album?.artists ))</div>
               </div>
             </div>
 
@@ -270,10 +286,12 @@ metadata:
             <div v-if="currentView === 'playlist'" key="playlist"
               class="top-cont track-info">
               <div class="album-image-cont" v-on:click="toggleRecord">
-                <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
+                <img class="album-image"
+                  v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'"
+                  alt="">
               </div>
               <div class="track-text">
-                <h2 class="title">(( playlist ? playlist.name : '' ))</h1>
+                <h2 class="title">(( playlist?.name ))</h1>
               </div>
             </div>
           </transition>
