@@ -157,118 +157,122 @@ metadata:
         Spotify returned an error! Please double check your input and try again.
       </div>
 
+      <!-- Transition container to fade the main container in and out -->
       <transition name="fade">
         <!-- Contains all visualization elements, including albums and graphing -->
-        <div id="apollo-main" v-show="!viewEmpty">
+        <div id="apollo-main" v-if="!viewEmpty">
           <button class="twitter-share share-btn" v-on:click="shareOnTwitter">
             Tweet
           </button>
 
-          <!-- For Song View -->
-          <div v-if="currentView === 'song'"
-            class="track-info single-song-module">
-            <button class="album-image-cont" v-on:click="toggleRecord">
-              <img class="record hidden" src="record.png" alt="">
-              <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
-            </button>
-            <div class="track-text">
-              <h2 class="title">(( track?.name ))</h2>
-              <h3 class="artists">(( track?.artists ))</h3>
-              <div class="non-graph-data">
-                <div class="left-col">
-                  <div class="data-item">
-                    <div class="left-text">Tempo:</div>
-                    <div class="right-text">(( songExtraData?.tempo )) BPM</div>
-                  </div>
-                  <div class="data-item">
-                    <div class="left-text">Key:</div>
-                    <div class="right-text">(( songExtraData?.key ))</div>
-                  </div>
-                  <div class="data-item">
-                    <div class="left-text">Loudness:</div>
-                    <div class="right-text">(( songExtraData?.loudness )) dB</div>
-                  </div>
-                </div>
-                <div class="right-col">
-                  <div class="data-item">
-                    <div class="left-text">Time Signature:</div>
-                    <div class="right-text">(( songExtraData?.timeSignature ))</div>
-                  </div>
-                  <div class="data-item">
-                    <div class="left-text">Mode:</div>
-                    <div class="right-text">(( songExtraData?.mode ))</div>
-                  </div>
-                  <div class="data-item">
-                    <div class="left-text">Length:</div>
-                    <div class="right-text">(( songExtraData?.duration ))</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- For Compare Songs -->
-          <template v-if="currentView === 'song-compare'">
-            <div class="song-select compare-songs-module">
-              <button class="apollo-btn option"
-                v-bind:class="{ 'active': selectedTrackNum === 1 }"
-                 v-on:click="selectSong(1)">
-                Song 1
+          <!-- Fade out old view before fading in new view -->
+          <transition name="fade" mode="out-in">
+            <!-- For Song View -->
+            <div v-if="currentView === 'song'" key="song"
+              class="track-info single-song-module">
+              <button class="album-image-cont" v-on:click="toggleRecord">
+                <img class="record hidden" src="record.png" alt="">
+                <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
               </button>
-              <button class="apollo-btn option"
-                v-bind:class="{ 'active': selectedTrackNum === 2 }"
-                 v-on:click="selectSong(2)">
-                Song 2
-              </button>
-            </div>
-
-            <div class="two-track-cont compare-songs-module">
-              <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
-                <img class="record hidden" src="record.png">
-                <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
-              </button>
-
-              <div class="track-versus">
-                <div class="track -one" v-if="track1">
-                  <div class="name">(( track1.name ))</div>
-                  <div class="artists">(( track1.artists ))</div>
-                </div>
-                <div class="divider-cont"><hr></div>
-                <div class="track -two" v-if="track2">
-                  <div class="name">(( track2.name ))</div>
-                  <div class="artists">(( track2.artists ))</div>
+              <div class="track-text">
+                <h2 class="title">(( track?.name ))</h2>
+                <h3 class="artists">(( track?.artists ))</h3>
+                <div class="non-graph-data">
+                  <div class="left-col">
+                    <div class="data-item">
+                      <div class="left-text">Tempo:</div>
+                      <div class="right-text">(( songExtraData?.tempo )) BPM</div>
+                    </div>
+                    <div class="data-item">
+                      <div class="left-text">Key:</div>
+                      <div class="right-text">(( songExtraData?.key ))</div>
+                    </div>
+                    <div class="data-item">
+                      <div class="left-text">Loudness:</div>
+                      <div class="right-text">(( songExtraData?.loudness )) dB</div>
+                    </div>
+                  </div>
+                  <div class="right-col">
+                    <div class="data-item">
+                      <div class="left-text">Time Signature:</div>
+                      <div class="right-text">(( songExtraData?.timeSignature ))</div>
+                    </div>
+                    <div class="data-item">
+                      <div class="left-text">Mode:</div>
+                      <div class="right-text">(( songExtraData?.mode ))</div>
+                    </div>
+                    <div class="data-item">
+                      <div class="left-text">Length:</div>
+                      <div class="right-text">(( songExtraData?.duration ))</div>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
-                <img class="record hidden" src="record.png">
-                <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
-              </button>
-            </div>
-          </template>
+            <!-- For Compare Songs -->
+            <div v-if="currentView === 'song-compare'"  key="song-compare">
+              <div class="song-select compare-songs-module">
+                <button class="apollo-btn option"
+                  v-bind:class="{ 'active': selectedTrackNum === 1 }"
+                   v-on:click="selectSong(1)">
+                  Song 1
+                </button>
+                <button class="apollo-btn option"
+                  v-bind:class="{ 'active': selectedTrackNum === 2 }"
+                   v-on:click="selectSong(2)">
+                  Song 2
+                </button>
+              </div>
 
-          <!-- For Album View -->
-          <div v-if="currentView === 'album'"
-            class="details track-info album-module">
-            <div class="album-image-cont" v-on:click="toggleRecord">
-              <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
-            </div>
-            <div class="track-text">
-              <h1 class="title">(( album ? album.name : '' ))</h1>
-              <h2 class="artists">(( album ? album.artists : '' ))</h2>
-            </div>
-          </div>
+              <div class="two-track-cont compare-songs-module">
+                <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
+                  <img class="record hidden" src="record.png">
+                  <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
+                </button>
 
-          <!-- For Playlist View -->
-          <div v-if="currentView === 'playlist'"
-            class="details track-info playlist-module">
-            <div class="album-image-cont" v-on:click="toggleRecord">
-              <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
+                <div class="track-versus">
+                  <div class="track -one" v-if="track1">
+                    <div class="name">(( track1.name ))</div>
+                    <div class="artists">(( track1.artists ))</div>
+                  </div>
+                  <div class="divider-cont"><hr></div>
+                  <div class="track -two" v-if="track2">
+                    <div class="name">(( track2.name ))</div>
+                    <div class="artists">(( track2.artists ))</div>
+                  </div>
+                </div>
+
+                <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
+                  <img class="record hidden" src="record.png">
+                  <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
+                </button>
+              </div>
             </div>
-            <div class="track-text">
-              <h1 class="title">(( playlist ? playlist.name : '' ))</h1>
+
+            <!-- For Album View -->
+            <div v-if="currentView === 'album'" key="album"
+              class="details track-info album-module">
+              <div class="album-image-cont" v-on:click="toggleRecord">
+                <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
+              </div>
+              <div class="track-text">
+                <h1 class="title">(( album ? album.name : '' ))</h1>
+                <h2 class="artists">(( album ? album.artists : '' ))</h2>
+              </div>
             </div>
-          </div>
+
+            <!-- For Playlist View -->
+            <div v-if="currentView === 'playlist'" key="playlist"
+              class="details track-info playlist-module">
+              <div class="album-image-cont" v-on:click="toggleRecord">
+                <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
+              </div>
+              <div class="track-text">
+                <h1 class="title">(( playlist ? playlist.name : '' ))</h1>
+              </div>
+            </div>
+          </transition>
 
           <!-- Used by each module for graphing -->
           <div class="graph-top-cont">

@@ -606,12 +606,11 @@ function graphAnalysisResults(pushHistory)
 
 /**
  * Called as a result of calling the search API call, and renders search results
- *
- * TODO: Convert to Vue
  */
 function handleSearch(data)
 {
-    // Determine the objects to iterate through depending on what type of objects we are dealing with
+    // Determine the objects to iterate through depending on what type of
+    // objects we are dealing with
     var items;
 
     if (spotifyObjectType === 'track') {
