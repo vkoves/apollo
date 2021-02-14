@@ -132,9 +132,13 @@ function switchView(viewToSwitchTo)
         return;
     }
 
+    // Clear any old errors
+    VueApp.spotifyErrored = false;
+
     VueApp.currentView = viewToSwitchTo;
 
-    pushStateToHistory(); // push to history after VueApp.currentView var has changed
+    // push to history after VueApp.currentView var has changed
+    pushStateToHistory();
 
     pausePlayingRecord();
     clearSearch();
