@@ -1,0 +1,630 @@
+---
+---
+
+@import 'colors';
+
+// If the current view has no Spotify object selected, give it a grey background
+// uses an image since you can't cross-fade to a linear gradient in CSS
+body {
+  background: $background-grey;
+  transition: background-image 0.5s;
+  background-size: auto 100%;
+  // force a constant scrollbar to prevent horizontal jitter if during
+  // transitions we go greater than 100vh - this isn't elegant, but it works
+  // well
+  overflow-y: scroll;
+}
+
+.app-cont {
+  height: 100%;
+  padding-top: 40px;
+  box-sizing: border-box;
+}
+
+.app-cont {
+  // To fade from a gradient to grey, we use a four step gradient scale 300% -
+  // the top third is our starting gradient, the middle third is our transition
+  // from that to grey, and the last third is grey. We can then animate the
+  // background position to get a smooth background transition
+  background-image: linear-gradient(
+    $purple 0%,
+    $apollo-purple 33%,
+    $background-grey 66%,
+    $background-grey 100%);
+  background-position: 0 0;
+  background-size: 100% 300%;
+  transition: background-position 0.5s;
+
+  &:not(.empty-view) {
+    background-position: 0 -200vh;
+  }
+}
+
+
+a:focus, button:focus { outline: 2px $white dashed; }
+
+.page-container, .page-container * {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.page-container {
+  color: $text-grey;
+  margin-top: 0px;
+}
+
+/* Customize the header color */
+header { background-color: $purple; }
+
+/* Add basic pill button styling */
+.apollo-btn {
+  display: inline-block;
+  background-color: $apollo-purple;
+  border: none;
+  border-radius: 100px;
+  padding: 5px 20px;
+  color: $white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: solid 3px transparent;
+  font-size: 14px;
+
+  /* Add hover to not disabled apollo buttons */
+  &:not(.disabled):hover, &:focus {
+    background-color: $apollo-purple-dark;
+  }
+
+  /* Make grey if disabled */
+  &.disabled { background-color: $light-grey; }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px $apollo-purple;
+    border-color: $white;
+  }
+}
+
+
+.post-authorize {
+  margin-top: 10px;
+}
+
+/* Style the top menu */
+.menu-bar {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.menu-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 25%;
+  color: $text-grey;
+  background-color: $extra-light-grey;
+  vertical-align: top;
+  padding: 10px 0px;
+  font-size: 16px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: solid 3px transparent;
+  height: 60px;
+  margin-right: 3px;
+
+  &:first-of-type {
+    border-radius: 5px 0 0 5px;
+  }
+  &:last-of-type {
+    border-radius: 0 5px 5px 0;
+    margin-right: 0;
+  }
+  &:focus {
+    outline: none;
+    border-color: $white;
+  }
+
+  &:hover {
+    background-color: $light-grey;
+  }
+
+  &.active, &:focus {
+    background-color: $apollo-purple;
+    color: $white;
+  }
+
+  .text { margin-top: 5px }
+
+  svg {
+    height: calc(100% - 20px);
+    width: 30px;
+    height: 30px;
+    margin: 0 20px;
+  }
+}
+
+
+.input-bar-cont {
+  transition: margin-top 0.5s;
+
+  &.active {
+    margin-top: 10%;
+
+    .input-label { color: $white; }
+  }
+
+  #interact-prompt {
+    font-weight: normal;
+    color: $white;
+    max-height: 30px; // set max-height for slide-vertical transition
+  }
+}
+
+.input-bar {
+  position: relative;
+  margin: auto;
+  border-radius: 5px;
+  text-align: left;
+  max-width: 800px;
+
+  .input-label {
+    display: block;
+    transition: color 0.3s;
+    color: $apollo-purple;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .input-row {
+    display: flex;
+
+    input[type="text"] {
+      border-radius: 5px 0 0 5px;
+      box-shadow: none;
+      padding: 10px;
+      border: none;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .search-submit {
+      width: auto;
+      text-align: center;
+      padding: 10px 20px;
+      border-radius: 0 5px 5px 0;
+    }
+  }
+}
+
+/* Search Styling */
+.search-results {
+  position: absolute;
+  overflow: hidden;
+  z-index: 15;
+  top: 100%;
+  left: 0;
+  width: 600px;
+  max-height: 700px;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0px 5px 10px $transparent-black;
+  background: $white;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+#search-no-results {
+  padding: 0px 30px;
+  font-weight: normal;
+}
+
+.search-listing {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 20px 30px;
+  cursor: pointer;
+  width: 100%;
+  transition: color 0.3s, background-color 0.3s;
+  border: none;
+
+  &:last-of-type { margin-bottom: 0px; }
+
+  &:hover, &:focus {
+    background-color: $apollo-purple;
+    color: $white;
+    outline: none;
+  }
+
+  img {
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 50%);
+  }
+
+  .listing-text {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    top: 25%;
+    max-width: calc(100% - 120px);
+
+    .track-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .author { font-size: 14px; }
+  }
+
+}
+/* End Search Styling */
+
+.spotify-error {
+  background-color: $apollo-red;
+  padding: 10px 30px;
+  margin: 10px 0px;
+  border-radius: 5px;
+  color: $white;
+}
+
+.album-image-cont {
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+
+  &:focus {
+    // The button encompasses the record and the album art, so we do custom
+    // focus since the default dashed outline wouldn't look very good
+    outline: none;
+  }
+
+  &:focus .album-image {
+    box-shadow: 0px 0px 15px 5px $apollo-purple;
+  }
+
+  img {
+    box-shadow: 2px 2px 5px $mid-grey;
+  }
+
+  .album-image {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .record {
+    border-radius: 100px;
+    position: absolute;
+    top: -10%;
+    z-index: 5;
+    width: 96%;
+    left: 2%;
+  }
+
+  &:hover > .record.hidden {
+    top: -12% !important; // sass-lint:disable-line no-important
+  }
+
+  &.playing {
+    .album-image { z-index: 0; }
+    .record {
+      -moz-animation: spin 30s linear infinite;
+      -o-animation: spin 30s linear infinite;
+      -webkit-animation: spin 30s linear infinite;
+      animation: spin 30s linear infinite;
+    }
+  }
+}
+
+/* If playing a song */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.top-cont {
+  height: 200px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.track-info {
+  display: flex;
+  align-items: stretch;
+
+  .track-text {
+    display: inline-block;
+    width: 78.5%;
+    margin-left: 1%;
+    vertical-align: top;
+    background: $extra-light-grey;
+    padding: 20px 0;
+    border-radius: 5px;
+  }
+
+  .title { margin: 0px; }
+
+  .artists {
+    margin-bottom: 30px;
+    font-weight: normal;
+  }
+}
+
+
+.non-graph-data .left-col, .right-col {
+  display: inline-block;
+  text-align: left;
+  width: 48%;
+  box-sizing: border-box;
+}
+.non-graph-data .left-col {
+  padding-left: 20%;
+}
+.non-graph-data .right-col {
+  padding-right: 20%;
+  margin-left: 2%;
+}
+.non-graph-data .data-item {
+  margin-right: 10px;
+  height: 30px;
+}
+.non-graph-data .left-text {
+  color: $text-grey;
+  float: left;
+}
+.non-graph-data .right-text { float: right; }
+
+
+/* Graph Styling */
+.graph-top-cont {
+  background: $extra-light-grey;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.graph-cont {
+  display: flex;
+  padding-top: 2%;
+  background: $white;
+  height: 50%;
+}
+
+.graph-col {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.graph-labels {
+  display: flex;
+
+  .col-title {
+    // Needs relative positioning for tooltip text
+    position: relative;
+    width: 100%;
+    padding-bottom: 10px;
+    text-overflow: ellipsis;
+
+    &:hover > .col-desc { display: block; }
+
+    .std-dev {
+      width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+      margin: 5px auto 0px auto;
+      color: $charcoal;
+    }
+  }
+  .col-desc {
+    display: none;
+    position: absolute;
+    width: 250%;
+    left: -75%;
+    bottom: 95%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: $charcoal;
+    color: $white;
+    border-radius: 5px;
+    z-index: 5;
+  }
+  .col-desc::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: $charcoal transparent transparent transparent;
+  }
+
+  /* Add column icons */
+  .col-icon {
+    width: 25%;
+    padding-bottom: 25%; /* Makes divs square if matches width */
+    margin: 10% auto 5% auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  .acousticness .col-icon { background-image: url("../images/col-icons/acousticness.png"); }
+  .danceability .col-icon { background-image: url("../images/col-icons/danceability.png"); }
+  .energy .col-icon { background-image: url("../images/col-icons/energy.png"); }
+  .instrumentalness .col-icon { background-image: url("../images/col-icons/instrumentalness.png"); }
+  .liveness .col-icon { background-image: url("../images/col-icons/liveness.png"); }
+  .speechiness .col-icon { background-image: url("../images/col-icons/speechiness.png"); }
+  .valence .col-icon { background-image: url("../images/col-icons/valence.png"); }
+}
+
+
+
+.graph-col .fill {
+  background: $apollo-purple;
+  position: absolute;
+  bottom: 0;
+  width: 80%;
+  left: 10%;
+  height: 0%;
+  transition: height 1s;
+}
+.fill.fill-1, .fill.fill-2 {
+  width: 40%;
+}
+.fill.fill-1 { background-color: $apollo-purple-light; }
+.fill.fill-2 { left: 50%; }
+
+.graph-col .value {
+  position: absolute;
+  width: 100%;
+  bottom: 100%;
+  font-weight: 600;
+  font-size: 1.25em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.value.value-1, .value.value-2 {
+  font-size: 0.8em;
+}
+/* End Graph Styling */
+
+/* Compare Songs Styling */
+.apollo-btn.-song-select {
+  border-radius: 5px;
+  background-color: $extra-light-grey;
+  color: $text-grey;
+  text-transform: none;
+
+  &.active, &:hover, &:focus {
+    background-color: $apollo-purple;
+    color: $white;
+  }
+}
+
+.two-track-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .song-cont {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &.-two { flex-direction: row-reverse; }
+  }
+
+  .track-versus {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    padding: 0 50px;
+
+    .track { width: 90%; }
+    .track.-one { text-align: left; }
+    .track.-two {
+      text-align: right;
+      align-self: flex-end;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .artists { font-size: 12px; }
+  }
+
+  .divider-cont {
+    height: 24px;
+    margin: 20px 0;
+
+    hr {
+      margin: 0;
+      height: 50px;
+      transform: rotate(-5deg);
+      border-width: 2px 0 0;
+      border-color: $apollo-purple;
+      font-family: -webkit-body;
+      transform-origin: right;
+    }
+  }
+}
+
+/* End Compare Songs Styling */
+
+/* Share Button Styling */
+.share-btn {
+  display: inline-block;
+  padding: 5px 10px 5px 20px;
+  border-radius: 50px;
+  color: $white;
+  width: 100px;
+  margin-top: 10px;
+  font-size: 14px;
+  background-size: auto 50%;
+  background-repeat: no-repeat;
+  background-position: 20px center;
+  cursor: pointer;
+}
+
+.twitter-share {
+  background-position: 15% center;
+  border: none;
+  background-color: $twitter-blue;
+  background-image: url(../images/icons/twitter.svg);
+
+  &:hover, &:focus { background-color: $twitter-blue-dark; }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px $twitter-blue-dark;
+  }
+}
+
+/* End Share Button Styling */
+
+
+/**
+ * Vue Animation styling
+ */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-vertical-enter-active, .slide-vertical-leave-active {
+  transition: max-height .5s, margin .5s, padding .5s, opacity .5s;
+}
+.slide-vertical-enter, .slide-vertical-leave-to {
+  max-height: 0 !important;  // sass-lint:disable-line no-important
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/**
+ * Generic Styling (Helpers)
+ */
+.zero-top {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.zero-bot {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}

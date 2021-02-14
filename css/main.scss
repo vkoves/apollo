@@ -1,11 +1,12 @@
+---
+---
+
 body {
   position: relative;
   font-family: 'Open Sans', sans-serif;
   text-align: center;
   margin: 0px;
-  padding-top: 40px;
-  padding-bottom: 60px;
-  background: #f3f3f3;
+  background: #F3F3F3;
 }
 
 .page-limiter {
@@ -95,28 +96,12 @@ h4 { font-weight: 600; margin-top: 10px; }
   }
 }
 @media (max-width: 600px) {
-  body
-  {
-    transition: padding 0.5s;
-  }
-  #header
-  {
-    transition: padding 0.5s;
+  #header {
     padding-bottom: 0px;
     overflow: hidden;
   }
-  #header-buttons
-  {
-    position: absolute;
-    top: 32px;
-    width: 100%;
-    text-align: center;
-    font-size: 16px;
-  }
-  #menu
-  {
-    display: block;
-  }
+
+  #menu { display: block; }
 }
 
 /****************************/

@@ -1,0 +1,138 @@
+---
+---
+
+@import 'colors';
+
+/**
+ * Homepage (pre-auth) styling
+ */
+
+.pre-authorize
+{
+  .banner
+  {
+    background: linear-gradient($purple, $apollo-purple);
+    color: $white;
+    padding: 200px 0px;
+    margin-bottom: 30px;
+  }
+
+  .page-limiter { max-width: 1200px; }
+
+  .description-text
+  {
+    line-height: 1.5;
+    width: 80%;
+    text-align: left;
+    font-size: 24px;
+  }
+
+  .section
+  {
+    margin: 30px auto;
+    padding: 200px 0px;
+  }
+
+  .section:last-of-type { padding-bottom: 100px }
+  /* Remove some bottom padding on last section, since body already has it */
+
+  .section.has-background
+  {
+    background: linear-gradient($apollo-purple, $purple);
+    color: $white;
+  }
+
+  .section h2
+  {
+    text-align: left;
+    width: 80%;
+    margin-top: 40px;
+    font-size: 38px;
+  }
+
+  .section:not(.has-background) h2
+  {
+    color: $apollo-purple;
+  }
+
+  .section .screenshot
+  {
+    display: inline-block;
+    width: 38%;
+  }
+
+  .section .text
+  {
+    display: inline-block;
+    width: 58%;
+    vertical-align: top;
+  }
+
+  .section .text.right-text h2,
+  .section .text.right-text p
+  {
+    margin-left: 20%;
+  }
+}
+
+/* Make main Apollo text very large with no bottom margin */
+.main-title
+{
+  font-size: 84px;
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+
+.sub-title
+{
+  margin-top: 10px;
+  font-weight: normal;
+  font-size: 28px;
+}
+
+
+/* Style button for logging in */
+#spotify-authorize
+{
+  font-size: 18px;
+  background-color: transparent;
+  border: solid 2px $white;
+  transition: background-color 0.2s;
+  padding: 8px 40px;
+  margin: 20px 0px;
+
+  &:hover, &:focus { background-color: $apollo-purple-dark; }
+  &:focus { box-shadow: 0px 0px 10px $white; }
+
+  img {
+    float: left;
+    height: 21px;
+    margin-right: 10px;
+  }
+
+  span { line-height: 21px; }
+}
+
+
+/* Style Github Link */
+.github-notice
+{
+  font-weight: normal;
+  margin-top: 0px;
+}
+
+.github-notice a, .github-notice a:focus, .github-notice a:hover { color: $white; }
+
+.github-notice a {
+  text-decoration: none;
+  opacity: 0.75;
+}
+
+.github-notice a:hover { opacity: 1; }
+
+.github-notice img
+{
+  width: 20px;
+  vertical-align: text-bottom;
+  margin-left: 10px;
+}
