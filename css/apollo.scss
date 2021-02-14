@@ -6,7 +6,7 @@
 // If the current view has no Spotify object selected, give it a grey background
 // uses an image since you can't cross-fade to a linear gradient in CSS
 body {
-  background: #f3f3f3;
+  background: $background-grey;
   transition: background-image 0.5s;
   background-size: auto 100%;
   // force a constant scrollbar to prevent horizontal jitter if during
@@ -609,7 +609,7 @@ header { background-color: $purple; }
   transition: max-height .5s, margin .5s, padding .5s, opacity .5s;
 }
 .slide-vertical-enter, .slide-vertical-leave-to {
-  max-height: 0 !important;
+  max-height: 0 !important;  // sass-lint:disable-line no-important
   opacity: 0;
   margin: 0;
   padding: 0;
