@@ -93,6 +93,7 @@ $(document).ready(function()
 
             songExtraData: undefined,
             spotifyGraphableData: spotifyGraphableData,
+            spotifyErrored: false,
         },
         methods: {
             login: () => login(loginComplete),
@@ -228,15 +229,18 @@ function spotifySearch()
 
     if (spotifyObjectType === 'track') {
         spotifyApi.searchTracks(textInput, { limit: 5 })
-            .then(handleSearch);
+            .then(handleSearch)
+            .catch(() => VueApp.spotifyErrored = true);
     }
     else if (spotifyObjectType === 'album') {
         spotifyApi.searchAlbums(textInput, { limit: 5 })
-            .then(handleSearch);
+            .then(handleSearch)
+            .catch(() => VueApp.spotifyErrored = true);
     }
     else if (spotifyObjectType === 'playlist') {
         spotifyApi.searchPlaylists(textInput, { limit: 5 })
-            .then(handleSearch);
+            .then(handleSearch)
+            .catch(() => VueApp.spotifyErrored = true);
     }
 }
 
@@ -315,7 +319,7 @@ function graphAudioFeatures(featureData)
 {
     setTrackData(featureData, true);
 
-    $('#spotify-error').hide();
+    VueApp.spotifyErrored = false;
 
     for (var key in featureData) // iterate through each feature attribute
     {
@@ -784,7 +788,7 @@ function pausePlayingRecord()
 // Callback for API calls that shows an error message
 function spotifyError()
 {
-    $('#spotify-error').show();
+    VueApp.spotifyErrored = true;
 }
 
 // A helper function to combine all the artists into one nice string

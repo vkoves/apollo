@@ -250,8 +250,7 @@ header { background-color: $purple; }
 .listing-text .author { font-size: 14px; }
 /* End Search Styling */
 
-#spotify-error {
-  display: none;
+.spotify-error {
   background-color: $apollo-red;
   padding: 10px 30px;
   margin: 10px 0px;

@@ -153,16 +153,16 @@ metadata:
         </div>
       </div>
 
+      <div v-if="spotifyErrored" class="spotify-error">
+        Spotify returned an error! Please double check your input and try again.
+      </div>
+
       <transition name="fade">
         <!-- Contains all visualization elements, including albums and graphing -->
         <div id="apollo-main" v-show="!viewEmpty">
           <button class="twitter-share share-btn" v-on:click="shareOnTwitter">
             Tweet
           </button>
-
-          <div id="spotify-error">
-            Spotify returned an error! Please double check your input and try again.
-          </div>
 
           <!-- For Song View -->
           <div v-if="currentView === 'song'"
