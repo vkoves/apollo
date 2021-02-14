@@ -169,7 +169,7 @@ metadata:
           <transition name="fade" mode="out-in">
             <!-- For Song View -->
             <div v-if="currentView === 'song'" key="song"
-              class="track-info single-song-module">
+              class="top-cont track-info">
               <button class="album-image-cont" v-on:click="toggleRecord">
                 <img class="record hidden" src="record.png" alt="">
                 <img class="album-image" v-bind:src="track?.imgUrl || 'album-art-placeholder.png'" alt="">
@@ -212,24 +212,19 @@ metadata:
 
             <!-- For Compare Songs -->
             <div v-if="currentView === 'song-compare'"  key="song-compare">
-              <div class="song-select compare-songs-module">
-                <button class="apollo-btn option"
-                  v-bind:class="{ 'active': selectedTrackNum === 1 }"
-                   v-on:click="selectSong(1)">
-                  Song 1
-                </button>
-                <button class="apollo-btn option"
-                  v-bind:class="{ 'active': selectedTrackNum === 2 }"
-                   v-on:click="selectSong(2)">
-                  Song 2
-                </button>
-              </div>
+              <div class="top-cont two-track-cont">
+                <div class="song-cont">
+                  <button class="apollo-btn -song-select"
+                    v-bind:class="{ 'active': selectedTrackNum === 1 }"
+                     v-on:click="selectSong(1)">
+                    Select <br> Track 1
+                  </button>
 
-              <div class="two-track-cont compare-songs-module">
-                <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
-                  <img class="record hidden" src="record.png">
-                  <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
-                </button>
+                  <button id="track-1" class="album-image-cont" v-on:click="toggleRecord">
+                    <img class="record hidden" src="record.png">
+                    <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
+                  </button>
+                </div>
 
                 <div class="track-versus">
                   <div class="track -one" v-if="track1">
@@ -243,16 +238,24 @@ metadata:
                   </div>
                 </div>
 
-                <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
-                  <img class="record hidden" src="record.png">
-                  <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
-                </button>
+                <div class="song-cont -two">
+                  <button class="apollo-btn -song-select"
+                    v-bind:class="{ 'active': selectedTrackNum === 2 }"
+                     v-on:click="selectSong(2)">
+                    Select <br> Track 2
+                  </button>
+
+                  <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
+                    <img class="record hidden" src="record.png">
+                    <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- For Album View -->
             <div v-if="currentView === 'album'" key="album"
-              class="details track-info album-module">
+              class="top-cont track-info">
               <div class="album-image-cont" v-on:click="toggleRecord">
                 <img class="album-image" v-bind:src="album?.imgUrl || 'album-art-placeholder.png'">
               </div>
@@ -264,7 +267,7 @@ metadata:
 
             <!-- For Playlist View -->
             <div v-if="currentView === 'playlist'" key="playlist"
-              class="details track-info playlist-module">
+              class="top-cont track-info">
               <div class="album-image-cont" v-on:click="toggleRecord">
                 <img class="album-image" v-bind:src="playlist?.imgUrl || 'album-art-placeholder.png'">
               </div>
@@ -274,17 +277,27 @@ metadata:
             </div>
           </transition>
 
-          <!-- Used by each module for graphing -->
+          <!-- Used by each view for graphing -->
           <div class="graph-top-cont">
             <div class="graph-cont">
               <template v-for="(keyData, key) in spotifyGraphableData">
                 <div v-if="keyData.type === 'zero-float'"
                   class="graph-col" v-bind:class="key">
-                    <div class="fill fill-1">
-                        <div class="value value-1"></div>
+                    <div class="fill fill-1"
+                      v-bind:style="{
+                        height: graphData ? graphData[key] * 100 + '%' : '0'
+                      }">
+                        <div class="value value-1">
+                          (( graphData ? graphData[key] : '' ))
+                        </div>
                     </div>
-                    <div v-if="currentView === 'song-compare'" class="fill fill-2">
-                        <div class="value value-2"></div>
+                    <div class="fill fill-2"
+                      v-bind:style="{
+                        height: graphData2 ? graphData2[key] * 100 + '%' : '0'
+                      }">
+                        <div class="value value-2">
+                          (( graphData2 ? graphData2[key] : '' ))
+                        </div>
                     </div>
                 </div>
               </template>
@@ -296,6 +309,9 @@ metadata:
                   class="col-title" v-bind:class="key">
                     <div class="col-icon"></div>
                     <span>(( keyData.name ))</span>
+                    <div class="std-dev">
+                      (( stdDeviations ? stdDeviations[key].toFixed(3) : '' ))
+                    </div>
                     <div class="col-desc">(( keyData.description ))</div>
                 </div>
               </template>

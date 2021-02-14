@@ -261,7 +261,7 @@ header { background-color: $purple; }
 .album-image-cont {
   display: inline-block;
   position: relative;
-  width: 20%;
+  width: 200px;
   cursor: pointer;
   border: none;
   padding: 0;
@@ -316,12 +316,15 @@ header { background-color: $purple; }
   to { transform: rotate(360deg); }
 }
 
-.track-info {
-  display: flex;
-  align-items: stretch;
+.top-cont {
   height: 200px;
   margin-top: 30px;
   margin-bottom: 10px;
+}
+
+.track-info {
+  display: flex;
+  align-items: stretch;
 
   .track-text {
     display: inline-block;
@@ -371,71 +374,78 @@ header { background-color: $purple; }
   border-radius: 5px;
   margin-top: 10px;
 }
+
 .graph-cont {
+  display: flex;
   padding-top: 2%;
   background: $white;
   height: 50%;
 }
+
 .graph-col {
-  display: inline-block;
   position: relative;
-  width: calc(100% / 7);
+  width: 100%;
   height: 100%;
 }
-.col-title {
-  display: inline-block;
-  width: calc(100%/7);
-  position: relative;
-  padding-bottom: 10px;
-  text-overflow: ellipsis;
+
+.graph-labels {
+  display: flex;
+
+  .col-title {
+    width: 100%;
+    padding-bottom: 10px;
+    text-overflow: ellipsis;
+  }
+  .col-title:hover > .col-desc { display: block; }
+  .col-title .std-dev {
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    margin: 5px auto 0px auto;
+    color: $charcoal;
+  }
+  .col-desc {
+    display: none;
+    position: absolute;
+    width: 250%;
+    left: -75%;
+    bottom: 95%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: $charcoal;
+    color: $white;
+    border-radius: 5px;
+    z-index: 5;
+  }
+  .col-desc::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: $charcoal transparent transparent transparent;
+  }
+
+  /* Add column icons */
+  .col-icon {
+    width: 25%;
+    padding-bottom: 25%; /* Makes divs square if matches width */
+    margin: 10% auto 5% auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  .acousticness .col-icon { background-image: url("../images/col-icons/acousticness.png"); }
+  .danceability .col-icon { background-image: url("../images/col-icons/danceability.png"); }
+  .energy .col-icon { background-image: url("../images/col-icons/energy.png"); }
+  .instrumentalness .col-icon { background-image: url("../images/col-icons/instrumentalness.png"); }
+  .liveness .col-icon { background-image: url("../images/col-icons/liveness.png"); }
+  .speechiness .col-icon { background-image: url("../images/col-icons/speechiness.png"); }
+  .valence .col-icon { background-image: url("../images/col-icons/valence.png"); }
 }
-.col-title:hover > .col-desc { display: block; }
-.col-title .std-dev {
-  width: 90%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 12px;
-  margin: 5px auto 0px auto;
-  color: $charcoal;
-}
-.col-desc {
-  display: none;
-  position: absolute;
-  width: 250%;
-  left: -75%;
-  bottom: 95%;
-  padding: 10px;
-  box-sizing: border-box;
-  background: $charcoal;
-  color: $white;
-  border-radius: 5px;
-  z-index: 5;
-}
-.col-desc::after {
-  content: " ";
-  position: absolute;
-  top: 100%; /* At the bottom of the tooltip */
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: $charcoal transparent transparent transparent;
-}
-/* Add column icons */
-.col-icon {
-  width: 25%;
-  padding-bottom: 25%; /* Makes divs square if matches width */
-  margin: 10% auto 5% auto;
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-.acousticness .col-icon { background-image: url("../images/col-icons/acousticness.png"); }
-.danceability .col-icon { background-image: url("../images/col-icons/danceability.png"); }
-.energy .col-icon { background-image: url("../images/col-icons/energy.png"); }
-.instrumentalness .col-icon { background-image: url("../images/col-icons/instrumentalness.png"); }
-.liveness .col-icon { background-image: url("../images/col-icons/liveness.png"); }
-.speechiness .col-icon { background-image: url("../images/col-icons/speechiness.png"); }
-.valence .col-icon { background-image: url("../images/col-icons/valence.png"); }
+
 
 
 .graph-col .fill {
@@ -468,21 +478,10 @@ header { background-color: $purple; }
 /* End Graph Styling */
 
 /* Compare Songs Styling */
-.song-select {
-  border-radius: 5px;
-  margin-top: 10px;
-  font-size: 0px; /* Prevent spacing from inline */
-}
-
-.song-select .option {
-  display: inline-block;
-  width: 10%;
-  padding: 10px;
-  margin: 0% 19%;
+.apollo-btn.-song-select {
   border-radius: 5px;
   background-color: $extra-light-grey;
   color: $text-grey;
-  cursor: pointer;
   text-transform: none;
 
   &.active, &:hover, &:focus {
@@ -495,13 +494,13 @@ header { background-color: $purple; }
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
 
-  .album-image-cont {
-    width: 200px;
+  .song-cont {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    /* Need larger margins when showing two albums */
-    img { margin-top: 20%; }
+    &.-two { flex-direction: row-reverse; }
   }
 
   .track-versus {

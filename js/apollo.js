@@ -91,6 +91,11 @@ $(document).ready(function()
             track2: undefined,
             track: undefined,
 
+            /** Graph data */
+            graphData: undefined,
+            graphData2: undefined,
+            stdDeviations: undefined,
+
             songExtraData: undefined,
             spotifyGraphableData: spotifyGraphableData,
             spotifyErrored: false,
@@ -137,6 +142,11 @@ function switchView(viewToSwitchTo)
 
     VueApp.currentView = viewToSwitchTo;
 
+    // Reset graph data
+    VueApp.graphData = undefined;
+    VueApp.graphData2 = undefined;
+    VueApp.stdDeviations = undefined;
+
     // push to history after VueApp.currentView var has changed
     pushStateToHistory();
 
@@ -181,7 +191,7 @@ function switchView(viewToSwitchTo)
         if (Object.keys(track2).length > 0) // if track2 is defined
         {
             VueApp.selectedTrackNum = 2;
-            graphAudioFeatures(track2.audioFeatures);
+            graphAudioFeatures(track2.audioFeatures, true);
             handleTrackInfo(track2.trackObject);
         }
 
@@ -263,7 +273,14 @@ function getSpotifyData(spotifyURI)
     if (spotifyObjectType === 'track')
     {
         // Also can use getAudioFeaturesForTracks(Array<string>)
-        spotifyApi.getAudioFeaturesForTrack(spotifyId).then(graphAudioFeatures, spotifyError);
+        spotifyApi.getAudioFeaturesForTrack(spotifyId)
+            .then((features) => {
+                const isTrack2 = VueApp.currentView === 'song-compare' &&
+                    VueApp.selectedTrackNum === 2;
+
+                graphAudioFeatures(features, isTrack2);
+            }).catch(spotifyError);
+
         spotifyApi.getTrack(spotifyId).then(function(data) {
             handleTrackInfo(data, true);
         }, spotifyError);
@@ -320,45 +337,29 @@ function setTrackData(data, isFeatures)
  *
  * TODO: Move to Vue
  */
-function graphAudioFeatures(featureData)
+function graphAudioFeatures(featureData, isTrack2)
 {
     setTrackData(featureData, true);
 
     VueApp.spotifyErrored = false;
 
-    for (var key in featureData) // iterate through each feature attribute
-    {
-        // and graph if it's in the list of allowed data to graph
-        if (key in spotifyGraphableData) {
-            var keyData = spotifyGraphableData[key];
-            var value = featureData[key];
-
-            // if one of the floats with range 0...1
-            if (keyData['type'] === 'zero-float') {
-                if (VueApp.currentView === 'song-compare')
-                {
-                    $('.graph-col.' + key + ' .value-' + VueApp.selectedTrackNum).text(value);
-                    $('.graph-col.' + key + ' .fill-' + VueApp.selectedTrackNum).css('height', value*100 + '%');
-                }
-                else
-                {
-                    $('.graph-col.' + key + ' .value').text(value);
-                    $('.graph-col.' + key + ' .fill').css('height', value*100 + '%');
-                }
-            }
-        }
+    if (isTrack2) {
+        VueApp.graphData2 = featureData;
+    }
+    else {
+        VueApp.graphData = featureData;
     }
 
-    if (featureData.mode === 1) // major
-    {
+    // Mode 1 is major
+    if (featureData.mode === 1) {
         featureData.mode = 'Major';
     }
-    else
-    {
+    else {
         featureData.mode = 'Minor';
     }
 
     var pitches = ['C', 'C#', 'D', 'D#', 'E', 'E#', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'B#'];
+
     featureData.key = pitches[featureData.key];
     featureData.duration = getProperDuration(featureData.duration_ms);
 
@@ -572,39 +573,23 @@ function analyzeAudioFeatures(data)
 }
 
 /**
- * Graph audio analysis details for an image
- *
- * TODO: Convert to Vue
+ * Graph audio analysis details for an album or playlist
  */
-function graphAnalysisResults(pushHistory)
+function graphAnalysisResults(shouldPushHistory)
 {
-    if (pushHistory) {
+    if (shouldPushHistory) {
         pushStateToHistory();
     }
 
-    $('.std-dev').remove(); // remove old analysis data
-
-    var analysisResultsObj;
-
     if (spotifyObjectType === 'album')
     {
-        analysisResultsObj = albumAnalysisResults;
+        VueApp.graphData = albumAnalysisResults.averages;
+        VueApp.stdDeviations = albumAnalysisResults.standardDeviations;
     }
     else if (spotifyObjectType === 'playlist')
     {
-        analysisResultsObj = playlistAnalysisResults;
-    }
-
-    var average, stdDev;
-
-    for (var key in analysisResultsObj.averages)
-    {
-        average = analysisResultsObj.averages[key];
-        stdDev = analysisResultsObj.standardDeviations[key];
-
-        $('.graph-col.' + key + ' .value').text(average);
-        $('.graph-col.' + key + ' .fill').css('height', average*100 + '%');
-        $('.col-title.' + key + ' span').after('<div class=\'std-dev\'>Std. Dev.<br>' + stdDev + '</div>');
+        VueApp.graphData = playlistAnalysisResults.averages;
+        VueApp.stdDeviations = playlistAnalysisResults.standardDeviations;
     }
 }
 
@@ -766,6 +751,7 @@ function hideRecord(element, speed)
     if (audioObject)
     {
         audioObject.pause();
+
         elem.animate({
             top: '-100%'
         }, speed, function() {
