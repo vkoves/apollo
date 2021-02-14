@@ -210,12 +210,12 @@ metadata:
           <!-- For Compare Songs -->
           <template v-if="currentView === 'song-compare'">
             <div class="song-select compare-songs-module">
-              <button class="option"
+              <button class="apollo-btn option"
                 v-bind:class="{ 'active': selectedTrackNum === 1 }"
                  v-on:click="selectSong(1)">
                 Song 1
               </button>
-              <button class="option"
+              <button class="apollo-btn option"
                 v-bind:class="{ 'active': selectedTrackNum === 2 }"
                  v-on:click="selectSong(2)">
                 Song 2
@@ -227,6 +227,19 @@ metadata:
                 <img class="record hidden" src="record.png">
                 <img class="album-image" v-bind:src="track1?.imgUrl || 'album-art-placeholder.png'">
               </button>
+
+              <div class="track-versus">
+                <div class="track -one" v-if="track1">
+                  <div class="name">(( track1.name ))</div>
+                  <div class="artists">(( track1.artists ))</div>
+                </div>
+                <div class="divider-cont"><hr></div>
+                <div class="track -two" v-if="track2">
+                  <div class="name">(( track2.name ))</div>
+                  <div class="artists">(( track2.artists ))</div>
+                </div>
+              </div>
+
               <button id="track-2" class="album-image-cont" v-on:click="toggleRecord">
                 <img class="record hidden" src="record.png">
                 <img class="album-image" v-bind:src="track2?.imgUrl || 'album-art-placeholder.png'">

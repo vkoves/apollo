@@ -137,7 +137,7 @@ function switchView(viewToSwitchTo)
     pushStateToHistory(); // push to history after VueApp.currentView var has changed
 
     pausePlayingRecord();
-    clearInput();
+    clearSearch();
 
     if (VueApp.currentView === 'song')
     {
@@ -224,6 +224,7 @@ function spotifySearch()
     // search query, so if we get that, fetch by URI
     if (textInput.startsWith('spotify:')) {
         getSpotifyData(textInput);
+        clearSearch();
         return;
     }
 
@@ -425,23 +426,24 @@ function handleTrackInfo(trackData, pushHistory)
     }
 
     const imgUrl = trackData.album.images[0].url;
+    const trackObj = {
+        imgUrl,
+        name: trackData.name,
+        artists: 'by ' + combineArtists(trackData.artists)
+    };
 
     if (VueApp.currentView === 'song-compare') {
         if (VueApp.selectedTrackNum === 1) {
-            VueApp.track1 = { imgUrl };
+            VueApp.track1 = trackObj;
         }
         else {
-            VueApp.track2 = { imgUrl };
+            VueApp.track2 = trackObj;
         }
     }
     // If viewing individual song, update title
     else if (VueApp.currentView === 'song')
     {
-        VueApp.track = {
-            imgUrl,
-            name: trackData.name,
-            artists: 'by ' + combineArtists(trackData.artists)
-        };
+        VueApp.track = trackObj;
     }
 }
 
@@ -654,14 +656,14 @@ function handleSearch(data)
  * Called on click of a search result item
  */
 function searchResultClick(uri) {
-    clearInput();
+    clearSearch();
     getSpotifyData(uri);
 }
 
 /**
  * Hides the search and clears the input fields
  */
-function clearInput()
+function clearSearch()
 {
     VueApp.searchText = '';
     VueApp.searchItems = undefined;

@@ -265,12 +265,16 @@ header { background-color: $purple; }
   cursor: pointer;
   border: none;
   padding: 0;
+  background: none;
 
-  // The button encompasses the record and the album art, so we do custom focus
-  outline: none;
+  &:focus {
+    // The button encompasses the record and the album art, so we do custom
+    // focus since the default dashed outline wouldn't look very good
+    outline: none;
+  }
 
   &:focus .album-image {
-    box-shadow: 0px 0px 15px 5px #6739b8;
+    box-shadow: 0px 0px 15px 5px $apollo-purple;
   }
 
   img {
@@ -466,27 +470,77 @@ header { background-color: $purple; }
 /* Compare Songs Styling */
 .song-select {
   border-radius: 5px;
-  overflow: hidden;
   margin-top: 10px;
   font-size: 0px; /* Prevent spacing from inline */
 }
+
 .song-select .option {
   display: inline-block;
-  background-color: $extra-light-grey;
   width: 10%;
-  font-size: 16px;
   padding: 10px;
-  cursor: pointer;
   margin: 0% 19%;
   border-radius: 5px;
-}
-.song-select .option.active {
-  background-color: $apollo-purple;
-  color: $white;
+  background-color: $extra-light-grey;
+  color: $text-grey;
+  cursor: pointer;
+  text-transform: none;
+
+  &.active, &:hover, &:focus {
+    background-color: $apollo-purple;
+    color: $white;
+  }
 }
 
-.two-track-cont .album-image-cont { margin: 0% 14.8%; } /* Give space between albums */
-.two-track-cont .album-image-cont img { margin-top: 20%; } /* Need larger margins when showing two albums */
+.two-track-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  .album-image-cont {
+    width: 200px;
+
+    /* Need larger margins when showing two albums */
+    img { margin-top: 20%; }
+  }
+
+  .track-versus {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    padding: 0 50px;
+    margin-top: 40px;
+
+    .track { width: 90%; }
+    .track.-one { text-align: left; }
+    .track.-two {
+      text-align: right;
+      align-self: flex-end;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .artists { font-size: 12px; }
+  }
+
+  .divider-cont {
+    height: 24px;
+    margin: 20px 0;
+
+    hr {
+      margin: 0;
+      height: 50px;
+      transform: rotate(-5deg);
+      border-width: 2px 0 0;
+      border-color: $apollo-purple;
+      font-family: -webkit-body;
+      transform-origin: right;
+    }
+  }
+}
+
 /* End Compare Songs Styling */
 
 /* Share Button Styling */
